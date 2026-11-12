@@ -134,6 +134,8 @@ function normalizeState(raw) {
     'visible',
     'archived',
     'workspaceCollapsed',
+    'workspaceSort',
+    'workspaceSortDir',
     'pluginCollapsed',
     'pluginGroups',
     'pluginAssign',

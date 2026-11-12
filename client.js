@@ -107,6 +107,13 @@ function build(require) {
 			return fallback
 		}
 
+		/** Last path segment, used when a Workspace has no stored title. */
+		function baseName(value) {
+			const text = String(value === undefined || value === null ? '' : value).replace(/[\\/]+$/, '')
+			const parts = text.split(/[\\/]/)
+			return parts[parts.length - 1] || text
+		}
+
 		function shortName(packageName) {
 			return String(packageName || '')
 				.replace(/^@[^/]+\//, '')
@@ -147,6 +154,8 @@ function build(require) {
 			visible: {},
 			archived: 'default',
 			workspaceCollapsed: false,
+			workspaceSort: 'manual',
+			workspaceSortDir: 'asc',
 			pluginCollapsed: true,
 			pluginGroups: [],
 			pluginAssign: {},
@@ -184,6 +193,8 @@ function build(require) {
 				visible: asRecord(merged.visible),
 				archived: ARCHIVED_MODES.indexOf(merged.archived) === -1 ? 'default' : merged.archived,
 				workspaceCollapsed: merged.workspaceCollapsed === true,
+				workspaceSort: ['manual', 'name', 'time'].indexOf(merged.workspaceSort) === -1 ? 'manual' : merged.workspaceSort,
+				workspaceSortDir: merged.workspaceSortDir === 'desc' ? 'desc' : 'asc',
 				pluginCollapsed: merged.pluginCollapsed !== false,
 				pluginGroups,
 				pluginAssign: asRecord(merged.pluginAssign),
@@ -379,6 +390,7 @@ function build(require) {
 			layers: 'M8 2.2 14 5.5 8 8.8 2 5.5zM2 9l6 3.3L14 9M2 12.2 8 15.5l6-3.3',
 			plug: 'M6 2.6v3M10 2.6v3M4.4 5.6h7.2v2.3a3.6 3.6 0 0 1-3.6 3.6A3.6 3.6 0 0 1 4.4 7.9zM8 11.5v2.4',
 			arrowLeft: 'M12.5 8H3.5M6.8 4.7 3.5 8l3.3 3.3',
+			expand: 'M4.5 6 8 9.5 11.5 6M4.5 10.5 8 14l3.5-3.5',
 			list: 'M3 4.2h10M3 8h10M3 11.8h10',
 			branch: 'M4.5 3.5v9M4.5 6.5a3 3 0 0 1 3-3h4M4.5 10.5a3 3 0 0 0 3 3h4M11.5 3.5v0M10 2l1.5 1.5L10 5M10 14.5l1.5-1.5M10 11l1.5 1.5',
 			sliders: 'M2.5 4.5h5M10 4.5h3.5M2.5 8h3M8 8h5.5M2.5 11.5h7M12 11.5h1.5M8.6 4.5a1.1 1.1 0 1 1-2.2 0 1.1 1.1 0 0 1 2.2 0M7.6 8a1.1 1.1 0 1 1-2.2 0 1.1 1.1 0 0 1 2.2 0M11.6 11.5a1.1 1.1 0 1 1-2.2 0 1.1 1.1 0 0 1 2.2 0'
@@ -401,7 +413,8 @@ function build(require) {
 			branch: shipped('IconBranchOutlineRegular'),
 			list: shipped('IconFlatListOutlineRegular'),
 			layers: shipped('IconWorkspaceTreeOutlineRegular'),
-			plug: shipped('IconCordisPluginOutlineRegular')
+			plug: shipped('IconCordisPluginOutlineRegular'),
+			expand: shipped('IconChevronsUpDownOutlineRegular')
 		}
 
 		function Icon(props) {
@@ -505,7 +518,8 @@ function build(require) {
 										}
 									},
 									item.icon ? h(Icon, { name: item.icon, size: 13 }) : null,
-									h('span', { className: 'dsc-menu-label' }, item.label)
+									h('span', { className: 'dsc-menu-label' }, item.label),
+									item.trailing ? h('span', { className: 'dsc-menu-trailing' }, item.trailing) : null
 								)
 				)
 			)
@@ -975,7 +989,8 @@ function build(require) {
 								y: rect.bottom + 4,
 								items: [
 									{
-										label: (showHidden ? '✓ ' : '') + '显示已隐藏入口' + (hiddenCount > 0 ? '（' + hiddenCount + '）' : ''),
+										label: '显示已隐藏入口' + (hiddenCount > 0 ? '（' + hiddenCount + '）' : ''),
+										trailing: showHidden ? '✓' : '',
 										onSelect: () => setPlugin({ pluginShowHidden: !showHidden })
 									},
 									{ separator: true },
@@ -1127,6 +1142,7 @@ function build(require) {
 			const wsSnap = useStoreSnapshot(props.workspacesStore) || {}
 			const sSnap = useStoreSnapshot(props.sessionsStore) || {}
 			const [needle, setNeedle] = React.useState('')
+			const [expandHits, setExpandHits] = React.useState(false)
 			const [menu, setMenu] = React.useState(null)
 			const [dialog, setDialog] = React.useState(null)
 			const [error, setError] = React.useState(null)
@@ -1161,14 +1177,62 @@ function build(require) {
 
 			const categories = stateNow.categories
 			const known = new Set(categories.map((category) => category.id))
+			// Filtering is a two-part match, like the shipped browser: a Workspace
+			// stays when its own title/path matches, and also when one of its
+			// Sessions matches even though the Workspace itself does not.
+			const sessionCache = new Map()
+			for (const workspace of workspaces) {
+				sessionCache.set(workspace.workspaceId, sessionsOf(workspace, wsSnap, sSnap, lower, stateNow.archived))
+			}
+
+			const workspaceLabel = (workspace) => workspace.title || baseName(workspace.path) || workspace.workspaceId
+			const latestSessionOf = (workspace) => {
+				let latest = 0
+				const byId = sSnap.byId || {}
+				for (const id of workspace.sessionIds || []) {
+					const summary = byId[id]
+					if (summary === undefined) continue
+					const at = timeOf(summary.updatedAt)
+					if (at > latest) latest = at
+				}
+				return latest
+			}
+			const orderWorkspaces = (list) => {
+				const descending = stateNow.workspaceSortDir === 'desc'
+				if (stateNow.workspaceSort === 'name') {
+					const rows = list
+						.slice()
+						.sort((left, right) => workspaceLabel(left).localeCompare(workspaceLabel(right), 'zh-Hans-CN', { numeric: true }))
+					return descending ? rows.reverse() : rows
+				}
+				if (stateNow.workspaceSort === 'time') {
+					const rows = list.slice().sort((left, right) => latestSessionOf(right) - latestSessionOf(left))
+					// Ascending means oldest first, so the default (newest first) is
+					// the reversed order.
+					return descending ? rows : rows.reverse()
+				}
+				return list
+			}
+
 			const buckets = new Map(categories.map((category) => [category.id, []]))
 			const unassigned = []
 			for (const workspace of workspaces) {
-				if (lower !== '' && !matchesWorkspace(workspace, lower)) continue
+				if (lower !== '') {
+					const ownMatch = matchesWorkspace(workspace, lower)
+					const sessionMatch = (sessionCache.get(workspace.workspaceId) || []).length > 0
+					if (!ownMatch && !sessionMatch) continue
+				}
 				const target = stateNow.assign[workspace.workspaceId]
 				if (target !== undefined && known.has(target)) buckets.get(target).push(workspace)
 				else unassigned.push(workspace)
 			}
+			for (const [categoryId, list] of buckets) buckets.set(categoryId, orderWorkspaces(list))
+			const orderedUnassigned = orderWorkspaces(unassigned)
+
+			// A new query starts folded again; the switch only affects this search.
+			React.useEffect(() => {
+				setExpandHits(false)
+			}, [needle])
 
 			const fail = (reason) => setError(describe(reason))
 			const clearError = () => setError(null)
@@ -1288,7 +1352,7 @@ function build(require) {
 						onSelect: () =>
 							setDialog({
 								title: '重命名工作区',
-								initialValue: workspace.title || shortName(workspace.path),
+								initialValue: workspaceLabel(workspace),
 								onSubmit: (name) => {
 									setDialog(null)
 									if (name === '') return
@@ -1443,9 +1507,16 @@ function build(require) {
 			}
 
 			const renderWorkspace = (workspace, indent) => {
-				const expanded = stateNow.expanded[workspace.workspaceId] === true
-				const limit = stateNow.visible[workspace.workspaceId] === undefined ? SESSION_DEFAULT : stateNow.visible[workspace.workspaceId]
-				const sessions = sessionsOf(workspace, wsSnap, sSnap, lower, stateNow.archived)
+				const searching = lower !== ''
+				const sessions = sessionCache.get(workspace.workspaceId) || []
+				// Filtering never rearranges the tree on its own: the user's fold
+				// state stays as it was unless the "expand all hits" switch is on.
+				const expanded = stateNow.expanded[workspace.workspaceId] === true || (searching && expandHits)
+				const limit = searching
+					? sessions.length
+					: stateNow.visible[workspace.workspaceId] === undefined
+						? SESSION_DEFAULT
+						: stateNow.visible[workspace.workspaceId]
 				const shown = sessions.slice(0, limit)
 				return h(
 					'div',
@@ -1479,9 +1550,11 @@ function build(require) {
 							},
 							h('span', { className: 'dsc-caret' + (expanded ? ' dsc-caret-open' : '') }, h(Icon, { name: 'chevron', size: 12 })),
 							h('span', { className: 'dsc-folder' }, h(Icon, { name: expanded ? 'folderOpen' : 'folder', size: 13 })),
-							h('span', { className: 'dsc-rowlabel dsc-strong' }, workspace.title || shortName(workspace.path))
+							h('span', { className: 'dsc-rowlabel dsc-strong' }, workspaceLabel(workspace))
 						),
-						h(CountBadge, { count: (workspace.sessionIds || []).length }),
+						h(CountBadge, {
+							count: lower !== '' ? (sessionCache.get(workspace.workspaceId) || []).length : (workspace.sessionIds || []).length
+						}),
 						h(
 							'span',
 							{ className: 'dsc-rowacts' },
@@ -1552,7 +1625,7 @@ function build(require) {
 							},
 							h(
 								'span',
-								{ className: 'dsc-caret' + (category.collapsed ? '' : ' dsc-caret-open') },
+								{ className: 'dsc-caret' + (category.collapsed && !(lower !== '' && expandHits) ? '' : ' dsc-caret-open') },
 								h(Icon, { name: 'chevron', size: 12 })
 							),
 							h('span', { className: 'dsc-rowlabel dsc-catlabel' }, category.name)
@@ -1605,7 +1678,7 @@ function build(require) {
 							})
 						)
 					),
-					category.collapsed
+					category.collapsed && !(lower !== '' && expandHits)
 						? null
 						: h(
 								'div',
@@ -1635,15 +1708,54 @@ function build(require) {
 						label: '视图选项',
 						onClick: (event) => {
 							const rect = event.currentTarget.getBoundingClientRect()
-							const check = (key) => (stateNow.archived === key ? '✓ ' : '')
+							const check = (key) => (stateNow.archived === key ? '✓' : '')
 							setMenu({
 								x: rect.right - 190,
 								y: rect.bottom + 4,
 								items: [
 									{ header: true, label: '已归档会话' },
-									{ label: check('default') + '隐藏已归档', onSelect: () => setState({ archived: 'default' }) },
-									{ label: check('show') + '全部对话（显示已归档）', onSelect: () => setState({ archived: 'show' }) },
-									{ label: check('only') + '仅显示已归档', onSelect: () => setState({ archived: 'only' }) },
+									{ label: '隐藏已归档', trailing: check('default'), onSelect: () => setState({ archived: 'default' }) },
+									{ label: '全部对话（显示已归档）', trailing: check('show'), onSelect: () => setState({ archived: 'show' }) },
+									{ label: '仅显示已归档', trailing: check('only'), onSelect: () => setState({ archived: 'only' }) },
+									{ separator: true },
+									{ header: true, label: '工作区排序' },
+									{
+										label: '不自动排序',
+										trailing: stateNow.workspaceSort === 'manual' ? '✓' : '',
+										onSelect: () => setState({ workspaceSort: 'manual' })
+									},
+									{
+										// Re-clicking the active mode flips its direction: one row
+										// per mode, not a second set of direction rows.
+										label: '按名称排序',
+										trailing:
+											stateNow.workspaceSort !== 'name'
+												? ''
+												: stateNow.workspaceSortDir === 'desc'
+													? '↓'
+													: '↑',
+										onSelect: () =>
+											setState(
+												stateNow.workspaceSort === 'name'
+													? { workspaceSortDir: stateNow.workspaceSortDir === 'desc' ? 'asc' : 'desc' }
+													: { workspaceSort: 'name', workspaceSortDir: 'asc' }
+											)
+									},
+									{
+										label: '按最近会话排序',
+										trailing:
+											stateNow.workspaceSort !== 'time'
+												? ''
+												: stateNow.workspaceSortDir === 'asc'
+													? '↑'
+													: '↓',
+										onSelect: () =>
+											setState(
+												stateNow.workspaceSort === 'time'
+													? { workspaceSortDir: stateNow.workspaceSortDir === 'desc' ? 'asc' : 'desc' }
+													: { workspaceSort: 'time', workspaceSortDir: 'desc' }
+											)
+									},
 									{ separator: true },
 									{ label: '全部展开', onSelect: () => expandAll() },
 									{ label: '全部折叠', onSelect: () => setState({ expanded: {} }) }
@@ -1680,7 +1792,15 @@ function build(require) {
 									value: needle,
 									placeholder: '筛选工作区与会话…',
 									onChange: (event) => setNeedle(event.target.value)
-								})
+								}),
+								needle.trim() === ''
+									? null
+									: h(IconButton, {
+											name: 'expand',
+											label: expandHits ? '收起命中' : '展开全部命中',
+											active: expandHits,
+											onClick: () => setExpandHits(!expandHits)
+										})
 							),
 							error
 								? h(
@@ -1718,9 +1838,9 @@ function build(require) {
 										{ className: 'dsc-rowmain' },
 										h('span', { className: 'dsc-rowlabel dsc-catlabel' }, '未分类')
 									),
-									h(CountBadge, { count: unassigned.length })
+									h(CountBadge, { count: orderedUnassigned.length })
 								),
-								h('div', { className: 'dsc-group-body' }, unassigned.map((workspace) => renderWorkspace(workspace, 0)))
+								h('div', { className: 'dsc-group-body' }, orderedUnassigned.map((workspace) => renderWorkspace(workspace, 0)))
 							)
 								: null,
 							workspaces.length === 0
@@ -1945,8 +2065,11 @@ function build(require) {
 .dsc-dot-done{background:var(--dsw-alias-state-success-primary)}
 @keyframes dsc-pulse{0%,100%{opacity:1}50%{opacity:.35}}
 .dsc-archived .dsc-rowlabel{font-style:italic;opacity:.7}
-.dsc-search{display:flex;align-items:center;gap:5px;margin:0 2px 2px;padding:0 4px;height:26px;color:var(--dsw-alias-label-tertiary)}
-.dsc-searchinput{flex:1 1 auto;min-width:0;border:0;background:transparent;color:var(--dsw-alias-label-primary);font-size:12.5px;outline:none}
+/* One fixed row for both states: the field never changes height or baseline
+   between the placeholder and a typed value. */
+.dsc-search{flex:0 0 auto;display:flex;align-items:center;gap:5px;margin:2px 2px 2px;padding:0 6px;height:28px;min-height:28px;box-sizing:border-box;color:var(--dsw-alias-label-tertiary)}
+.dsc-searchinput{flex:1 1 auto;min-width:0;height:26px;line-height:26px;padding:0;margin:0;border:0;background:transparent;color:var(--dsw-alias-label-primary);font-family:inherit;font-size:12.5px;outline:none}
+.dsc-searchinput::placeholder{color:var(--dsw-alias-label-tertiary);opacity:1}
 .dsc-morebtn{align-self:flex-start;margin:1px 0 1px 20px;border:0;background:transparent;color:var(--dsw-alias-label-tertiary);font-size:12px;cursor:pointer;padding:1px 4px;border-radius:4px}
 .dsc-morebtn:hover{color:var(--dsw-alias-label-primary)}
 .dsc-empty{padding:2px 6px 4px;font-size:12px;color:var(--dsw-alias-label-tertiary)}
@@ -1975,6 +2098,7 @@ function build(require) {
 .dsc-menu-sep{height:1px;margin:3px 4px;background:color-mix(in srgb,var(--dsw-alias-label-primary) 10%,transparent)}
 .dsc-menu-head{padding:4px 8px 2px;font-size:11px;color:var(--dsw-alias-label-tertiary)}
 .dsc-menu-label{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dsc-menu-trailing{margin-left:auto;flex:none;display:inline-flex;align-items:center;gap:4px;color:var(--dsw-alias-label-tertiary);font-size:11px}
 .dsc-scrim{position:fixed;inset:0;z-index:4100;background:rgba(0,0,0,.28);display:flex;align-items:center;justify-content:center;padding:24px}
 .dsc-dialog{width:min(360px,100%);border-radius:12px;border:1px solid var(--dsw-alias-border-l1);background:var(--dsw-alias-bg-overlay);padding:14px;display:flex;flex-direction:column;gap:10px;box-shadow:0 16px 40px rgba(0,0,0,.24)}
 .dsc-dialog-title{font-size:13px;font-weight:600;color:var(--dsw-alias-label-primary)}
@@ -2084,7 +2208,7 @@ html.dsc-on [class*="panelList"]{display:none!important}
 								value: {
 									workspaceId: workspace.workspaceId,
 									path: workspace.path,
-									displayTitle: workspace.title || shortName(workspace.path)
+									displayTitle: workspaceLabel(workspace)
 								}
 							},
 							point

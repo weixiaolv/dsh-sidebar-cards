@@ -50,7 +50,9 @@ Plugins page) and restart `dsh web`. Requires DSH `0.2.1-rc.3` or newer; checked
 
 | Card | What it does |
 | --- | --- |
-| Workspaces | Create / rename / delete / collapse categories; drag workspaces between them, rename, delete, start a session in one; open, rename, pin, archive or unarchive sessions (archiving a running session asks first), copy the session id; filter by text; three-way archived filter; five sessions per workspace by default, with "show more" adding ten at a time |
+| Workspaces | Create / rename / delete / collapse categories; drag workspaces between them, rename, delete, start a session in one; open, rename, pin, archive or unarchive sessions (archiving a running session asks first), copy the session id; five sessions per workspace by default, with "show more" adding ten at a time |
+| Workspaces, view options | Three-way archived filter; sort workspaces by name or by their latest session, each in either direction (re-picking the active mode flips it); expand or collapse everything |
+| Search | Matches a workspace's own title and path, and also keeps a workspace whose sessions match; while a query is active no session list is truncated and the "expand all hits" switch unfolds every hit without changing your saved fold state |
 | Plugins | Collects every entry registered in `sidebar.panellist` and `sidebar.footer.action`; user-made groups, drag to regroup, hide / restore, click to open; collapsed by default |
 
 ## State
@@ -70,9 +72,11 @@ Host copy wins. On first run the categories left in `localStorage` by
 ## 中文说明
 
 把 DeepSeek Harness 的左栏做成 VS Code 那种「功能卡片」侧边栏：工作区与会话按分类树组织，
-可拖拽归类；原本散落在侧栏顶部图标行和底部快捷入口的插件入口，统一收进「插件」卡，可自建分组、
-拖拽、隐藏。布局状态存在 Host 端的 `~/.dsh/sidebar-cards/state.json`，换端口、换浏览器、
-刷新页面都不会丢。见上方能力表与已知限制。
+可拖拽归类；「视图选项」里可按名称或最近会话给工作区排序（再次点击同一项切换升/降），并做
+归档三态筛选；搜索会同时匹配工作区标题与它下面的会话，命中时可一键「展开全部命中」。原本散落
+在侧栏顶部图标行和底部快捷入口的插件入口，统一收进「插件」卡，可自建分组、拖拽、隐藏。布局状态
+存在 Host 端的 `~/.dsh/sidebar-cards/state.json`，换端口、换浏览器、刷新页面都不会丢。见上方
+能力表与已知限制。
 
 ---
 
