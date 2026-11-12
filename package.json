@@ -1,6 +1,6 @@
 {
   "name": "dsh-sidebar-cards",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "从左栏接管 DeepSeek Harness 的侧边栏：工作区分类树 + 插件入口统一管理。",
   "type": "module",
   "main": "index.js",

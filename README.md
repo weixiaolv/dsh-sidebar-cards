@@ -53,6 +53,7 @@ Plugins page) and restart `dsh web`. Requires DSH `0.2.1-rc.3` or newer; checked
 | Workspaces | Create / rename / delete / collapse categories; drag workspaces between them, rename, delete, start a session in one; open, rename, pin, archive or unarchive sessions (archiving a running session asks first), copy the session id; five sessions per workspace by default, with "show more" adding ten at a time |
 | Workspaces, view options | Three-way archived filter; sort workspaces by name or by their latest session, each in either direction (re-picking the active mode flips it); expand or collapse everything |
 | Search | Matches a workspace's own title and path, and also keeps a workspace whose sessions match; while a query is active no session list is truncated and the "expand all hits" switch unfolds every hit without changing your saved fold state |
+| Language | Every label exists in English and Chinese. The default follows the browser — English on a non-Chinese UI — and the Workspaces card's view options pin it to either language |
 | Plugins | Collects every entry registered in `sidebar.panellist` and `sidebar.footer.action`; user-made groups, drag to regroup, hide / restore, click to open; collapsed by default |
 
 ## State
@@ -60,7 +61,8 @@ Plugins page) and restart `dsh web`. Requires DSH `0.2.1-rc.3` or newer; checked
 `~/.dsh/sidebar-cards/state.json`, read and written by the Host half through the
 `/api/dsh-sidebar-cards/state` route. The browser's `localStorage` only mirrors it — the
 Host copy wins. On first run the categories left in `localStorage` by
-`dsh-workspace-categories` are migrated over.
+`dsh-workspace-categories` are migrated over. The same file keeps the language choice
+(`lang`: `auto`, `en` or `zh`), so the UI comes back in the language you left it in.
 
 ## Known limitations
 

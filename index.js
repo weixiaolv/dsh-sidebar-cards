@@ -136,6 +136,7 @@ function normalizeState(raw) {
     'workspaceCollapsed',
     'workspaceSort',
     'workspaceSortDir',
+    'lang',
     'pluginCollapsed',
     'pluginGroups',
     'pluginAssign',

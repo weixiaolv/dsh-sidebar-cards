@@ -4,10 +4,10 @@
  * Takes over the sidebar's `sidebar.workspaces` region and renders two
  * collapsible cards in it:
  *
- *   工作区 —— categories > workspaces > sessions, with the management actions
+ *   Workspaces —— categories > workspaces > sessions, with the management actions
  *             the native browser offers (rename / delete / archive / pin /
  *             new session / new workspace / search / archived filter).
- *   插件   —— every panel entry (`sidebar.panellist`) and loose shortcut entry
+ *   Plugins    —— every panel entry (`sidebar.panellist`) and loose shortcut entry
  *             (`sidebar.footer.action`) collected into one list, with user
  *             groups, hiding and reordering.
  *
@@ -114,6 +114,133 @@ function build(require) {
 			return parts[parts.length - 1] || text
 		}
 
+		/* ------------------------------------------------------------ language */
+
+		/**
+		 * Every user-visible string, one row per message: [English, Chinese].
+		 * `t()` takes the column of the language in force — the saved choice, or
+		 * the browser's own language while the choice is "auto" (the default).
+		 */
+		const STRINGS = {
+			"card.workspaces": ["Workspaces", "工作区"],
+			"card.plugins": ["Plugins", "插件"],
+			"card.unassigned": ["Uncategorized", "未分类"],
+			"card.ungrouped": ["Ungrouped", "未分组"],
+			"action.cancel": ["Cancel", "取消"],
+			"action.confirm": ["OK", "确定"],
+			"action.delete": ["Delete", "删除"],
+			"action.close": ["Close", "关闭"],
+			"action.expandAll": ["Expand all", "全部展开"],
+			"action.collapseAll": ["Collapse all", "全部折叠"],
+			"category.new": ["New category", "新建分类"],
+			"category.newWorkspace": ["New workspace in this category", "在此分类下新建工作区"],
+			"category.rename": ["Rename category", "重命名分类"],
+			"category.delete": ["Delete category", "删除分类"],
+			"category.deleteMessage": ["Workspaces in this category move to Uncategorized; no workspace is deleted.", "分类里的工作区会回到「未分类」，不会删除工作区。"],
+			"category.namePlaceholder": ["Category name, for example Org management / Projects", "分类名称，例如 组织管理 / 项目管理"],
+			"category.untitled": ["Untitled category", "未命名分类"],
+			"plugins.newGroup": ["New plugin group", "新建插件分组"],
+			"plugins.renameGroup": ["Rename group", "重命名分组"],
+			"plugins.deleteGroup": ["Delete group", "删除分组"],
+			"plugins.groupNamePlaceholder": ["Group name, for example Tools / Data / Connectors", "分组名称，例如 工具 / 数据 / 连接"],
+			"plugins.dragHint": ["Drag into a group", "拖到分组归类"],
+			"plugins.restore": ["Show again", "恢复显示"],
+			"plugins.hide": ["Hide entry", "隐藏入口"],
+			"plugins.empty": ["No plugin entries to manage", "暂无可管理的插件入口"],
+			"plugins.showHidden": ["Show hidden entries", "显示已隐藏入口"],
+			"plugins.showHiddenCount": ["Show hidden entries ({n})", "显示已隐藏入口（{n}）"],
+			"plugins.untitledGroup": ["Untitled group", "未命名分组"],
+			"session.rename": ["Rename session", "重命名会话"],
+			"session.pin": ["Pin", "置顶"],
+			"session.unpin": ["Unpin", "取消置顶"],
+			"session.fork": ["Fork session", "分叉会话"],
+			"session.copyId": ["Copy session ID", "复制会话 ID"],
+			"session.archive": ["Archive", "归档"],
+			"session.unarchive": ["Unarchive", "取消归档"],
+			"session.more": ["More actions", "更多操作"],
+			"session.untitled": ["Untitled", "未命名"],
+			"session.empty": ["No sessions yet", "还没有会话"],
+			"session.noMatch": ["No matching sessions", "没有匹配的会话"],
+			"session.showMore": ["Show more", "显示更多"],
+			"session.showLess": ["Show less", "显示更少"],
+			"session.runningTitle": ["This session is still running", "该会话仍在运行"],
+			"session.runningMessage": ["Stop it and archive?", "停止它并归档？"],
+			"session.stopArchive": ["Stop and archive", "停止并归档"],
+			"workspace.newSession": ["New session", "新建会话"],
+			"workspace.rename": ["Rename workspace", "重命名工作区"],
+			"workspace.copyPath": ["Copy path", "复制路径"],
+			"workspace.moveTo": ["Move to category", "移入分类"],
+			"workspace.moveOut": ["Remove from category", "移出分类"],
+			"workspace.delete": ["Delete workspace", "删除工作区"],
+			"workspace.deleteMessage": ["Removes it from this list only; the folder on disk is untouched.", "仅从列表移除，不会删除磁盘上的目录。"],
+			"workspace.more": ["Workspace actions", "工作区操作"],
+			"workspace.dropHint": ["Drop a workspace here, or click + to create one", "把工作区拖到这里，或点 + 新建"],
+			"workspace.empty": ["No workspaces yet — click + above to add a folder", "还没有工作区，点上方 + 添加一个目录"],
+			"options.title": ["View options", "视图选项"],
+			"options.archivedHeader": ["Archived sessions", "已归档会话"],
+			"options.archivedDefault": ["Hide archived", "隐藏已归档"],
+			"options.archivedShow": ["All conversations (show archived)", "全部对话（显示已归档）"],
+			"options.archivedOnly": ["Archived only", "仅显示已归档"],
+			"options.sortHeader": ["Workspace order", "工作区排序"],
+			"options.sortManual": ["Manual order", "不自动排序"],
+			"options.sortName": ["By name", "按名称排序"],
+			"options.sortTime": ["By latest session", "按最近会话排序"],
+			"options.newHeader": ["New group or workspace", "新建分组或工作区"],
+			"options.newGroup": ["New category", "新建分组"],
+			"options.newWorkspace": ["New workspace", "新建工作区"],
+			"options.language": ["Language", "界面语言"],
+			"options.langAuto": ["Follow browser", "跟随浏览器"],
+			"search.placeholder": ["Filter workspaces and sessions…", "筛选工作区与会话…"],
+			"search.expandHits": ["Expand all hits", "展开全部命中"],
+			"search.collapseHits": ["Collapse hits", "收起命中"],
+			"mode.title": ["View", "视图切换"],
+			"mode.native": ["Native list", "原生列表"],
+			"mode.cards": ["Card sidebar", "卡片侧栏"],
+			"mode.toNative": ["Switch to the native workspace list", "切换为原生工作区列表"],
+			"mode.toCards": ["Switch to the card sidebar", "切换为卡片侧栏"],
+			"error.noDirectoryPicker": ["No directory picker is available", "没有可用的目录选择器"],
+			"error.workspacesUnavailable": ["The workspaces service is unavailable", "workspaces 服务不可用"],
+			"error.sessionsUnavailable": ["The sessions service is unavailable", "sessions 服务不可用"],
+			"error.pinUnavailable": ["Pin is unavailable", "置顶不可用"],
+			"error.unpinUnavailable": ["Unpin is unavailable", "取消置顶不可用"],
+			"error.forkUnavailable": ["Fork is unavailable", "分叉不可用"],
+			"error.renameFailed": ["Rename failed", "重命名失败"],
+		}
+
+		function browserLang(nav) {
+			const agent = nav === undefined ? (typeof navigator === 'undefined' ? null : navigator) : nav
+			try {
+				const tags = agent === null ? [] : Array.isArray(agent.languages) && agent.languages.length > 0 ? agent.languages : [agent.language]
+				for (const tag of tags) {
+					if (typeof tag === 'string' && tag.toLowerCase().indexOf('zh') === 0) return 'zh'
+				}
+			} catch {
+				/* no navigator here: English is the safe default */
+			}
+			return 'en'
+		}
+
+		/** The language in force: the saved choice, otherwise the browser's. */
+		function currentLang() {
+			const choice = getState() && getState().lang
+			if (choice === 'zh' || choice === 'en') return choice
+			return browserLang()
+		}
+
+		function t(key) {
+			const row = STRINGS[key]
+			if (row === undefined) return key
+			return currentLang() === 'zh' ? row[1] : row[0]
+		}
+
+		/** `t()` with its `{name}` placeholders filled in. */
+		function tf(key, values) {
+			let out = t(key)
+			const vars = values || {}
+			for (const name of Object.keys(vars)) out = out.split('{' + name + '}').join(String(vars[name]))
+			return out
+		}
+
 		function shortName(packageName) {
 			return String(packageName || '')
 				.replace(/^@[^/]+\//, '')
@@ -156,6 +283,7 @@ function build(require) {
 			workspaceCollapsed: false,
 			workspaceSort: 'manual',
 			workspaceSortDir: 'asc',
+			lang: 'auto',
 			pluginCollapsed: true,
 			pluginGroups: [],
 			pluginAssign: {},
@@ -171,7 +299,7 @@ function build(require) {
 						.filter((entry) => entry && typeof entry.id === 'string' && entry.id !== '')
 						.map((entry) => ({
 							id: entry.id,
-							name: typeof entry.name === 'string' && entry.name !== '' ? entry.name : '未命名分类',
+							name: typeof entry.name === 'string' ? entry.name : '',
 							collapsed: entry.collapsed === true
 						}))
 				: []
@@ -180,7 +308,7 @@ function build(require) {
 						.filter((entry) => entry && typeof entry.id === 'string' && entry.id !== '')
 						.map((entry) => ({
 							id: entry.id,
-							name: typeof entry.name === 'string' && entry.name !== '' ? entry.name : '未命名分组',
+							name: typeof entry.name === 'string' ? entry.name : '',
 							collapsed: entry.collapsed === true
 						}))
 				: []
@@ -195,6 +323,7 @@ function build(require) {
 				workspaceCollapsed: merged.workspaceCollapsed === true,
 				workspaceSort: ['manual', 'name', 'time'].indexOf(merged.workspaceSort) === -1 ? 'manual' : merged.workspaceSort,
 				workspaceSortDir: merged.workspaceSortDir === 'desc' ? 'desc' : 'asc',
+				lang: merged.lang === 'zh' || merged.lang === 'en' ? merged.lang : 'auto',
 				pluginCollapsed: merged.pluginCollapsed !== false,
 				pluginGroups,
 				pluginAssign: asRecord(merged.pluginAssign),
@@ -351,7 +480,7 @@ function build(require) {
 					.filter((entry) => entry && typeof entry.id === 'string')
 					.map((entry) => ({
 						id: entry.id,
-						name: typeof entry.name === 'string' && entry.name !== '' ? entry.name : '未命名分类',
+						name: typeof entry.name === 'string' ? entry.name : '',
 						collapsed: entry.collapsed === true
 					}))
 				setState({
@@ -572,7 +701,7 @@ function build(require) {
 						h(
 							'button',
 							{ type: 'button', className: 'dsc-btn', onClick: props.onCancel },
-							'取消'
+							t('action.cancel')
 						),
 						h(
 							'button',
@@ -581,7 +710,7 @@ function build(require) {
 								className: 'dsc-btn dsc-btn-primary' + (props.danger ? ' dsc-btn-danger' : ''),
 								onClick: submit
 							},
-							props.confirmLabel || '确定'
+							props.confirmLabel || t('action.confirm')
 						)
 					)
 				)
@@ -649,7 +778,7 @@ function build(require) {
 						)
 					)
 					const textOf = (element) => (element.getAttribute('aria-label') || element.textContent || '').replace(/\s+/g, ' ').trim()
-					// Exact label first: "插件" must not borrow "插件市场"'s glyph.
+					// Exact label first: "Plugins" must not borrow "Plugin Market"'s glyph.
 					let match = scope.find((element) => label !== '' && textOf(element) === label)
 					if (!match && label !== '') match = scope.find((element) => textOf(element).indexOf(label) !== -1)
 					if (!match) return false
@@ -825,8 +954,8 @@ function build(require) {
 
 			const newGroup = () => {
 				setDialog({
-					title: '新建插件分组',
-					placeholder: '分组名称，例如 工具 / 数据 / 连接',
+					title: t('plugins.newGroup'),
+					placeholder: t('plugins.groupNamePlaceholder'),
 					onSubmit: (name) => {
 						setDialog(null)
 						if (name === '') return
@@ -859,7 +988,7 @@ function build(require) {
 						},
 						onDragEnd: () => setDragKey(null)
 					},
-					h('span', { className: 'dsc-grip', title: '拖到分组归类' }, h(Icon, { name: 'grip', size: 12 })),
+					h('span', { className: 'dsc-grip', title: t('plugins.dragHint') }, h(Icon, { name: 'grip', size: 12 })),
 					h(
 						'button',
 						{
@@ -875,7 +1004,7 @@ function build(require) {
 						{ className: 'dsc-rowacts' },
 						h(IconButton, {
 							name: hidden.has(row.key) ? 'eye' : 'eyeOff',
-							label: hidden.has(row.key) ? '恢复显示' : '隐藏入口',
+							label: hidden.has(row.key) ? t('plugins.restore') : t('plugins.hide'),
 							onClick: () => toggleHidden(row.key)
 						})
 					)
@@ -921,7 +1050,7 @@ function build(require) {
 								{ className: 'dsc-caret' + (group.collapsed ? '' : ' dsc-caret-open') },
 								h(Icon, { name: 'chevron', size: 12 })
 							),
-							h('span', { className: 'dsc-rowlabel dsc-catlabel' }, group.name)
+							h('span', { className: 'dsc-rowlabel dsc-catlabel' }, group.name || t('plugins.untitledGroup'))
 						),
 						h(CountBadge, { count: (buckets.get(group.id) || []).length }),
 						h(
@@ -929,10 +1058,10 @@ function build(require) {
 							{ className: 'dsc-rowacts' },
 							h(IconButton, {
 								name: 'pencil',
-								label: '重命名分组',
+								label: t('plugins.renameGroup'),
 								onClick: () =>
 									setDialog({
-										title: '重命名分组',
+										title: t('plugins.renameGroup'),
 										initialValue: group.name,
 										onSubmit: (name) => {
 											setDialog(null)
@@ -947,7 +1076,7 @@ function build(require) {
 							}),
 							h(IconButton, {
 								name: 'trash',
-								label: '删除分组',
+								label: t('plugins.deleteGroup'),
 								onClick: () => {
 									const nextAssign = Object.assign({}, assign)
 									for (const key of Object.keys(nextAssign)) {
@@ -973,14 +1102,14 @@ function build(require) {
 				h(
 					CardHeader,
 					{
-						title: '插件',
+						title: t('card.plugins'),
 						open,
 						count: totalVisible,
 						onToggle: () => setPlugin({ pluginCollapsed: open })
 					},
 					h(IconButton, {
 						name: 'sliders',
-						label: '视图选项',
+						label: t('options.title'),
 						onClick: (event) => {
 							const rect = event.currentTarget.getBoundingClientRect()
 							const hiddenCount = all.filter((row) => hidden.has(row.key)).length
@@ -989,24 +1118,24 @@ function build(require) {
 								y: rect.bottom + 4,
 								items: [
 									{
-										label: '显示已隐藏入口' + (hiddenCount > 0 ? '（' + hiddenCount + '）' : ''),
+										label: hiddenCount > 0 ? tf('plugins.showHiddenCount', { n: hiddenCount }) : t('plugins.showHidden'),
 										trailing: showHidden ? '✓' : '',
 										onSelect: () => setPlugin({ pluginShowHidden: !showHidden })
 									},
 									{ separator: true },
 									{
-										label: '全部展开',
+										label: t('action.expandAll'),
 										onSelect: () => setPlugin({ pluginGroups: groups.map((group) => Object.assign({}, group, { collapsed: false })) })
 									},
 									{
-										label: '全部折叠',
+										label: t('action.collapseAll'),
 										onSelect: () => setPlugin({ pluginGroups: groups.map((group) => Object.assign({}, group, { collapsed: true })) })
 									}
 								]
 							})
 						}
 					}),
-					h(IconButton, { name: 'plus', label: '新建插件分组', onClick: newGroup })
+					h(IconButton, { name: 'plus', label: t('plugins.newGroup'), onClick: newGroup })
 				),
 				open
 					? h(
@@ -1038,7 +1167,7 @@ function build(require) {
 											h(
 												'span',
 												{ className: 'dsc-rowmain' },
-												h('span', { className: 'dsc-rowlabel dsc-catlabel' }, '未分组')
+												h('span', { className: 'dsc-rowlabel dsc-catlabel' }, t('card.ungrouped'))
 											),
 											h(CountBadge, { count: ungrouped.length })
 										),
@@ -1046,7 +1175,7 @@ function build(require) {
 									)
 								: null,
 							groups.length === 0 && ungrouped.length === 0
-								? h('div', { className: 'dsc-empty' }, '暂无可管理的插件入口')
+								? h('div', { className: 'dsc-empty' }, t('plugins.empty'))
 								: null,
 							h(FooterProxies, null)
 						)
@@ -1069,7 +1198,7 @@ function build(require) {
 		}
 
 		/**
-		 * The foot's other entries (Lark, the market's "更多", …) can only be
+		 * The foot's other entries (Lark, the market's "More", …) can only be
 		 * rendered by the plugin that owns them, so the card keeps a proxy row
 		 * per entry: it reads the label from the live DOM and forwards a click to
 		 * the original element, which stays mounted (hidden by CSS) in the foot.
@@ -1270,8 +1399,8 @@ function build(require) {
 
 			const newCategory = () => {
 				setDialog({
-					title: '新建分类',
-					placeholder: '分类名称，例如 组织管理 / 项目管理',
+					title: t('category.new'),
+					placeholder: t('category.namePlaceholder'),
 					onSubmit: (name) => {
 						setDialog(null)
 						if (name === '') return
@@ -1294,10 +1423,10 @@ function build(require) {
 					.catch((reason) => {
 						if (isActiveRefusal(reason)) {
 							setDialog({
-								title: '该会话仍在运行',
-								message: '停止它并归档？',
+								title: t('session.runningTitle'),
+								message: t('session.runningMessage'),
 								confirmOnly: true,
-								confirmLabel: '停止并归档',
+								confirmLabel: t('session.stopArchive'),
 								danger: true,
 								onSubmit: () => {
 									setDialog(null)
@@ -1340,18 +1469,18 @@ function build(require) {
 				const rect = event.currentTarget.getBoundingClientRect()
 				const items = [
 					{
-						label: '新建会话',
+						label: t('workspace.newSession'),
 						icon: 'plus',
 						onSelect: () => {
 							if (actions.startSession) actions.startSession(workspace.workspaceId)
 						}
 					},
 					{
-						label: '重命名工作区',
+						label: t('workspace.rename'),
 						icon: 'pencil',
 						onSelect: () =>
 							setDialog({
-								title: '重命名工作区',
+								title: t('workspace.rename'),
 								initialValue: workspaceLabel(workspace),
 								onSubmit: (name) => {
 									setDialog(null)
@@ -1360,33 +1489,33 @@ function build(require) {
 								}
 							})
 					},
-					{ label: '复制路径', onSelect: () => copy(workspace.path) },
+					{ label: t('workspace.copyPath'), onSelect: () => copy(workspace.path) },
 					{ separator: true }
 				]
 				if (categories.length > 0) {
-					items.push({ header: true, label: '移入分类' })
+					items.push({ header: true, label: t('workspace.moveTo') })
 					for (const category of categories) {
 						items.push({
-							label: (stateNow.assign[workspace.workspaceId] === category.id ? '✓ ' : '') + category.name,
+							label: (stateNow.assign[workspace.workspaceId] === category.id ? '✓ ' : '') + (category.name || t('category.untitled')),
 							onSelect: () => assignWorkspace(workspace.workspaceId, category.id)
 						})
 					}
 					if (stateNow.assign[workspace.workspaceId] !== undefined) {
-						items.push({ label: '移出分类', onSelect: () => assignWorkspace(workspace.workspaceId, UNASSIGNED) })
+						items.push({ label: t('workspace.moveOut'), onSelect: () => assignWorkspace(workspace.workspaceId, UNASSIGNED) })
 					}
 					items.push({ separator: true })
 				}
 				items.push({
-					label: '删除工作区',
+					label: t('workspace.delete'),
 					danger: true,
 					icon: 'trash',
 					onSelect: () =>
 						setDialog({
-							title: '删除工作区',
-							message: '仅从列表移除，不会删除磁盘上的目录。',
+							title: t('workspace.delete'),
+							message: t('workspace.deleteMessage'),
 							confirmOnly: true,
 							danger: true,
-							confirmLabel: '删除',
+							confirmLabel: t('action.delete'),
 							onSubmit: () => {
 								setDialog(null)
 								Promise.resolve(actions.deleteWorkspace(workspace.workspaceId)).catch(fail)
@@ -1403,7 +1532,7 @@ function build(require) {
 						? { x: event.clientX, y: event.clientY }
 						: { x: rect ? rect.left : 0, y: rect ? rect.bottom + 2 : 0 }
 				const opened = actions.openSessionMenu
-					? actions.openSessionMenu(session.id, session.displayTitle || session.title || '未命名', point, mode)
+					? actions.openSessionMenu(session.id, session.displayTitle || session.title || t('session.untitled'), point, mode)
 					: false
 				return opened === true
 			}
@@ -1414,11 +1543,11 @@ function build(require) {
 				const pinned = (wsSnap.pinnedSessionIds || []).indexOf(session.id) !== -1
 				const items = [
 					{
-						label: '重命名会话',
+						label: t('session.rename'),
 						icon: 'pencil',
 						onSelect: () =>
 							setDialog({
-								title: '重命名会话',
+								title: t('session.rename'),
 								initialValue: session.displayTitle || session.title || '',
 								onSubmit: (name) => {
 									setDialog(null)
@@ -1428,7 +1557,7 @@ function build(require) {
 							})
 					},
 					{
-						label: pinned ? '取消置顶' : '置顶',
+						label: pinned ? t('session.unpin') : t('session.pin'),
 						icon: 'pin',
 						onSelect: () => {
 							const call = pinned ? actions.unpinSession : actions.pinSession
@@ -1437,7 +1566,7 @@ function build(require) {
 						}
 					},
 					{
-						label: '分叉会话',
+						label: t('session.fork'),
 						icon: 'branch',
 						onSelect: () => {
 							try {
@@ -1447,13 +1576,13 @@ function build(require) {
 							}
 						}
 					},
-					{ label: '复制会话 ID', onSelect: () => copy(session.id) },
+					{ label: t('session.copyId'), onSelect: () => copy(session.id) },
 					{ separator: true }
 				]
 				if (session.archived) {
-					items.push({ label: '取消归档', icon: 'unarchive', onSelect: () => unarchive(session.id) })
+					items.push({ label: t('session.unarchive'), icon: 'unarchive', onSelect: () => unarchive(session.id) })
 				} else {
-					items.push({ label: '归档', icon: 'archive', onSelect: () => archive(session.id) })
+					items.push({ label: t('session.archive'), icon: 'archive', onSelect: () => archive(session.id) })
 				}
 				setMenu({ x: rect.right - 180, y: rect.bottom + 4, items })
 			}
@@ -1496,12 +1625,12 @@ function build(require) {
 							}
 						},
 						statusDot ? (StateDot ? h(StateDot, { state: statusDot }) : h('span', { className: 'dsc-dot dsc-dot-' + statusDot })) : null,
-						h('span', { className: 'dsc-rowlabel' }, session.displayTitle || session.title || '未命名')
+						h('span', { className: 'dsc-rowlabel' }, session.displayTitle || session.title || t('session.untitled'))
 					),
 					h(
 						'span',
 						{ className: 'dsc-rowacts' },
-						h(IconButton, { name: 'more', label: '更多操作', onClick: (event) => sessionMenu(event, session, 'toggle') })
+						h(IconButton, { name: 'more', label: t('session.more'), onClick: (event) => sessionMenu(event, session, 'toggle') })
 					)
 				)
 			}
@@ -1560,12 +1689,12 @@ function build(require) {
 							{ className: 'dsc-rowacts' },
 							h(IconButton, {
 								name: 'plus',
-								label: '新建会话',
+								label: t('workspace.newSession'),
 								onClick: () => {
 									if (actions.startSession) actions.startSession(workspace.workspaceId)
 								}
 							}),
-							h(IconButton, { name: 'more', label: '工作区操作', onClick: (event) => workspaceMenu(event, workspace, 'toggle') })
+							h(IconButton, { name: 'more', label: t('workspace.more'), onClick: (event) => workspaceMenu(event, workspace, 'toggle') })
 						)
 					),
 					expanded
@@ -1573,15 +1702,15 @@ function build(require) {
 								'div',
 								{ className: 'dsc-group-body' },
 								shown.map((session) => renderSession(workspace, session)),
-								sessions.length === 0 ? h('div', { className: 'dsc-empty' }, lower === '' ? '还没有会话' : '没有匹配的会话') : null,
+								sessions.length === 0 ? h('div', { className: 'dsc-empty' }, lower === '' ? t('session.empty') : t('session.noMatch')) : null,
 								sessions.length > limit
 									? h(
 											'button',
 											{ type: 'button', className: 'dsc-morebtn', onClick: () => showMore(workspace.workspaceId) },
-											'显示更多'
+											t('session.showMore')
 										)
 									: limit > SESSION_DEFAULT && sessions.length > 0
-										? h('button', { type: 'button', className: 'dsc-morebtn', onClick: () => showLess(workspace.workspaceId) }, '显示更少')
+										? h('button', { type: 'button', className: 'dsc-morebtn', onClick: () => showLess(workspace.workspaceId) }, t('session.showLess'))
 										: null
 							)
 						: null
@@ -1628,19 +1757,19 @@ function build(require) {
 								{ className: 'dsc-caret' + (category.collapsed && !(lower !== '' && expandHits) ? '' : ' dsc-caret-open') },
 								h(Icon, { name: 'chevron', size: 12 })
 							),
-							h('span', { className: 'dsc-rowlabel dsc-catlabel' }, category.name)
+							h('span', { className: 'dsc-rowlabel dsc-catlabel' }, category.name || t('category.untitled'))
 						),
 						h(CountBadge, { count: (buckets.get(category.id) || []).length }),
 						h(
 							'span',
 							{ className: 'dsc-rowacts' },
-							h(IconButton, { name: 'plus', label: '在此分类下新建工作区', onClick: () => createWorkspaceFor(category.id) }),
+							h(IconButton, { name: 'plus', label: t('category.newWorkspace'), onClick: () => createWorkspaceFor(category.id) }),
 							h(IconButton, {
 								name: 'pencil',
-								label: '重命名分类',
+								label: t('category.rename'),
 								onClick: () =>
 									setDialog({
-										title: '重命名分类',
+										title: t('category.rename'),
 										initialValue: category.name,
 										onSubmit: (name) => {
 											setDialog(null)
@@ -1655,14 +1784,14 @@ function build(require) {
 							}),
 							h(IconButton, {
 								name: 'trash',
-								label: '删除分类',
+								label: t('category.delete'),
 								onClick: () =>
 									setDialog({
-										title: '删除分类',
-										message: '分类里的工作区会回到「未分类」，不会删除工作区。',
+										title: t('category.delete'),
+										message: t('category.deleteMessage'),
 										confirmOnly: true,
 										danger: true,
-										confirmLabel: '删除分类',
+										confirmLabel: t('category.delete'),
 										onSubmit: () => {
 											setDialog(null)
 											const nextAssign = Object.assign({}, stateNow.assign)
@@ -1685,7 +1814,7 @@ function build(require) {
 								{ className: 'dsc-group-body' },
 								(buckets.get(category.id) || []).map((workspace) => renderWorkspace(workspace, 12)),
 								(buckets.get(category.id) || []).length === 0
-									? h('div', { className: 'dsc-empty' }, '把工作区拖到这里，或点 + 新建')
+									? h('div', { className: 'dsc-empty' }, t('workspace.dropHint'))
 									: null
 							)
 				)
@@ -1698,14 +1827,14 @@ function build(require) {
 				h(
 					CardHeader,
 					{
-						title: '工作区',
+						title: t('card.workspaces'),
 						open,
 						count: workspaces.length,
 						onToggle: () => setState({ workspaceCollapsed: open })
 					},
 					h(IconButton, {
 						name: 'sliders',
-						label: '视图选项',
+						label: t('options.title'),
 						onClick: (event) => {
 							const rect = event.currentTarget.getBoundingClientRect()
 							const check = (key) => (stateNow.archived === key ? '✓' : '')
@@ -1713,21 +1842,21 @@ function build(require) {
 								x: rect.right - 190,
 								y: rect.bottom + 4,
 								items: [
-									{ header: true, label: '已归档会话' },
-									{ label: '隐藏已归档', trailing: check('default'), onSelect: () => setState({ archived: 'default' }) },
-									{ label: '全部对话（显示已归档）', trailing: check('show'), onSelect: () => setState({ archived: 'show' }) },
-									{ label: '仅显示已归档', trailing: check('only'), onSelect: () => setState({ archived: 'only' }) },
+									{ header: true, label: t('options.archivedHeader') },
+									{ label: t('options.archivedDefault'), trailing: check('default'), onSelect: () => setState({ archived: 'default' }) },
+									{ label: t('options.archivedShow'), trailing: check('show'), onSelect: () => setState({ archived: 'show' }) },
+									{ label: t('options.archivedOnly'), trailing: check('only'), onSelect: () => setState({ archived: 'only' }) },
 									{ separator: true },
-									{ header: true, label: '工作区排序' },
+									{ header: true, label: t('options.sortHeader') },
 									{
-										label: '不自动排序',
+										label: t('options.sortManual'),
 										trailing: stateNow.workspaceSort === 'manual' ? '✓' : '',
 										onSelect: () => setState({ workspaceSort: 'manual' })
 									},
 									{
 										// Re-clicking the active mode flips its direction: one row
 										// per mode, not a second set of direction rows.
-										label: '按名称排序',
+										label: t('options.sortName'),
 										trailing:
 											stateNow.workspaceSort !== 'name'
 												? ''
@@ -1742,7 +1871,7 @@ function build(require) {
 											)
 									},
 									{
-										label: '按最近会话排序',
+										label: t('options.sortTime'),
 										trailing:
 											stateNow.workspaceSort !== 'time'
 												? ''
@@ -1757,23 +1886,32 @@ function build(require) {
 											)
 									},
 									{ separator: true },
-									{ label: '全部展开', onSelect: () => expandAll() },
-									{ label: '全部折叠', onSelect: () => setState({ expanded: {} }) }
+									{ label: t('action.expandAll'), onSelect: () => expandAll() },
+									{ label: t('action.collapseAll'), onSelect: () => setState({ expanded: {} }) },
+									{ separator: true },
+									{ header: true, label: t('options.language') },
+									{
+										label: t('options.langAuto'),
+										trailing: stateNow.lang === 'zh' || stateNow.lang === 'en' ? '' : '✓',
+										onSelect: () => setState({ lang: 'auto' })
+									},
+									{ label: '中文', trailing: stateNow.lang === 'zh' ? '✓' : '', onSelect: () => setState({ lang: 'zh' }) },
+									{ label: 'English', trailing: stateNow.lang === 'en' ? '✓' : '', onSelect: () => setState({ lang: 'en' }) }
 								]
 							})
 						}
 					}),
 					h(IconButton, {
 						name: 'plus',
-						label: '新建分组或工作区',
+						label: t('options.newHeader'),
 						onClick: (event) => {
 							const rect = event.currentTarget.getBoundingClientRect()
 							setMenu({
 								x: rect.right - 168,
 								y: rect.bottom + 4,
 								items: [
-									{ label: '新建分组', icon: 'layers', onSelect: newCategory },
-									{ label: '新建工作区', icon: 'folder', onSelect: () => createWorkspaceFor(null) }
+									{ label: t('options.newGroup'), icon: 'layers', onSelect: newCategory },
+									{ label: t('options.newWorkspace'), icon: 'folder', onSelect: () => createWorkspaceFor(null) }
 								]
 							})
 						}
@@ -1790,14 +1928,14 @@ function build(require) {
 								h('input', {
 									className: 'dsc-searchinput',
 									value: needle,
-									placeholder: '筛选工作区与会话…',
+									placeholder: t('search.placeholder'),
 									onChange: (event) => setNeedle(event.target.value)
 								}),
 								needle.trim() === ''
 									? null
 									: h(IconButton, {
 											name: 'expand',
-											label: expandHits ? '收起命中' : '展开全部命中',
+											label: expandHits ? t('search.collapseHits') : t('search.expandHits'),
 											active: expandHits,
 											onClick: () => setExpandHits(!expandHits)
 										})
@@ -1807,7 +1945,7 @@ function build(require) {
 										'div',
 										{ className: 'dsc-error' },
 										h('span', null, error),
-										h(IconButton, { name: 'close', label: '关闭', onClick: clearError })
+										h(IconButton, { name: 'close', label: t('action.close'), onClick: clearError })
 									)
 								: null,
 							categories.map(renderCategory),
@@ -1836,7 +1974,7 @@ function build(require) {
 									h(
 										'span',
 										{ className: 'dsc-rowmain' },
-										h('span', { className: 'dsc-rowlabel dsc-catlabel' }, '未分类')
+										h('span', { className: 'dsc-rowlabel dsc-catlabel' }, t('card.unassigned'))
 									),
 									h(CountBadge, { count: orderedUnassigned.length })
 								),
@@ -1844,7 +1982,7 @@ function build(require) {
 							)
 								: null,
 							workspaces.length === 0
-								? h('div', { className: 'dsc-empty dsc-empty-block' }, '还没有工作区，点上方 + 添加一个目录')
+								? h('div', { className: 'dsc-empty dsc-empty-block' }, t('workspace.empty'))
 								: null
 						)
 					: null,
@@ -2111,7 +2249,7 @@ function build(require) {
 .dsc-btn-primary{border-color:transparent;background:var(--dsw-alias-brand-primary);color:var(--dsw-alias-bg-base)}
 .dsc-btn-danger{background:var(--dsw-alias-state-error-primary);color:var(--dsw-alias-bg-base)}
 /* The foot keeps nothing but the view switch: every other entry (Lark, the
-   market's "更多", …) is listed in the plugin card instead. */
+   market's "More", …) is listed in the plugin card instead. */
 [class*="footerActions"] > :not(:has(.dsc-modeswitch)){display:none!important}
 [class*="footerActions"] > :has(.dsc-modeswitch){display:flex !important;align-items:center;flex:1 1 auto;min-width:0;justify-content:flex-end}
 .dsc-modeswitch-row{display:flex;align-items:center;justify-content:flex-end;width:100%;padding:2px 2px 2px 0}
@@ -2256,55 +2394,55 @@ html.dsc-on [class*="panelList"]{display:none!important}
 							? Promise.resolve(desktop.pick())
 							: safeService('uiWorkspace') && typeof safeService('uiWorkspace').pickDirectory === 'function'
 								? Promise.resolve(safeService('uiWorkspace').pickDirectory())
-								: Promise.reject(new Error('没有可用的目录选择器'))
+								: Promise.reject(new Error(t('error.noDirectoryPicker')))
 					return picking.then((path) => {
 						if (path === null || path === undefined || path === '') return null
 						const workspaces = safeService('workspaces')
-						if (!workspaces || typeof workspaces.create !== 'function') throw new Error('workspaces 服务不可用')
+						if (!workspaces || typeof workspaces.create !== 'function') throw new Error(t('error.workspacesUnavailable'))
 						return workspaces.create({ path })
 					})
 				},
 				renameWorkspace(workspaceId, title) {
 					const workspaces = safeService('workspaces')
-					if (!workspaces || typeof workspaces.rename !== 'function') return Promise.reject(new Error('workspaces 服务不可用'))
+					if (!workspaces || typeof workspaces.rename !== 'function') return Promise.reject(new Error(t('error.workspacesUnavailable')))
 					return workspaces.rename(workspaceId, title)
 				},
 				deleteWorkspace(workspaceId) {
 					const workspaces = safeService('workspaces')
-					if (!workspaces || typeof workspaces.delete !== 'function') return Promise.reject(new Error('workspaces 服务不可用'))
+					if (!workspaces || typeof workspaces.delete !== 'function') return Promise.reject(new Error(t('error.workspacesUnavailable')))
 					return workspaces.delete(workspaceId)
 				},
 				archiveSession(sessionId, options) {
 					const workspaces = safeService('workspaces')
-					if (!workspaces || typeof workspaces.archiveSession !== 'function') throw new Error('workspaces 服务不可用')
+					if (!workspaces || typeof workspaces.archiveSession !== 'function') throw new Error(t('error.workspacesUnavailable'))
 					return workspaces.archiveSession(sessionId, options)
 				},
 				unarchiveSession(sessionId) {
 					const workspaces = safeService('workspaces')
-					if (!workspaces || typeof workspaces.unarchiveSession !== 'function') throw new Error('workspaces 服务不可用')
+					if (!workspaces || typeof workspaces.unarchiveSession !== 'function') throw new Error(t('error.workspacesUnavailable'))
 					return workspaces.unarchiveSession(sessionId)
 				},
 				pinSession(sessionId) {
 					const workspaces = safeService('workspaces')
-					if (!workspaces || typeof workspaces.pinSession !== 'function') return Promise.reject(new Error('置顶不可用'))
+					if (!workspaces || typeof workspaces.pinSession !== 'function') return Promise.reject(new Error(t('error.pinUnavailable')))
 					return workspaces.pinSession(sessionId)
 				},
 				unpinSession(sessionId) {
 					const workspaces = safeService('workspaces')
-					if (!workspaces || typeof workspaces.unpinSession !== 'function') return Promise.reject(new Error('取消置顶不可用'))
+					if (!workspaces || typeof workspaces.unpinSession !== 'function') return Promise.reject(new Error(t('error.unpinUnavailable')))
 					return workspaces.unpinSession(sessionId)
 				},
 				forkSession(sessionId) {
 					const uiWorkspace = safeService('uiWorkspace')
-					if (!uiWorkspace || typeof uiWorkspace.forkSession !== 'function') return Promise.reject(new Error('分叉不可用'))
+					if (!uiWorkspace || typeof uiWorkspace.forkSession !== 'function') return Promise.reject(new Error(t('error.forkUnavailable')))
 					return uiWorkspace.forkSession(sessionId)
 				},
 				renameSession(sessionId, title) {
 					const sessions = safeService('sessions')
-					if (!sessions || typeof sessions.using !== 'function') return Promise.reject(new Error('sessions 服务不可用'))
+					if (!sessions || typeof sessions.using !== 'function') return Promise.reject(new Error(t('error.sessionsUnavailable')))
 					return Promise.resolve(sessions.using(sessionId, { source: 'workspaceOperation' }, (reference) => reference.binding.session.rename(title))).then(
 						(result) => {
-							if (result && result.ok === false) throw new Error((result.error && result.error.message) || '重命名失败')
+							if (result && result.ok === false) throw new Error((result.error && result.error.message) || t('error.renameFailed'))
 							return result
 						}
 					)
@@ -2333,10 +2471,10 @@ html.dsc-on [class*="panelList"]{display:none!important}
 									const rows = [
 										{
 											id: 'move-to-category',
-											label: '移入分类',
+											label: t('workspace.moveTo'),
 											children: categories.map((category) => ({
 												id: 'move-to:' + category.id,
-												label: (current === category.id ? '✓ ' : '') + category.name,
+												label: (current === category.id ? '✓ ' : '') + (category.name || t('category.untitled')),
 												run: () => assignWorkspaceTo(workspaceId, category.id)
 											}))
 										}
@@ -2344,7 +2482,7 @@ html.dsc-on [class*="panelList"]{display:none!important}
 									if (current !== undefined) {
 										rows.push({
 											id: 'remove-from-category',
-											label: '移出分类',
+											label: t('workspace.moveOut'),
 											run: () => assignWorkspaceTo(workspaceId, UNASSIGNED)
 										})
 									}
@@ -2414,13 +2552,15 @@ html.dsc-on [class*="panelList"]{display:none!important}
 						name: 'sidebar.footer.action',
 						id: 'sidebar-cards-toggle',
 						order: 9999,
-						label: '视图切换',
+						// Fixed at registration: the slot label is metadata, while the
+						// visible switch text re-renders from t() inside ViewSwitch.
+						label: t('mode.title'),
 						registrant: PACKAGE
 					},
 					function ViewSwitch(props) {
 						const stateNow = useStateTick()
 						const cards = stateNow.mode === 'cards'
-						const label = cards ? '原生列表' : '卡片侧栏'
+						const label = cards ? t('mode.native') : t('mode.cards')
 						const wide = props.wide !== false
 						const node = h(
 							'button',
@@ -2428,8 +2568,8 @@ html.dsc-on [class*="panelList"]{display:none!important}
 								type: 'button',
 								className: 'dsc-modeswitch',
 								'aria-pressed': cards,
-								'aria-label': cards ? '切换为原生工作区列表' : '切换为卡片侧栏',
-								title: cards ? '切换为原生工作区列表' : '切换为卡片侧栏',
+								'aria-label': cards ? t('mode.toNative') : t('mode.toCards'),
+								title: cards ? t('mode.toNative') : t('mode.toCards'),
 								onClick: () => setState({ mode: cards ? 'native' : 'cards' })
 							},
 							h(Icon, { name: 'layers', size: 13 }),
