@@ -6,14 +6,14 @@ and shortcut entry that the shell used to scatter along the top and bottom of th
 
 ```
 ▾ Workspaces                 [search] [+ category] [+]
-    ▾ 管理 (5)
+    ▾ Management (5)
         ▾ ai_pm (1)
-            能否读取飞书项目管理信息
-        ▸ ai_组织 (4)
-    ▸ 产品开发 (2)
+            Can you read the project records in Feishu?
+        ▸ ai_org (4)
+    ▸ Product (2)
     Uncategorized (3)
 ▾ Plugins                    [+]
-    ▾ 工具 (3)
+    ▾ Tools (3)
         Plugin Market
         Scheduler
         Task Board
@@ -68,17 +68,6 @@ Host copy wins. On first run the categories left in `localStorage` by
   `footerActions`). If a DSH upgrade renames them, the native rows simply reappear; nothing
   crashes.
 - Overlaps `dsh-workspace-categories` and `dsh-panel-control`; keep only one of them.
-
-## 中文说明
-
-把 DeepSeek Harness 的左栏做成 VS Code 那种「功能卡片」侧边栏：工作区与会话按分类树组织，
-可拖拽归类；「视图选项」里可按名称或最近会话给工作区排序（再次点击同一项切换升/降），并做
-归档三态筛选；搜索会同时匹配工作区标题与它下面的会话，命中时可一键「展开全部命中」。原本散落
-在侧栏顶部图标行和底部快捷入口的插件入口，统一收进「插件」卡，可自建分组、拖拽、隐藏。布局状态
-存在 Host 端的 `~/.dsh/sidebar-cards/state.json`，换端口、换浏览器、刷新页面都不会丢。见上方
-能力表与已知限制。
-
----
 
 ## Development
 
