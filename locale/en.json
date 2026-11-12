@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "Sidebar Cards",
+    "description": "Card-style left sidebar: a draggable category tree over workspaces and sessions, plus one grouped list holding every panel and shortcut entry."
+  }
+}

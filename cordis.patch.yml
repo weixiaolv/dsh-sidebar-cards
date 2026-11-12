@@ -1,0 +1,12 @@
+# dsh-sidebar-cards bundle patch
+#
+# Adding this package to `dsh.profile.bundles` merges this layer, which mounts
+# the loader row for the plugin (host half + `dsh.client` scan).
+#
+# The `disabled` guard backs this row off when another enabled entry already
+# mounts `dsh-sidebar-cards`, so an accidental double mount cannot create two
+# competing `sidebar.workspaces` registrations.
+- insert:
+    - id: sidebar-cards
+      name: 'dsh-sidebar-cards'
+      disabled: !!js "[...ctx.loader.entries()].some((e) => e.options.name === 'dsh-sidebar-cards' && e.options.id !== 'sidebar-cards' && !e.disabled)"

@@ -1,0 +1,68 @@
+{
+  "name": "dsh-sidebar-cards",
+  "version": "0.1.0",
+  "description": "从左栏接管 DeepSeek Harness 的侧边栏：工作区分类树 + 插件入口统一管理。",
+  "type": "module",
+  "main": "index.js",
+  "author": {
+    "name": "weixiaolv",
+    "url": "https://github.com/weixiaolv"
+  },
+  "license": "MIT",
+  "icon": "./icon.svg",
+  "homepage": "https://github.com/weixiaolv/dsh-sidebar-cards#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/weixiaolv/dsh-sidebar-cards.git"
+  },
+  "bugs": {
+    "url": "https://github.com/weixiaolv/dsh-sidebar-cards/issues"
+  },
+  "keywords": [
+    "deepseek",
+    "harness",
+    "dsh",
+    "dsh-plugin",
+    "sidebar",
+    "workspace",
+    "cards",
+    "侧栏",
+    "工作区",
+    "分类"
+  ],
+  "engines": {
+    "dsh": ">=0.2.1-rc.3"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/dsh-client-ui-primitives": ">=0.2.1-rc.2 <0.2.2-0 || >=0.2.2-rc.1 <0.3.0-0",
+    "react": "^18.2.0"
+  },
+  "exports": {
+    ".": "./index.js",
+    "./client": "./client.js",
+    "./package.json": "./package.json",
+    "./locale/*.json": "./locale/*.json"
+  },
+  "files": [
+    "index.js",
+    "client.js",
+    "cordis.patch.yml",
+    "icon.svg",
+    "assets/icon-512.png",
+    "locale/*.json",
+    "README.md",
+    "LICENSE"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "inject": [
+        "@deepseek-ai/dsh-client-ui-sidebar",
+        "@deepseek-ai/dsh-client-ui-workspace"
+      ]
+    }
+  }
+}
