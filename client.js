@@ -1139,6 +1139,13 @@ function build(require) {
 			return choice === 'auto' ? browserLang() : choice
 		}
 
+		/** The label of the language in force, shown beside the submenu row. */
+		function currentLangLabel() {
+			const code = currentLang()
+			const entry = LANGS.find((item) => item.code === code)
+			return entry === undefined ? code : entry.label
+		}
+
 		function t(key) {
 			const row = STRINGS[key]
 			if (row === undefined) return key
@@ -1493,13 +1500,18 @@ function build(require) {
 
 		function Popover(props) {
 			const ref = React.useRef(null)
+			/** A submenu replaces the list in place; Escape steps back one level. */
+			const [branch, setBranch] = React.useState(null)
+			const items = branch === null ? props.items : branch.items
 			React.useEffect(() => {
 				const close = (event) => {
 					if (ref.current && ref.current.contains(event.target)) return
 					props.onClose()
 				}
 				const onKey = (event) => {
-					if (event.key === 'Escape') props.onClose()
+					if (event.key !== 'Escape') return
+					if (branch !== null) setBranch(null)
+					else props.onClose()
 				}
 				document.addEventListener('mousedown', close, true)
 				document.addEventListener('keydown', onKey)
@@ -1507,17 +1519,31 @@ function build(require) {
 					document.removeEventListener('mousedown', close, true)
 					document.removeEventListener('keydown', onKey)
 				}
-			}, [])
+			}, [branch])
 			const style = {
 				position: 'fixed',
 				left: Math.max(8, Math.min(props.x, window.innerWidth - 220)),
-				top: Math.max(8, Math.min(props.y, window.innerHeight - 40 - (props.items.length + 2) * 28)),
+				top: Math.max(8, Math.min(props.y, window.innerHeight - 40 - (items.length + (branch === null ? 2 : 3)) * 28)),
 				zIndex: 4000
 			}
 			return h(
 				'div',
 				{ className: 'dsc-menu', style, ref, role: 'menu' },
-				props.items.map((item, index) =>
+				branch === null
+					? null
+					: h(
+							'button',
+							{
+								type: 'button',
+								key: 'back',
+								className: 'dsc-menu-item dsc-menu-back',
+								onClick: () => setBranch(null)
+							},
+							h(Icon, { name: 'arrowLeft', size: 12 }),
+							h('span', { className: 'dsc-menu-label' }, branch.title)
+						),
+				branch === null ? null : h('div', { className: 'dsc-menu-sep', key: 'backsep' }),
+				items.map((item, index) =>
 					item.separator === true
 						? h('div', { className: 'dsc-menu-sep', key: 'sep' + index })
 						: item.header === true
@@ -1528,15 +1554,21 @@ function build(require) {
 										type: 'button',
 										key: 'item' + index,
 										role: 'menuitem',
+										'aria-haspopup': Array.isArray(item.submenu) ? 'menu' : undefined,
 										className: 'dsc-menu-item' + (item.danger ? ' dsc-menu-danger' : ''),
 										onClick: () => {
+											if (Array.isArray(item.submenu)) {
+												setBranch({ title: item.label, items: item.submenu })
+												return
+											}
 											props.onClose()
 											if (item.onSelect) item.onSelect()
 										}
 									},
 									item.icon ? h(Icon, { name: item.icon, size: 13 }) : null,
 									h('span', { className: 'dsc-menu-label' }, item.label),
-									item.trailing ? h('span', { className: 'dsc-menu-trailing' }, item.trailing) : null
+									item.trailing ? h('span', { className: 'dsc-menu-trailing' }, item.trailing) : null,
+									Array.isArray(item.submenu) ? h('span', { className: 'dsc-menu-caret' }, h(Icon, { name: 'chevron', size: 12 })) : null
 								)
 				)
 			)
@@ -2821,18 +2853,23 @@ function build(require) {
 									{ label: t('action.expandAll'), onSelect: () => expandAll() },
 									{ label: t('action.collapseAll'), onSelect: () => setState({ expanded: {} }) },
 									{ separator: true },
-									{ header: true, label: t('options.language') },
 									{
-										label: t('options.langAuto'),
-										trailing: LANGS.some((entry) => entry.code === stateNow.lang) ? '' : '✓',
-										onSelect: () => setState({ lang: 'auto' })
-									},
-									...LANGS.map((entry) => ({
-										key: entry.code,
-										label: entry.label,
-										trailing: stateNow.lang === entry.code ? '✓' : '',
-										onSelect: () => setState({ lang: entry.code })
-									}))
+										label: t('options.language'),
+										trailing: currentLangLabel(),
+										submenu: [
+											{
+												label: t('options.langAuto'),
+												trailing: LANGS.some((entry) => entry.code === stateNow.lang) ? '' : '✓',
+												onSelect: () => setState({ lang: 'auto' })
+											},
+											...LANGS.map((entry) => ({
+												key: entry.code,
+												label: entry.label,
+												trailing: stateNow.lang === entry.code ? '✓' : '',
+												onSelect: () => setState({ lang: entry.code })
+											}))
+										]
+									}
 								]
 							})
 						}
@@ -3174,6 +3211,8 @@ function build(require) {
 .dsc-menu-sep{height:1px;margin:3px 4px;background:color-mix(in srgb,var(--dsw-alias-label-primary) 10%,transparent)}
 .dsc-menu-head{padding:4px 8px 2px;font-size:11px;color:var(--dsw-alias-label-tertiary)}
 .dsc-menu-label{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dsc-menu-back{color:var(--dsw-alias-label-secondary)}
+.dsc-menu-caret{margin-left:auto;flex:none;display:inline-flex;align-items:center;color:var(--dsw-alias-label-tertiary)}
 .dsc-menu-trailing{margin-left:auto;flex:none;display:inline-flex;align-items:center;gap:4px;color:var(--dsw-alias-label-tertiary);font-size:11px}
 .dsc-scrim{position:fixed;inset:0;z-index:4100;background:rgba(0,0,0,.28);display:flex;align-items:center;justify-content:center;padding:24px}
 .dsc-dialog{width:min(360px,100%);border-radius:12px;border:1px solid var(--dsw-alias-border-l1);background:var(--dsw-alias-bg-overlay);padding:14px;display:flex;flex-direction:column;gap:10px;box-shadow:0 16px 40px rgba(0,0,0,.24)}
