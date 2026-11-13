@@ -122,97 +122,136 @@ function build(require) {
 		 * the browser's own language while the choice is "auto" (the default).
 		 */
 		const STRINGS = {
-			"card.workspaces": ["Workspaces", "工作区"],
-			"card.plugins": ["Plugins", "插件"],
-			"card.unassigned": ["Uncategorized", "未分类"],
-			"card.ungrouped": ["Ungrouped", "未分组"],
-			"action.cancel": ["Cancel", "取消"],
-			"action.confirm": ["OK", "确定"],
-			"action.delete": ["Delete", "删除"],
-			"action.close": ["Close", "关闭"],
-			"action.expandAll": ["Expand all", "全部展开"],
-			"action.collapseAll": ["Collapse all", "全部折叠"],
-			"category.new": ["New category", "新建分类"],
-			"category.newWorkspace": ["New workspace in this category", "在此分类下新建工作区"],
-			"category.rename": ["Rename category", "重命名分类"],
-			"category.delete": ["Delete category", "删除分类"],
-			"category.deleteMessage": ["Workspaces in this category move to Uncategorized; no workspace is deleted.", "分类里的工作区会回到「未分类」，不会删除工作区。"],
-			"category.namePlaceholder": ["Category name, for example Org management / Projects", "分类名称，例如 组织管理 / 项目管理"],
-			"category.untitled": ["Untitled category", "未命名分类"],
-			"plugins.newGroup": ["New plugin group", "新建插件分组"],
-			"plugins.renameGroup": ["Rename group", "重命名分组"],
-			"plugins.deleteGroup": ["Delete group", "删除分组"],
-			"plugins.groupNamePlaceholder": ["Group name, for example Tools / Data / Connectors", "分组名称，例如 工具 / 数据 / 连接"],
-			"plugins.dragHint": ["Drag into a group", "拖到分组归类"],
-			"plugins.restore": ["Show again", "恢复显示"],
-			"plugins.hide": ["Hide entry", "隐藏入口"],
-			"plugins.empty": ["No plugin entries to manage", "暂无可管理的插件入口"],
-			"plugins.showHidden": ["Show hidden entries", "显示已隐藏入口"],
-			"plugins.showHiddenCount": ["Show hidden entries ({n})", "显示已隐藏入口（{n}）"],
-			"plugins.untitledGroup": ["Untitled group", "未命名分组"],
-			"session.rename": ["Rename session", "重命名会话"],
-			"session.pin": ["Pin", "置顶"],
-			"session.unpin": ["Unpin", "取消置顶"],
-			"session.fork": ["Fork session", "分叉会话"],
-			"session.copyId": ["Copy session ID", "复制会话 ID"],
-			"session.archive": ["Archive", "归档"],
-			"session.unarchive": ["Unarchive", "取消归档"],
-			"session.more": ["More actions", "更多操作"],
-			"session.untitled": ["Untitled", "未命名"],
-			"session.empty": ["No sessions yet", "还没有会话"],
-			"session.noMatch": ["No matching sessions", "没有匹配的会话"],
-			"session.showMore": ["Show more", "显示更多"],
-			"session.showLess": ["Show less", "显示更少"],
-			"session.runningTitle": ["This session is still running", "该会话仍在运行"],
-			"session.runningMessage": ["Stop it and archive?", "停止它并归档？"],
-			"session.stopArchive": ["Stop and archive", "停止并归档"],
-			"workspace.newSession": ["New session", "新建会话"],
-			"workspace.rename": ["Rename workspace", "重命名工作区"],
-			"workspace.copyPath": ["Copy path", "复制路径"],
-			"workspace.moveTo": ["Move to category", "移入分类"],
-			"workspace.moveOut": ["Remove from category", "移出分类"],
-			"workspace.delete": ["Delete workspace", "删除工作区"],
-			"workspace.deleteMessage": ["Removes it from this list only; the folder on disk is untouched.", "仅从列表移除，不会删除磁盘上的目录。"],
-			"workspace.more": ["Workspace actions", "工作区操作"],
-			"workspace.dropHint": ["Drop a workspace here, or click + to create one", "把工作区拖到这里，或点 + 新建"],
-			"workspace.empty": ["No workspaces yet — click + above to add a folder", "还没有工作区，点上方 + 添加一个目录"],
-			"options.title": ["View options", "视图选项"],
-			"options.archivedHeader": ["Archived sessions", "已归档会话"],
-			"options.archivedDefault": ["Hide archived", "隐藏已归档"],
-			"options.archivedShow": ["All conversations (show archived)", "全部对话（显示已归档）"],
-			"options.archivedOnly": ["Archived only", "仅显示已归档"],
-			"options.sortHeader": ["Workspace order", "工作区排序"],
-			"options.sortManual": ["Manual order", "不自动排序"],
-			"options.sortName": ["By name", "按名称排序"],
-			"options.sortTime": ["By latest session", "按最近会话排序"],
-			"options.newHeader": ["New group or workspace", "新建分组或工作区"],
-			"options.newGroup": ["New category", "新建分组"],
-			"options.newWorkspace": ["New workspace", "新建工作区"],
-			"options.language": ["Language", "界面语言"],
-			"options.langAuto": ["Follow browser", "跟随浏览器"],
-			"search.placeholder": ["Filter workspaces and sessions…", "筛选工作区与会话…"],
-			"search.expandHits": ["Expand all hits", "展开全部命中"],
-			"search.collapseHits": ["Collapse hits", "收起命中"],
-			"mode.title": ["View", "视图切换"],
-			"mode.native": ["Native list", "原生列表"],
-			"mode.cards": ["Card sidebar", "卡片侧栏"],
-			"mode.toNative": ["Switch to the native workspace list", "切换为原生工作区列表"],
-			"mode.toCards": ["Switch to the card sidebar", "切换为卡片侧栏"],
-			"error.noDirectoryPicker": ["No directory picker is available", "没有可用的目录选择器"],
-			"error.workspacesUnavailable": ["The workspaces service is unavailable", "workspaces 服务不可用"],
-			"error.sessionsUnavailable": ["The sessions service is unavailable", "sessions 服务不可用"],
-			"error.pinUnavailable": ["Pin is unavailable", "置顶不可用"],
-			"error.unpinUnavailable": ["Unpin is unavailable", "取消置顶不可用"],
-			"error.forkUnavailable": ["Fork is unavailable", "分叉不可用"],
-			"error.renameFailed": ["Rename failed", "重命名失败"],
+			// One row per message: the text in every language this build carries.
+			"card.workspaces": { "en": "Workspaces", "zh-Hans": "工作区", "zh-Hant": "工作區", "ja": "ワークスペース", "fr": "Espaces de travail" },
+			"card.plugins": { "en": "Plugins", "zh-Hans": "插件", "zh-Hant": "外掛", "ja": "プラグイン", "fr": "Plugins" },
+			"card.unassigned": { "en": "Uncategorized", "zh-Hans": "未分类", "zh-Hant": "未分類", "ja": "未分類", "fr": "Sans catégorie" },
+			"card.ungrouped": { "en": "Ungrouped", "zh-Hans": "未分组", "zh-Hant": "未分組", "ja": "グループなし", "fr": "Sans groupe" },
+			"action.cancel": { "en": "Cancel", "zh-Hans": "取消", "zh-Hant": "取消", "ja": "キャンセル", "fr": "Annuler" },
+			"action.confirm": { "en": "OK", "zh-Hans": "确定", "zh-Hant": "確定", "ja": "OK", "fr": "OK" },
+			"action.delete": { "en": "Delete", "zh-Hans": "删除", "zh-Hant": "刪除", "ja": "削除", "fr": "Supprimer" },
+			"action.close": { "en": "Close", "zh-Hans": "关闭", "zh-Hant": "關閉", "ja": "閉じる", "fr": "Fermer" },
+			"action.expandAll": { "en": "Expand all", "zh-Hans": "全部展开", "zh-Hant": "全部展開", "ja": "すべて展開", "fr": "Tout déplier" },
+			"action.collapseAll": { "en": "Collapse all", "zh-Hans": "全部折叠", "zh-Hant": "全部收合", "ja": "すべて折りたたむ", "fr": "Tout replier" },
+			"category.new": { "en": "New category", "zh-Hans": "新建分类", "zh-Hant": "新增分類", "ja": "新しいカテゴリ", "fr": "Nouvelle catégorie" },
+			"category.newWorkspace": { "en": "New workspace in this category", "zh-Hans": "在此分类下新建工作区", "zh-Hant": "在此分類新增工作區", "ja": "このカテゴリにワークスペースを追加", "fr": "Nouvel espace de travail dans cette catégorie" },
+			"category.rename": { "en": "Rename category", "zh-Hans": "重命名分类", "zh-Hant": "重新命名分類", "ja": "カテゴリ名を変更", "fr": "Renommer la catégorie" },
+			"category.delete": { "en": "Delete category", "zh-Hans": "删除分类", "zh-Hant": "刪除分類", "ja": "カテゴリを削除", "fr": "Supprimer la catégorie" },
+			"category.deleteMessage": { "en": "Workspaces in this category move to Uncategorized; no workspace is deleted.", "zh-Hans": "分类里的工作区会回到「未分类」，不会删除工作区。", "zh-Hant": "分類中的工作區會回到「未分類」，不會刪除工作區。", "ja": "このカテゴリのワークスペースは「未分類」に戻ります。ワークスペースは削除されません。", "fr": "Les espaces de travail de cette catégorie passent dans « Sans catégorie » ; aucun espace de travail n’est supprimé." },
+			"category.namePlaceholder": { "en": "Category name, for example Org management / Projects", "zh-Hans": "分类名称，例如 组织管理 / 项目管理", "zh-Hant": "分類名稱，例如 組織管理 / 專案管理", "ja": "カテゴリ名（例: 組織管理 / プロジェクト管理）", "fr": "Nom de la catégorie, par exemple Organisation / Projets" },
+			"category.untitled": { "en": "Untitled category", "zh-Hans": "未命名分类", "zh-Hant": "未命名分類", "ja": "無題のカテゴリ", "fr": "Catégorie sans titre" },
+			"plugins.newGroup": { "en": "New plugin group", "zh-Hans": "新建插件分组", "zh-Hant": "新增外掛群組", "ja": "新しいプラグイングループ", "fr": "Nouveau groupe de plugins" },
+			"plugins.renameGroup": { "en": "Rename group", "zh-Hans": "重命名分组", "zh-Hant": "重新命名群組", "ja": "グループ名を変更", "fr": "Renommer le groupe" },
+			"plugins.deleteGroup": { "en": "Delete group", "zh-Hans": "删除分组", "zh-Hant": "刪除群組", "ja": "グループを削除", "fr": "Supprimer le groupe" },
+			"plugins.groupNamePlaceholder": { "en": "Group name, for example Tools / Data / Connectors", "zh-Hans": "分组名称，例如 工具 / 数据 / 连接", "zh-Hant": "群組名稱，例如 工具 / 資料 / 連線", "ja": "グループ名（例: ツール / データ / 接続）", "fr": "Nom du groupe, par exemple Outils / Données / Connecteurs" },
+			"plugins.dragHint": { "en": "Drag into a group", "zh-Hans": "拖到分组归类", "zh-Hant": "拖曳到群組分類", "ja": "グループにドラッグ", "fr": "Glisser dans un groupe" },
+			"plugins.restore": { "en": "Show again", "zh-Hans": "恢复显示", "zh-Hant": "恢復顯示", "ja": "再表示", "fr": "Réafficher" },
+			"plugins.hide": { "en": "Hide entry", "zh-Hans": "隐藏入口", "zh-Hant": "隱藏項目", "ja": "エントリを非表示", "fr": "Masquer l’entrée" },
+			"plugins.empty": { "en": "No plugin entries to manage", "zh-Hans": "暂无可管理的插件入口", "zh-Hant": "尚無可管理的外掛項目", "ja": "管理できるプラグインエントリはありません", "fr": "Aucune entrée de plugin à gérer" },
+			"plugins.showHidden": { "en": "Show hidden entries", "zh-Hans": "显示已隐藏入口", "zh-Hant": "顯示已隱藏項目", "ja": "非表示のエントリを表示", "fr": "Afficher les entrées masquées" },
+			"plugins.showHiddenCount": { "en": "Show hidden entries ({n})", "zh-Hans": "显示已隐藏入口（{n}）", "zh-Hant": "顯示已隱藏項目（{n}）", "ja": "非表示のエントリを表示（{n}）", "fr": "Afficher les entrées masquées ({n})" },
+			"plugins.untitledGroup": { "en": "Untitled group", "zh-Hans": "未命名分组", "zh-Hant": "未命名群組", "ja": "無題のグループ", "fr": "Groupe sans titre" },
+			"session.rename": { "en": "Rename session", "zh-Hans": "重命名会话", "zh-Hant": "重新命名會話", "ja": "セッション名を変更", "fr": "Renommer la session" },
+			"session.pin": { "en": "Pin", "zh-Hans": "置顶", "zh-Hant": "釘選", "ja": "ピン留め", "fr": "Épingler" },
+			"session.unpin": { "en": "Unpin", "zh-Hans": "取消置顶", "zh-Hant": "取消釘選", "ja": "ピン留めを解除", "fr": "Ne plus épingler" },
+			"session.fork": { "en": "Fork session", "zh-Hans": "分叉会话", "zh-Hant": "分支會話", "ja": "セッションを分岐", "fr": "Créer une branche de la session" },
+			"session.copyId": { "en": "Copy session ID", "zh-Hans": "复制会话 ID", "zh-Hant": "複製會話 ID", "ja": "セッション ID をコピー", "fr": "Copier l’ID de session" },
+			"session.archive": { "en": "Archive", "zh-Hans": "归档", "zh-Hant": "封存", "ja": "アーカイブ", "fr": "Archiver" },
+			"session.unarchive": { "en": "Unarchive", "zh-Hans": "取消归档", "zh-Hant": "取消封存", "ja": "アーカイブを解除", "fr": "Désarchiver" },
+			"session.more": { "en": "More actions", "zh-Hans": "更多操作", "zh-Hant": "更多操作", "ja": "その他の操作", "fr": "Plus d’actions" },
+			"session.untitled": { "en": "Untitled", "zh-Hans": "未命名", "zh-Hant": "未命名", "ja": "無題", "fr": "Sans titre" },
+			"session.empty": { "en": "No sessions yet", "zh-Hans": "还没有会话", "zh-Hant": "尚無會話", "ja": "セッションはまだありません", "fr": "Aucune session pour l’instant" },
+			"session.noMatch": { "en": "No matching sessions", "zh-Hans": "没有匹配的会话", "zh-Hant": "沒有符合的會話", "ja": "一致するセッションはありません", "fr": "Aucune session correspondante" },
+			"session.showMore": { "en": "Show more", "zh-Hans": "显示更多", "zh-Hant": "顯示更多", "ja": "さらに表示", "fr": "Afficher plus" },
+			"session.showLess": { "en": "Show less", "zh-Hans": "显示更少", "zh-Hant": "顯示較少", "ja": "表示を減らす", "fr": "Afficher moins" },
+			"session.runningTitle": { "en": "This session is still running", "zh-Hans": "该会话仍在运行", "zh-Hant": "此會話仍在執行", "ja": "このセッションはまだ実行中です", "fr": "Cette session est toujours en cours" },
+			"session.runningMessage": { "en": "Stop it and archive?", "zh-Hans": "停止它并归档？", "zh-Hant": "停止並封存？", "ja": "停止してアーカイブしますか？", "fr": "L’arrêter et l’archiver ?" },
+			"session.stopArchive": { "en": "Stop and archive", "zh-Hans": "停止并归档", "zh-Hant": "停止並封存", "ja": "停止してアーカイブ", "fr": "Arrêter et archiver" },
+			"workspace.newSession": { "en": "New session", "zh-Hans": "新建会话", "zh-Hant": "新增會話", "ja": "新しいセッション", "fr": "Nouvelle session" },
+			"workspace.rename": { "en": "Rename workspace", "zh-Hans": "重命名工作区", "zh-Hant": "重新命名工作區", "ja": "ワークスペース名を変更", "fr": "Renommer l’espace de travail" },
+			"workspace.copyPath": { "en": "Copy path", "zh-Hans": "复制路径", "zh-Hant": "複製路徑", "ja": "パスをコピー", "fr": "Copier le chemin" },
+			"workspace.moveTo": { "en": "Move to category", "zh-Hans": "移入分类", "zh-Hant": "移至分類", "ja": "カテゴリへ移動", "fr": "Déplacer vers une catégorie" },
+			"workspace.moveOut": { "en": "Remove from category", "zh-Hans": "移出分类", "zh-Hant": "移出分類", "ja": "カテゴリから外す", "fr": "Retirer de la catégorie" },
+			"workspace.delete": { "en": "Delete workspace", "zh-Hans": "删除工作区", "zh-Hant": "刪除工作區", "ja": "ワークスペースを削除", "fr": "Supprimer l’espace de travail" },
+			"workspace.deleteMessage": { "en": "Removes it from this list only; the folder on disk is untouched.", "zh-Hans": "仅从列表移除，不会删除磁盘上的目录。", "zh-Hant": "僅從清單移除，不會刪除磁碟上的目錄。", "ja": "一覧から外すだけで、ディスク上のフォルダーは削除されません。", "fr": "Retiré de cette liste uniquement ; le dossier sur le disque n’est pas touché." },
+			"workspace.more": { "en": "Workspace actions", "zh-Hans": "工作区操作", "zh-Hant": "工作區操作", "ja": "ワークスペースの操作", "fr": "Actions de l’espace de travail" },
+			"workspace.dropHint": { "en": "Drop a workspace here, or click + to create one", "zh-Hans": "把工作区拖到这里，或点 + 新建", "zh-Hant": "將工作區拖曳到這裡，或按 + 新增", "ja": "ここにワークスペースをドラッグするか、+ で新規作成します", "fr": "Déposez un espace de travail ici, ou cliquez sur + pour en créer un" },
+			"workspace.empty": { "en": "No workspaces yet — click + above to add a folder", "zh-Hans": "还没有工作区，点上方 + 添加一个目录", "zh-Hant": "尚無工作區，請按上方 + 新增目錄", "ja": "ワークスペースがありません。上の + からフォルダーを追加してください", "fr": "Aucun espace de travail — cliquez sur + ci-dessus pour ajouter un dossier" },
+			"options.title": { "en": "View options", "zh-Hans": "视图选项", "zh-Hant": "檢視選項", "ja": "表示オプション", "fr": "Options d’affichage" },
+			"options.archivedHeader": { "en": "Archived sessions", "zh-Hans": "已归档会话", "zh-Hant": "已封存會話", "ja": "アーカイブ済みセッション", "fr": "Sessions archivées" },
+			"options.archivedDefault": { "en": "Hide archived", "zh-Hans": "隐藏已归档", "zh-Hant": "隱藏已封存", "ja": "アーカイブを非表示", "fr": "Masquer les archivées" },
+			"options.archivedShow": { "en": "All conversations (show archived)", "zh-Hans": "全部对话（显示已归档）", "zh-Hant": "全部對話（顯示已封存）", "ja": "すべての会話（アーカイブを含む）", "fr": "Toutes les conversations (archives incluses)" },
+			"options.archivedOnly": { "en": "Archived only", "zh-Hans": "仅显示已归档", "zh-Hant": "僅顯示已封存", "ja": "アーカイブのみ", "fr": "Archivées uniquement" },
+			"options.sortHeader": { "en": "Workspace order", "zh-Hans": "工作区排序", "zh-Hant": "工作區排序", "ja": "ワークスペースの並び順", "fr": "Ordre des espaces de travail" },
+			"options.sortManual": { "en": "Manual order", "zh-Hans": "不自动排序", "zh-Hant": "不自動排序", "ja": "手動", "fr": "Ordre manuel" },
+			"options.sortName": { "en": "By name", "zh-Hans": "按名称排序", "zh-Hant": "依名稱排序", "ja": "名前順", "fr": "Par nom" },
+			"options.sortTime": { "en": "By latest session", "zh-Hans": "按最近会话排序", "zh-Hant": "依最近會話排序", "ja": "最新セッション順", "fr": "Par session la plus récente" },
+			"options.newHeader": { "en": "New group or workspace", "zh-Hans": "新建分组或工作区", "zh-Hant": "新增群組或工作區", "ja": "新規カテゴリ / ワークスペース", "fr": "Nouveau groupe ou espace de travail" },
+			"options.newGroup": { "en": "New category", "zh-Hans": "新建分组", "zh-Hant": "新增分類", "ja": "新しいカテゴリ", "fr": "Nouvelle catégorie" },
+			"options.newWorkspace": { "en": "New workspace", "zh-Hans": "新建工作区", "zh-Hant": "新增工作區", "ja": "新しいワークスペース", "fr": "Nouvel espace de travail" },
+			"options.language": { "en": "Language", "zh-Hans": "界面语言", "zh-Hant": "介面語言", "ja": "言語", "fr": "Langue" },
+			"options.langAuto": { "en": "Follow browser", "zh-Hans": "跟随浏览器", "zh-Hant": "跟隨瀏覽器", "ja": "ブラウザに合わせる", "fr": "Suivre le navigateur" },
+			"search.placeholder": { "en": "Filter workspaces and sessions…", "zh-Hans": "筛选工作区与会话…", "zh-Hant": "篩選工作區與會話…", "ja": "ワークスペースとセッションを絞り込む…", "fr": "Filtrer les espaces de travail et les sessions…" },
+			"search.expandHits": { "en": "Expand all hits", "zh-Hans": "展开全部命中", "zh-Hant": "展開全部符合項目", "ja": "一致する項目をすべて展開", "fr": "Déplier tous les résultats" },
+			"search.collapseHits": { "en": "Collapse hits", "zh-Hans": "收起命中", "zh-Hant": "收合符合項目", "ja": "一致する項目を折りたたむ", "fr": "Replier les résultats" },
+			"mode.title": { "en": "View", "zh-Hans": "视图切换", "zh-Hant": "檢視切換", "ja": "表示", "fr": "Affichage" },
+			"mode.native": { "en": "Native list", "zh-Hans": "原生列表", "zh-Hant": "原生清單", "ja": "標準リスト", "fr": "Liste native" },
+			"mode.cards": { "en": "Card sidebar", "zh-Hans": "卡片侧栏", "zh-Hant": "卡片側欄", "ja": "カード表示", "fr": "Barre latérale en cartes" },
+			"mode.toNative": { "en": "Switch to the native workspace list", "zh-Hans": "切换为原生工作区列表", "zh-Hant": "切換為原生工作區清單", "ja": "標準のワークスペース一覧に切り替える", "fr": "Passer à la liste native des espaces de travail" },
+			"mode.toCards": { "en": "Switch to the card sidebar", "zh-Hans": "切换为卡片侧栏", "zh-Hant": "切換為卡片側欄", "ja": "カード表示に切り替える", "fr": "Passer à la barre latérale en cartes" },
+			"error.noDirectoryPicker": { "en": "No directory picker is available", "zh-Hans": "没有可用的目录选择器", "zh-Hant": "沒有可用的目錄選擇器", "ja": "ディレクトリ選択を利用できません", "fr": "Aucun sélecteur de dossier disponible" },
+			"error.workspacesUnavailable": { "en": "The workspaces service is unavailable", "zh-Hans": "workspaces 服务不可用", "zh-Hant": "workspaces 服務無法使用", "ja": "workspaces サービスを利用できません", "fr": "Le service workspaces est indisponible" },
+			"error.sessionsUnavailable": { "en": "The sessions service is unavailable", "zh-Hans": "sessions 服务不可用", "zh-Hant": "sessions 服務無法使用", "ja": "sessions サービスを利用できません", "fr": "Le service sessions est indisponible" },
+			"error.pinUnavailable": { "en": "Pin is unavailable", "zh-Hans": "置顶不可用", "zh-Hant": "釘選無法使用", "ja": "ピン留めを利用できません", "fr": "L’épinglage est indisponible" },
+			"error.unpinUnavailable": { "en": "Unpin is unavailable", "zh-Hans": "取消置顶不可用", "zh-Hant": "取消釘選無法使用", "ja": "ピン留めの解除を利用できません", "fr": "Le retrait de l’épingle est indisponible" },
+			"error.forkUnavailable": { "en": "Fork is unavailable", "zh-Hans": "分叉不可用", "zh-Hant": "分支無法使用", "ja": "セッション分岐を利用できません", "fr": "La création de branche est indisponible" },
+			"error.renameFailed": { "en": "Rename failed", "zh-Hans": "重命名失败", "zh-Hant": "重新命名失敗", "ja": "名前の変更に失敗しました", "fr": "Le renommage a échoué" },
 		}
 
+		/** The languages this build carries, in menu order. */
+		const LANGS = [
+			{ code: 'en', label: 'English' },
+			{ code: 'zh-Hans', label: '简体中文' },
+			{ code: 'zh-Hant', label: '繁體中文' },
+			{ code: 'ja', label: '日本語' },
+			{ code: 'fr', label: 'Français' }
+		]
+
+		/** Per-language fallback chain, so a partial translation still renders. */
+		const LANG_FALLBACK = {
+			en: ['en'],
+			'zh-Hans': ['zh-Hans', 'en'],
+			'zh-Hant': ['zh-Hant', 'zh-Hans', 'en'],
+			ja: ['ja', 'en'],
+			fr: ['fr', 'en']
+		}
+
+		/** Map a BCP 47 tag — or a stored choice — onto one of LANGS, or ''. */
+		function normalizeLang(value) {
+			const tag = String(value === undefined || value === null ? '' : value).toLowerCase()
+			if (tag === 'zh-hant' || tag === 'zh-tw' || tag === 'zh-hk' || tag === 'zh-mo') return 'zh-Hant'
+			if (tag === 'zh' || tag.indexOf('zh-') === 0) return 'zh-Hans'
+			if (tag === 'ja' || tag.indexOf('ja-') === 0) return 'ja'
+			if (tag === 'fr' || tag.indexOf('fr-') === 0) return 'fr'
+			if (tag === 'en' || tag.indexOf('en-') === 0) return 'en'
+			return ''
+		}
+
+		/** The stored choice, with old values ('zh') and unknown tags folded in. */
+		function sanitizeLang(value) {
+			if (value === 'auto' || value === undefined || value === null) return 'auto'
+			const mapped = normalizeLang(value)
+			return mapped === '' ? 'auto' : mapped
+		}
+
+		/** The browser's preferred language mapped onto LANGS; English when none match. */
 		function browserLang(nav) {
 			const agent = nav === undefined ? (typeof navigator === 'undefined' ? null : navigator) : nav
 			try {
 				const tags = agent === null ? [] : Array.isArray(agent.languages) && agent.languages.length > 0 ? agent.languages : [agent.language]
 				for (const tag of tags) {
-					if (typeof tag === 'string' && tag.toLowerCase().indexOf('zh') === 0) return 'zh'
+					const mapped = normalizeLang(tag)
+					if (mapped !== '') return mapped
 				}
 			} catch {
 				/* no navigator here: English is the safe default */
@@ -222,15 +261,19 @@ function build(require) {
 
 		/** The language in force: the saved choice, otherwise the browser's. */
 		function currentLang() {
-			const choice = getState() && getState().lang
-			if (choice === 'zh' || choice === 'en') return choice
-			return browserLang()
+			const choice = sanitizeLang(getState() && getState().lang)
+			return choice === 'auto' ? browserLang() : choice
 		}
 
 		function t(key) {
 			const row = STRINGS[key]
 			if (row === undefined) return key
-			return currentLang() === 'zh' ? row[1] : row[0]
+			const chain = LANG_FALLBACK[currentLang()] || LANG_FALLBACK.en
+			for (const code of chain) {
+				const text = row[code]
+				if (typeof text === 'string') return text
+			}
+			return key
 		}
 
 		/** `t()` with its `{name}` placeholders filled in. */
@@ -323,7 +366,7 @@ function build(require) {
 				workspaceCollapsed: merged.workspaceCollapsed === true,
 				workspaceSort: ['manual', 'name', 'time'].indexOf(merged.workspaceSort) === -1 ? 'manual' : merged.workspaceSort,
 				workspaceSortDir: merged.workspaceSortDir === 'desc' ? 'desc' : 'asc',
-				lang: merged.lang === 'zh' || merged.lang === 'en' ? merged.lang : 'auto',
+				lang: sanitizeLang(merged.lang),
 				pluginCollapsed: merged.pluginCollapsed !== false,
 				pluginGroups,
 				pluginAssign: asRecord(merged.pluginAssign),
@@ -1892,11 +1935,15 @@ function build(require) {
 									{ header: true, label: t('options.language') },
 									{
 										label: t('options.langAuto'),
-										trailing: stateNow.lang === 'zh' || stateNow.lang === 'en' ? '' : '✓',
+										trailing: LANGS.some((entry) => entry.code === stateNow.lang) ? '' : '✓',
 										onSelect: () => setState({ lang: 'auto' })
 									},
-									{ label: '中文', trailing: stateNow.lang === 'zh' ? '✓' : '', onSelect: () => setState({ lang: 'zh' }) },
-									{ label: 'English', trailing: stateNow.lang === 'en' ? '✓' : '', onSelect: () => setState({ lang: 'en' }) }
+									...LANGS.map((entry) => ({
+										key: entry.code,
+										label: entry.label,
+										trailing: stateNow.lang === entry.code ? '✓' : '',
+										onSelect: () => setState({ lang: entry.code })
+									}))
 								]
 							})
 						}
@@ -2251,8 +2298,12 @@ function build(require) {
 /* The foot keeps nothing but the view switch: every other entry (Lark, the
    market's "More", …) is listed in the plugin card instead. */
 [class*="footerActions"] > :not(:has(.dsc-modeswitch)){display:none!important}
-[class*="footerActions"] > :has(.dsc-modeswitch){display:flex !important;align-items:center;flex:1 1 auto;min-width:0;justify-content:flex-end}
-.dsc-modeswitch-row{display:flex;align-items:center;justify-content:flex-end;width:100%;padding:2px 2px 2px 0}
+/* The switch shares the foot's last line instead of taking a line of its own:
+   the account launcher ("More" / the avatar) owns that row, and the switch sits
+   at its right edge. */
+[class*="footArea"]{position:relative}
+[class*="footerActions"] > :has(.dsc-modeswitch){position:absolute;right:var(--dsh-sidebar-inline-padding,8px);bottom:4px;z-index:3;display:flex !important;align-items:center;justify-content:flex-end;flex:none;width:auto;min-width:0;height:32px}
+.dsc-modeswitch-row{display:flex;align-items:center;justify-content:flex-end;width:auto;height:32px;padding:0}
 .dsc-modeswitch{display:inline-flex;align-items:center;gap:6px;border:0;background:transparent;color:var(--dsw-alias-label-tertiary);font-size:12px;cursor:pointer;padding:3px 6px;border-radius:6px}
 .dsc-modeswitch:hover{color:var(--dsw-alias-label-primary);background:color-mix(in srgb,var(--dsw-alias-label-primary) 8%,transparent)}
 .dsc-modeswitch-label{white-space:nowrap}
