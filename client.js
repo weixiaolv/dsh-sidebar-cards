@@ -1500,17 +1500,19 @@ function build(require) {
 
 		function Popover(props) {
 			const ref = React.useRef(null)
-			/** A submenu replaces the list in place; Escape steps back one level. */
-			const [branch, setBranch] = React.useState(null)
-			const items = branch === null ? props.items : branch.items
+			const flyoutRef = React.useRef(null)
+			/** A row that carries a submenu opens a sibling panel beside the menu. */
+			const [flyout, setFlyout] = React.useState(null)
 			React.useEffect(() => {
 				const close = (event) => {
-					if (ref.current && ref.current.contains(event.target)) return
+					const insideMenu = ref.current !== null && ref.current.contains(event.target)
+					const insideFlyout = flyoutRef.current !== null && flyoutRef.current.contains(event.target)
+					if (insideMenu || insideFlyout) return
 					props.onClose()
 				}
 				const onKey = (event) => {
 					if (event.key !== 'Escape') return
-					if (branch !== null) setBranch(null)
+					if (flyout !== null) setFlyout(null)
 					else props.onClose()
 				}
 				document.addEventListener('mousedown', close, true)
@@ -1519,58 +1521,81 @@ function build(require) {
 					document.removeEventListener('mousedown', close, true)
 					document.removeEventListener('keydown', onKey)
 				}
-			}, [branch])
+			}, [flyout])
+
+			const open = (item, element) => {
+				if (!Array.isArray(item.submenu)) return
+				const rect = element.getBoundingClientRect()
+				setFlyout({ items: item.submenu, left: rect.left, right: rect.right, top: rect.top })
+			}
+
+			const openNow = (item) => flyout !== null && flyout.items === item.submenu
+
+			const renderItem = (item, index) =>
+				item.separator === true
+					? h('div', { className: 'dsc-menu-sep', key: 'sep' + index })
+					: item.header === true
+						? h('div', { className: 'dsc-menu-head', key: 'head' + index }, item.label)
+						: h(
+								'button',
+								{
+									type: 'button',
+									key: 'item' + index,
+									role: 'menuitem',
+									'aria-haspopup': Array.isArray(item.submenu) ? 'menu' : undefined,
+									'aria-expanded': Array.isArray(item.submenu) ? openNow(item) : undefined,
+									className: 'dsc-menu-item' + (item.danger ? ' dsc-menu-danger' : '') + (openNow(item) ? ' dsc-menu-item-open' : ''),
+									onMouseEnter: (event) => {
+										// Hover opens the sibling panel, and hovering a plain row
+										// closes it again — the usual cascading-menu behaviour.
+										if (Array.isArray(item.submenu)) open(item, event.currentTarget)
+										else setFlyout(null)
+									},
+									onClick: (event) => {
+										if (Array.isArray(item.submenu)) {
+											open(item, event.currentTarget)
+											return
+										}
+										props.onClose()
+										if (item.onSelect) item.onSelect()
+									}
+								},
+								item.icon ? h(Icon, { name: item.icon, size: 13 }) : null,
+								h('span', { className: 'dsc-menu-label' }, item.label),
+								item.trailing ? h('span', { className: 'dsc-menu-trailing' }, item.trailing) : null,
+								Array.isArray(item.submenu) ? h('span', { className: 'dsc-menu-caret' }, h(Icon, { name: 'chevron', size: 12 })) : null
+							)
+
 			const style = {
 				position: 'fixed',
 				left: Math.max(8, Math.min(props.x, window.innerWidth - 220)),
-				top: Math.max(8, Math.min(props.y, window.innerHeight - 40 - (items.length + (branch === null ? 2 : 3)) * 28)),
+				top: Math.max(8, Math.min(props.y, window.innerHeight - 40 - (props.items.length + 2) * 28)),
 				zIndex: 4000
 			}
+
+			let flyoutStyle = null
+			if (flyout !== null) {
+				const width = 200
+				const height = Math.min(flyout.items.length * 27 + 10, window.innerHeight - 16)
+				// Prefer the right side of the menu, flip left when it would overflow.
+				let left = flyout.right + 4
+				if (left + width > window.innerWidth - 8) left = flyout.left - width - 4
+				flyoutStyle = {
+					position: 'fixed',
+					left: Math.max(8, left),
+					top: Math.max(8, Math.min(flyout.top - 4, window.innerHeight - height - 8)),
+					width,
+					zIndex: 4001
+				}
+			}
+
 			return h(
-				'div',
-				{ className: 'dsc-menu', style, ref, role: 'menu' },
-				branch === null
+				React.Fragment,
+				null,
+				h('div', { className: 'dsc-menu', style, ref, role: 'menu' }, props.items.map(renderItem)),
+				flyout === null
 					? null
-					: h(
-							'button',
-							{
-								type: 'button',
-								key: 'back',
-								className: 'dsc-menu-item dsc-menu-back',
-								onClick: () => setBranch(null)
-							},
-							h(Icon, { name: 'arrowLeft', size: 12 }),
-							h('span', { className: 'dsc-menu-label' }, branch.title)
-						),
-				branch === null ? null : h('div', { className: 'dsc-menu-sep', key: 'backsep' }),
-				items.map((item, index) =>
-					item.separator === true
-						? h('div', { className: 'dsc-menu-sep', key: 'sep' + index })
-						: item.header === true
-							? h('div', { className: 'dsc-menu-head', key: 'head' + index }, item.label)
-							: h(
-									'button',
-									{
-										type: 'button',
-										key: 'item' + index,
-										role: 'menuitem',
-										'aria-haspopup': Array.isArray(item.submenu) ? 'menu' : undefined,
-										className: 'dsc-menu-item' + (item.danger ? ' dsc-menu-danger' : ''),
-										onClick: () => {
-											if (Array.isArray(item.submenu)) {
-												setBranch({ title: item.label, items: item.submenu })
-												return
-											}
-											props.onClose()
-											if (item.onSelect) item.onSelect()
-										}
-									},
-									item.icon ? h(Icon, { name: item.icon, size: 13 }) : null,
-									h('span', { className: 'dsc-menu-label' }, item.label),
-									item.trailing ? h('span', { className: 'dsc-menu-trailing' }, item.trailing) : null,
-									Array.isArray(item.submenu) ? h('span', { className: 'dsc-menu-caret' }, h(Icon, { name: 'chevron', size: 12 })) : null
-								)
-				)
+					: h('div', { className: 'dsc-menu dsc-menu-flyout', style: flyoutStyle, ref: flyoutRef, role: 'menu' }, flyout.items.map(renderItem))
 			)
 		}
 
@@ -3211,8 +3236,8 @@ function build(require) {
 .dsc-menu-sep{height:1px;margin:3px 4px;background:color-mix(in srgb,var(--dsw-alias-label-primary) 10%,transparent)}
 .dsc-menu-head{padding:4px 8px 2px;font-size:11px;color:var(--dsw-alias-label-tertiary)}
 .dsc-menu-label{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.dsc-menu-back{color:var(--dsw-alias-label-secondary)}
 .dsc-menu-caret{margin-left:auto;flex:none;display:inline-flex;align-items:center;color:var(--dsw-alias-label-tertiary)}
+.dsc-menu-item-open{background:color-mix(in srgb,var(--dsw-alias-label-primary) 8%,transparent)}
 .dsc-menu-trailing{margin-left:auto;flex:none;display:inline-flex;align-items:center;gap:4px;color:var(--dsw-alias-label-tertiary);font-size:11px}
 .dsc-scrim{position:fixed;inset:0;z-index:4100;background:rgba(0,0,0,.28);display:flex;align-items:center;justify-content:center;padding:24px}
 .dsc-dialog{width:min(360px,100%);border-radius:12px;border:1px solid var(--dsw-alias-border-l1);background:var(--dsw-alias-bg-overlay);padding:14px;display:flex;flex-direction:column;gap:10px;box-shadow:0 16px 40px rgba(0,0,0,.24)}
