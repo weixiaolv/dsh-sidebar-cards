@@ -1531,7 +1531,7 @@ function build(require) {
 
 			const openNow = (item) => flyout !== null && flyout.items === item.submenu
 
-			const renderItem = (item, index) =>
+			const renderItem = (item, index, inFlyout) =>
 				item.separator === true
 					? h('div', { className: 'dsc-menu-sep', key: 'sep' + index })
 					: item.header === true
@@ -1546,10 +1546,11 @@ function build(require) {
 									'aria-expanded': Array.isArray(item.submenu) ? openNow(item) : undefined,
 									className: 'dsc-menu-item' + (item.danger ? ' dsc-menu-danger' : '') + (openNow(item) ? ' dsc-menu-item-open' : ''),
 									onMouseEnter: (event) => {
-										// Hover opens the sibling panel, and hovering a plain row
-										// closes it again — the usual cascading-menu behaviour.
+										// The flyout never closes itself: its rows are where the pointer
+										// lands next. Only a plain row in the parent menu closes it.
+										if (inFlyout === true) return
 										if (Array.isArray(item.submenu)) open(item, event.currentTarget)
-										else setFlyout(null)
+										else if (flyout !== null) setFlyout(null)
 									},
 									onClick: (event) => {
 										if (Array.isArray(item.submenu)) {
@@ -1592,10 +1593,10 @@ function build(require) {
 			return h(
 				React.Fragment,
 				null,
-				h('div', { className: 'dsc-menu', style, ref, role: 'menu' }, props.items.map(renderItem)),
+				h('div', { className: 'dsc-menu', style, ref, role: 'menu' }, props.items.map((item, index) => renderItem(item, index, false))),
 				flyout === null
 					? null
-					: h('div', { className: 'dsc-menu dsc-menu-flyout', style: flyoutStyle, ref: flyoutRef, role: 'menu' }, flyout.items.map(renderItem))
+					: h('div', { className: 'dsc-menu dsc-menu-flyout', style: flyoutStyle, ref: flyoutRef, role: 'menu' }, flyout.items.map((item, index) => renderItem(item, index, true)))
 			)
 		}
 
