@@ -53,17 +53,16 @@ Plugins page) and restart `dsh web`. Requires DSH `0.2.1-rc.3` or newer; checked
 | Workspaces | Create / rename / delete / collapse categories; drag workspaces between them, rename, delete, start a session in one; open, rename, pin, archive or unarchive sessions (archiving a running session asks first), copy the session id; five sessions per workspace by default, with "show more" adding ten at a time |
 | Workspaces, view options | Three-way archived filter; sort workspaces by name or by their latest session, each in either direction (re-picking the active mode flips it); expand or collapse everything |
 | Search | Matches a workspace's own title and path, and also keeps a workspace whose sessions match; while a query is active no session list is truncated and the "expand all hits" switch unfolds every hit without changing your saved fold state |
-| Language | Every label ships in English, Simplified Chinese, Traditional Chinese, Japanese and French. The default follows the browser — zh-CN/SG to Simplified, zh-TW/HK/MO to Traditional, ja and fr to their own, anything else to English — and the Workspaces card's view options pin any of the five |
-| Plugins | Collects every entry registered in `sidebar.panellist` and `sidebar.footer.action`; user-made groups, drag to regroup, hide / restore, click to open; collapsed by default |
+| Language | Every label ships in nine languages: English, Simplified and Traditional Chinese, Japanese, French, German, Spanish, Portuguese and Russian. The default follows the browser — zh-CN/SG to Simplified, zh-TW/HK/MO to Traditional, ja/fr/de/es/pt/ru to their own, anything else to English — and the Workspaces card's view options pin any of them |
+| Plugins | Collects every entry registered in `sidebar.panellist` and `sidebar.footer.action`; user-made groups, drag to regroup, hide / restore, click to open; its menu also opens the plugin list and starts a Creator session with a sidebar-plugin draft; collapsed by default |
 
 ## State
 
 `~/.dsh/sidebar-cards/state.json`, read and written by the Host half through the
 `/api/dsh-sidebar-cards/state` route. The browser's `localStorage` only mirrors it — the
-Host copy wins. On first run the categories left in `localStorage` by
-`dsh-workspace-categories` are migrated over. The same file keeps the language choice
-(`lang`: `auto`, `en`, `zh-Hans`, `zh-Hant`, `ja` or `fr`), so the UI comes back in the language
-you left it in.
+Host copy wins. The same file keeps the language choice (`lang`: `auto`, `en`, `zh-Hans`,
+`zh-Hant`, `ja`, `fr`, `de`, `es`, `pt` or `ru`), so the UI comes back in the language you
+left it in.
 
 ## Known limitations
 

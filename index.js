@@ -141,7 +141,7 @@ function normalizeState(raw) {
     'pluginGroups',
     'pluginAssign',
     'pluginHidden',
-    'migrated',
+    'pluginShowHidden',
     'updatedAt'
   ]
   for (const key of allowed) {
