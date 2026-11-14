@@ -1,11 +1,13 @@
 # dsh-sidebar-cards
 
+**English** · [简体中文](README.zh.md)
+
 Turns the DeepSeek Harness left sidebar into cards: workspace and session management,
 plugin management, and project file management — all in one column.
 
-![The left sidebar in card view: a Workspaces card with categories, workspaces, sessions and status dots, a Plugins card grouped into Tools, Connectors and Insights, and a Files card listing the project tree](assets/sidebar-cards.png)
+![The app window with the card sidebar on the left: a Workspaces card with categories, workspaces, sessions and status dots, a Plugins card and a Files card listing the project tree](assets/preview.png)
 
-*Card view — an illustration with invented workspaces and plugins.*
+*The card sidebar in place — invented workspaces, plugins and files.*
 
 ## Install
 
@@ -42,7 +44,7 @@ Plugins page) and restart `dsh web`. Requires DSH `0.2.1-rc.3` or newer; checked
 | Workspaces | Create / rename / delete / collapse categories; drag workspaces between them, rename, delete, start a session in one; open, rename, pin, fork or archive sessions (archiving a running session asks first), copy the session id; five sessions per workspace by default, with "show more" adding ten at a time; the open session and the workspace that holds it are marked |
 | Workspaces, view options | Three-way archived filter; sort workspaces by name or by their latest session, each in either direction (re-picking the active mode flips it); expand or collapse everything |
 | Search | Matches a workspace's own title and path, and also keeps a workspace whose sessions match; matched counts show on each row, and an "expand all hits" switch unfolds the results without changing your saved fold state |
-| Language | Every label ships in nine languages: English, Simplified and Traditional Chinese, Japanese, French, German, Spanish, Portuguese and Russian. The default follows the browser — zh-CN/SG to Simplified, zh-TW/HK/MO to Traditional, ja/fr/de/es/pt/ru to their own, anything else to English. The choice lives in the Workspaces card's view options, next to “follow browser” |
+| Language | Every label ships in nine languages: English, Simplified and Traditional Chinese, Japanese, French, German, Spanish, Portuguese and Russian. The default follows the browser — zh-CN/SG to Simplified, zh-TW/HK/MO to Traditional, ja/fr/de/es/pt/ru to their own, anything else to English. In the Workspaces card's view options a Language row shows the language in force and opens a menu beside it holding “follow browser” and the nine languages |
 | Plugins | Collects every panel and shortcut entry; your own groups, drag to regroup, hide / restore, click to open; its menu also opens the plugin list and starts a Creator session with a sidebar-plugin draft; collapsed by default |
 | Files | The current project's tree, root taken from the session you are looking at. Folders load on demand and sort before files, each file with a type-coloured icon. A click selects a file and opens its preview; ⌘/Ctrl-click toggles and Shift-click extends the selection. The header copies the selected paths; the options menu offers reveal in Finder / File Explorer, open with the system default (labelled with the application's own name and icon when the system reports them), copy file paths or the project path, and expand / collapse all |
 

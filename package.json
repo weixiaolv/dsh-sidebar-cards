@@ -52,6 +52,7 @@
     "locale/*.json",
     "locale/ui/*.json",
     "README.md",
+    "README.zh.md",
     "LICENSE"
   ],
   "dsh": {
