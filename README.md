@@ -7,8 +7,6 @@ plugin management, and project file management — all in one column.
 
 ![The app window with the card sidebar on the left: a Workspaces card with categories, workspaces, sessions and status dots, a Plugins card and a Files card listing the project tree](assets/preview.png)
 
-*The card sidebar in place — invented workspaces, plugins and files.*
-
 ## Install
 
 ```sh
@@ -58,4 +56,4 @@ that file restores the defaults.
 
 - Collapsing the native rows relies on the shell's own style hooks. If a DSH upgrade
   renames them, those native rows simply reappear; nothing breaks.
-- Overlaps `dsh-workspace-categories` and `dsh-panel-control`; keep only one of them.
+- Overlaps some sidebar tools; when they conflict, keep only one of them.

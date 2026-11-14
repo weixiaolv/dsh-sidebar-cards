@@ -6,8 +6,6 @@
 
 ![应用窗口：左侧是卡片式侧栏，工作区卡含分类、工作区、会话与状态点，插件卡和项目文件卡在下方](assets/preview.png)
 
-*卡片式侧栏实际效果 —— 图中工作区、插件、文件均为虚构内容。*
-
 ## 安装
 
 ```sh
@@ -49,4 +47,4 @@ dsh plugin --profile web add dsh-sidebar-cards
 ## 已知限制
 
 - 隐藏原生行依赖 shell 自身的样式钩子。如果 DSH 升级后改了这些类名，原生行会重新出现，但不会出错。
-- 与 `dsh-workspace-categories`、`dsh-panel-control` 功能重叠，请只保留其中一个。
+- 与一些侧边栏工具功能重叠，冲突时请只保留其中一个。
