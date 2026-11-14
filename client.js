@@ -120,955 +120,130 @@ function build(require) {
 		 * `t()` takes the column of the language in force — the saved choice, or
 		 * the browser's own language while the choice is "auto" (the default).
 		 */
-		const STRINGS = {
-			// One row per message, the text in every language this build carries.
-			"card.workspaces": {
-				"en": "Workspaces",
-				"zh-Hans": "工作区",
-				"zh-Hant": "工作區",
-				"ja": "ワークスペース",
-				"fr": "Espaces de travail",
-				"de": "Arbeitsbereiche",
-				"es": "Espacios de trabajo",
-				"pt": "Espaços de trabalho",
-				"ru": "Рабочие области",
-			},
-			"card.plugins": {
-				"en": "Plugins",
-				"zh-Hans": "插件",
-				"zh-Hant": "外掛",
-				"ja": "プラグイン",
-				"fr": "Plugins",
-				"de": "Plugins",
-				"es": "Plugins",
-				"pt": "Plugins",
-				"ru": "Плагины",
-			},
-			"card.unassigned": {
-				"en": "Uncategorized",
-				"zh-Hans": "未分类",
-				"zh-Hant": "未分類",
-				"ja": "未分類",
-				"fr": "Sans catégorie",
-				"de": "Nicht zugeordnet",
-				"es": "Sin categoría",
-				"pt": "Sem categoria",
-				"ru": "Без категории",
-			},
-			"card.ungrouped": {
-				"en": "Ungrouped",
-				"zh-Hans": "未分组",
-				"zh-Hant": "未分組",
-				"ja": "グループなし",
-				"fr": "Sans groupe",
-				"de": "Ohne Gruppe",
-				"es": "Sin grupo",
-				"pt": "Sem grupo",
-				"ru": "Без группы",
-			},
-			"action.cancel": {
-				"en": "Cancel",
-				"zh-Hans": "取消",
-				"zh-Hant": "取消",
-				"ja": "キャンセル",
-				"fr": "Annuler",
-				"de": "Abbrechen",
-				"es": "Cancelar",
-				"pt": "Cancelar",
-				"ru": "Отмена",
-			},
-			"action.confirm": {
-				"en": "OK",
-				"zh-Hans": "确定",
-				"zh-Hant": "確定",
-				"ja": "OK",
-				"fr": "OK",
-				"de": "OK",
-				"es": "Aceptar",
-				"pt": "OK",
-				"ru": "ОК",
-			},
-			"action.delete": {
-				"en": "Delete",
-				"zh-Hans": "删除",
-				"zh-Hant": "刪除",
-				"ja": "削除",
-				"fr": "Supprimer",
-				"de": "Löschen",
-				"es": "Eliminar",
-				"pt": "Excluir",
-				"ru": "Удалить",
-			},
-			"action.close": {
-				"en": "Close",
-				"zh-Hans": "关闭",
-				"zh-Hant": "關閉",
-				"ja": "閉じる",
-				"fr": "Fermer",
-				"de": "Schließen",
-				"es": "Cerrar",
-				"pt": "Fechar",
-				"ru": "Закрыть",
-			},
-			"action.expandAll": {
-				"en": "Expand all",
-				"zh-Hans": "全部展开",
-				"zh-Hant": "全部展開",
-				"ja": "すべて展開",
-				"fr": "Tout déplier",
-				"de": "Alle ausklappen",
-				"es": "Expandir todo",
-				"pt": "Expandir tudo",
-				"ru": "Развернуть все",
-			},
-			"action.collapseAll": {
-				"en": "Collapse all",
-				"zh-Hans": "全部折叠",
-				"zh-Hant": "全部收合",
-				"ja": "すべて折りたたむ",
-				"fr": "Tout replier",
-				"de": "Alle einklappen",
-				"es": "Contraer todo",
-				"pt": "Recolher tudo",
-				"ru": "Свернуть все",
-			},
-			"category.new": {
-				"en": "New category",
-				"zh-Hans": "新建分类",
-				"zh-Hant": "新增分類",
-				"ja": "新しいカテゴリ",
-				"fr": "Nouvelle catégorie",
-				"de": "Neue Kategorie",
-				"es": "Nueva categoría",
-				"pt": "Nova categoria",
-				"ru": "Новая категория",
-			},
-			"category.newWorkspace": {
-				"en": "New workspace in this category",
-				"zh-Hans": "在此分类下新建工作区",
-				"zh-Hant": "在此分類新增工作區",
-				"ja": "このカテゴリにワークスペースを追加",
-				"fr": "Nouvel espace de travail dans cette catégorie",
-				"de": "Neuer Arbeitsbereich in dieser Kategorie",
-				"es": "Nuevo espacio de trabajo en esta categoría",
-				"pt": "Novo espaço de trabalho nesta categoria",
-				"ru": "Новая рабочая область в этой категории",
-			},
-			"category.rename": {
-				"en": "Rename category",
-				"zh-Hans": "重命名分类",
-				"zh-Hant": "重新命名分類",
-				"ja": "カテゴリ名を変更",
-				"fr": "Renommer la catégorie",
-				"de": "Kategorie umbenennen",
-				"es": "Cambiar nombre de la categoría",
-				"pt": "Renomear categoria",
-				"ru": "Переименовать категорию",
-			},
-			"category.delete": {
-				"en": "Delete category",
-				"zh-Hans": "删除分类",
-				"zh-Hant": "刪除分類",
-				"ja": "カテゴリを削除",
-				"fr": "Supprimer la catégorie",
-				"de": "Kategorie löschen",
-				"es": "Eliminar la categoría",
-				"pt": "Excluir a categoria",
-				"ru": "Удалить категорию",
-			},
-			"category.deleteMessage": {
-				"en": "Workspaces in this category move to Uncategorized; no workspace is deleted.",
-				"zh-Hans": "分类里的工作区会回到「未分类」，不会删除工作区。",
-				"zh-Hant": "分類中的工作區會回到「未分類」，不會刪除工作區。",
-				"ja": "このカテゴリのワークスペースは「未分類」に戻ります。ワークスペースは削除されません。",
-				"fr": "Les espaces de travail de cette catégorie passent dans « Sans catégorie » ; aucun espace de travail n’est supprimé.",
-				"de": "Die Arbeitsbereiche dieser Kategorie wandern nach „Nicht zugeordnet“; kein Arbeitsbereich wird gelöscht.",
-				"es": "Los espacios de trabajo de esta categoría pasan a «Sin categoría»; no se elimina ningún espacio de trabajo.",
-				"pt": "Os espaços de trabalho desta categoria passam para «Sem categoria»; nenhum espaço de trabalho é excluído.",
-				"ru": "Рабочие области этой категории перейдут в «Без категории»; сами рабочие области не удаляются.",
-			},
-			"category.namePlaceholder": {
-				"en": "Category name, for example Org management / Projects",
-				"zh-Hans": "分类名称，例如 组织管理 / 项目管理",
-				"zh-Hant": "分類名稱，例如 組織管理 / 專案管理",
-				"ja": "カテゴリ名（例: 組織管理 / プロジェクト管理）",
-				"fr": "Nom de la catégorie, par exemple Organisation / Projets",
-				"de": "Kategoriename, z. B. Organisation / Projekte",
-				"es": "Nombre de la categoría, por ejemplo Organización / Proyectos",
-				"pt": "Nome da categoria, por exemplo Organização / Projetos",
-				"ru": "Название категории, например Организация / Проекты",
-			},
-			"category.untitled": {
-				"en": "Untitled category",
-				"zh-Hans": "未命名分类",
-				"zh-Hant": "未命名分類",
-				"ja": "無題のカテゴリ",
-				"fr": "Catégorie sans titre",
-				"de": "Kategorie ohne Titel",
-				"es": "Categoría sin título",
-				"pt": "Categoria sem título",
-				"ru": "Категория без названия",
-			},
-			"plugins.newGroup": {
-				"en": "New plugin group",
-				"zh-Hans": "新建插件分组",
-				"zh-Hant": "新增外掛群組",
-				"ja": "新しいプラグイングループ",
-				"fr": "Nouveau groupe de plugins",
-				"de": "Neue Plugin-Gruppe",
-				"es": "Nuevo grupo de plugins",
-				"pt": "Novo grupo de plugins",
-				"ru": "Новая группа плагинов",
-			},
-			"plugins.renameGroup": {
-				"en": "Rename group",
-				"zh-Hans": "重命名分组",
-				"zh-Hant": "重新命名群組",
-				"ja": "グループ名を変更",
-				"fr": "Renommer le groupe",
-				"de": "Gruppe umbenennen",
-				"es": "Cambiar nombre del grupo",
-				"pt": "Renomear grupo",
-				"ru": "Переименовать группу",
-			},
-			"plugins.deleteGroup": {
-				"en": "Delete group",
-				"zh-Hans": "删除分组",
-				"zh-Hant": "刪除群組",
-				"ja": "グループを削除",
-				"fr": "Supprimer le groupe",
-				"de": "Gruppe löschen",
-				"es": "Eliminar el grupo",
-				"pt": "Excluir o grupo",
-				"ru": "Удалить группу",
-			},
-			"plugins.groupNamePlaceholder": {
-				"en": "Group name, for example Tools / Data / Connectors",
-				"zh-Hans": "分组名称，例如 工具 / 数据 / 连接",
-				"zh-Hant": "群組名稱，例如 工具 / 資料 / 連線",
-				"ja": "グループ名（例: ツール / データ / 接続）",
-				"fr": "Nom du groupe, par exemple Outils / Données / Connecteurs",
-				"de": "Gruppenname, z. B. Werkzeuge / Daten / Verbindungen",
-				"es": "Nombre del grupo, por ejemplo Herramientas / Datos / Conexiones",
-				"pt": "Nome do grupo, por exemplo Ferramentas / Dados / Conexões",
-				"ru": "Название группы, например Инструменты / Данные / Подключения",
-			},
-			"plugins.dragHint": {
-				"en": "Drag into a group",
-				"zh-Hans": "拖到分组归类",
-				"zh-Hant": "拖曳到群組分類",
-				"ja": "グループにドラッグ",
-				"fr": "Glisser dans un groupe",
-				"de": "In eine Gruppe ziehen",
-				"es": "Arrastrar a un grupo",
-				"pt": "Arrastar para um grupo",
-				"ru": "Перетащите в группу",
-			},
-			"plugins.restore": {
-				"en": "Show again",
-				"zh-Hans": "恢复显示",
-				"zh-Hant": "恢復顯示",
-				"ja": "再表示",
-				"fr": "Réafficher",
-				"de": "Wieder einblenden",
-				"es": "Volver a mostrar",
-				"pt": "Mostrar novamente",
-				"ru": "Показать снова",
-			},
-			"plugins.hide": {
-				"en": "Hide entry",
-				"zh-Hans": "隐藏入口",
-				"zh-Hant": "隱藏項目",
-				"ja": "エントリを非表示",
-				"fr": "Masquer l’entrée",
-				"de": "Eintrag ausblenden",
-				"es": "Ocultar entrada",
-				"pt": "Ocultar entrada",
-				"ru": "Скрыть элемент",
-			},
-			"plugins.empty": {
-				"en": "No plugin entries to manage",
-				"zh-Hans": "暂无可管理的插件入口",
-				"zh-Hant": "尚無可管理的外掛項目",
-				"ja": "管理できるプラグインエントリはありません",
-				"fr": "Aucune entrée de plugin à gérer",
-				"de": "Keine Plugin-Einträge zu verwalten",
-				"es": "No hay entradas de plugins que gestionar",
-				"pt": "Não há entradas de plugins para gerenciar",
-				"ru": "Нет элементов плагинов для управления",
-			},
-			"plugins.showHidden": {
-				"en": "Show hidden entries",
-				"zh-Hans": "显示已隐藏入口",
-				"zh-Hant": "顯示已隱藏項目",
-				"ja": "非表示のエントリを表示",
-				"fr": "Afficher les entrées masquées",
-				"de": "Ausgeblendete Einträge anzeigen",
-				"es": "Mostrar entradas ocultas",
-				"pt": "Mostrar entradas ocultas",
-				"ru": "Показать скрытые элементы",
-			},
-			"plugins.showHiddenCount": {
-				"en": "Show hidden entries ({n})",
-				"zh-Hans": "显示已隐藏入口（{n}）",
-				"zh-Hant": "顯示已隱藏項目（{n}）",
-				"ja": "非表示のエントリを表示（{n}）",
-				"fr": "Afficher les entrées masquées ({n})",
-				"de": "Ausgeblendete Einträge anzeigen ({n})",
-				"es": "Mostrar entradas ocultas ({n})",
-				"pt": "Mostrar entradas ocultas ({n})",
-				"ru": "Показать скрытые элементы ({n})",
-			},
-			"plugins.browsePlugins": {
-				"en": "Browse other plugins",
-				"zh-Hans": "浏览更多插件",
-				"zh-Hant": "瀏覽更多外掛",
-				"ja": "他のプラグインを探す",
-				"fr": "Parcourir d’autres plugins",
-				"de": "Weitere Plugins durchsuchen",
-				"es": "Explorar otros plugins",
-				"pt": "Explorar outros plugins",
-				"ru": "Просмотреть другие плагины",
-			},
-			"plugins.createPlugin": {
-				"en": "Create your plugin",
-				"zh-Hans": "创建你的插件",
-				"zh-Hant": "建立你的外掛",
-				"ja": "プラグインを作成",
-				"fr": "Créez votre plugin",
-				"de": "Eigenes Plugin erstellen",
-				"es": "Crear tu plugin",
-				"pt": "Criar seu plugin",
-				"ru": "Создать свой плагин",
-			},
-			"plugins.createPrompt": {
-				"en": "Create a DSH plugin with a left sidebar entry.",
-				"zh-Hans": "创建一个带左侧栏入口的 DSH 插件。",
-				"zh-Hant": "建立一個帶左側欄入口的 DSH 外掛。",
-				"ja": "左サイドバーにエントリを持つ DSH プラグインを作成します。",
-				"fr": "Créez un plugin DSH avec une entrée dans la barre latérale gauche.",
-				"de": "Erstelle ein DSH-Plugin mit einem Eintrag in der linken Seitenleiste.",
-				"es": "Crea un plugin de DSH con una entrada en la barra lateral izquierda.",
-				"pt": "Crie um plugin do DSH com uma entrada na barra lateral esquerda.",
-				"ru": "Создайте плагин DSH с элементом на левой боковой панели.",
-			},
-			"plugins.untitledGroup": {
-				"en": "Untitled group",
-				"zh-Hans": "未命名分组",
-				"zh-Hant": "未命名群組",
-				"ja": "無題のグループ",
-				"fr": "Groupe sans titre",
-				"de": "Gruppe ohne Titel",
-				"es": "Grupo sin título",
-				"pt": "Grupo sem título",
-				"ru": "Группа без названия",
-			},
-			"session.rename": {
-				"en": "Rename session",
-				"zh-Hans": "重命名会话",
-				"zh-Hant": "重新命名會話",
-				"ja": "セッション名を変更",
-				"fr": "Renommer la session",
-				"de": "Sitzung umbenennen",
-				"es": "Cambiar nombre de la sesión",
-				"pt": "Renomear sessão",
-				"ru": "Переименовать сеанс",
-			},
-			"session.pin": {
-				"en": "Pin",
-				"zh-Hans": "置顶",
-				"zh-Hant": "釘選",
-				"ja": "ピン留め",
-				"fr": "Épingler",
-				"de": "Anheften",
-				"es": "Fijar",
-				"pt": "Fixar",
-				"ru": "Закрепить",
-			},
-			"session.unpin": {
-				"en": "Unpin",
-				"zh-Hans": "取消置顶",
-				"zh-Hant": "取消釘選",
-				"ja": "ピン留めを解除",
-				"fr": "Ne plus épingler",
-				"de": "Anheftung aufheben",
-				"es": "Dejar de fijar",
-				"pt": "Desafixar",
-				"ru": "Открепить",
-			},
-			"session.fork": {
-				"en": "Fork session",
-				"zh-Hans": "分叉会话",
-				"zh-Hant": "分支會話",
-				"ja": "セッションを分岐",
-				"fr": "Créer une branche de la session",
-				"de": "Sitzung verzweigen",
-				"es": "Bifurcar la sesión",
-				"pt": "Criar ramificação da sessão",
-				"ru": "Создать ответвление сеанса",
-			},
-			"session.copyId": {
-				"en": "Copy session ID",
-				"zh-Hans": "复制会话 ID",
-				"zh-Hant": "複製會話 ID",
-				"ja": "セッション ID をコピー",
-				"fr": "Copier l’ID de session",
-				"de": "Sitzungs-ID kopieren",
-				"es": "Copiar el ID de sesión",
-				"pt": "Copiar ID da sessão",
-				"ru": "Копировать ID сеанса",
-			},
-			"session.archive": {
-				"en": "Archive",
-				"zh-Hans": "归档",
-				"zh-Hant": "封存",
-				"ja": "アーカイブ",
-				"fr": "Archiver",
-				"de": "Archivieren",
-				"es": "Archivar",
-				"pt": "Arquivar",
-				"ru": "Архивировать",
-			},
-			"session.unarchive": {
-				"en": "Unarchive",
-				"zh-Hans": "取消归档",
-				"zh-Hant": "取消封存",
-				"ja": "アーカイブを解除",
-				"fr": "Désarchiver",
-				"de": "Aus dem Archiv holen",
-				"es": "Desarchivar",
-				"pt": "Desarquivar",
-				"ru": "Вернуть из архива",
-			},
-			"session.more": {
-				"en": "More actions",
-				"zh-Hans": "更多操作",
-				"zh-Hant": "更多操作",
-				"ja": "その他の操作",
-				"fr": "Plus d’actions",
-				"de": "Weitere Aktionen",
-				"es": "Más acciones",
-				"pt": "Mais ações",
-				"ru": "Другие действия",
-			},
-			"session.untitled": {
-				"en": "Untitled",
-				"zh-Hans": "未命名",
-				"zh-Hant": "未命名",
-				"ja": "無題",
-				"fr": "Sans titre",
-				"de": "Ohne Titel",
-				"es": "Sin título",
-				"pt": "Sem título",
-				"ru": "Без названия",
-			},
-			"session.empty": {
-				"en": "No sessions yet",
-				"zh-Hans": "还没有会话",
-				"zh-Hant": "尚無會話",
-				"ja": "セッションはまだありません",
-				"fr": "Aucune session pour l’instant",
-				"de": "Noch keine Sitzungen",
-				"es": "Aún no hay sesiones",
-				"pt": "Ainda não há sessões",
-				"ru": "Сеансов пока нет",
-			},
-			"session.noMatch": {
-				"en": "No matching sessions",
-				"zh-Hans": "没有匹配的会话",
-				"zh-Hant": "沒有符合的會話",
-				"ja": "一致するセッションはありません",
-				"fr": "Aucune session correspondante",
-				"de": "Keine passenden Sitzungen",
-				"es": "No hay sesiones coincidentes",
-				"pt": "Nenhuma sessão correspondente",
-				"ru": "Нет подходящих сеансов",
-			},
-			"session.showMore": {
-				"en": "Show more",
-				"zh-Hans": "显示更多",
-				"zh-Hant": "顯示更多",
-				"ja": "さらに表示",
-				"fr": "Afficher plus",
-				"de": "Mehr anzeigen",
-				"es": "Mostrar más",
-				"pt": "Mostrar mais",
-				"ru": "Показать ещё",
-			},
-			"session.showLess": {
-				"en": "Show less",
-				"zh-Hans": "显示更少",
-				"zh-Hant": "顯示較少",
-				"ja": "表示を減らす",
-				"fr": "Afficher moins",
-				"de": "Weniger anzeigen",
-				"es": "Mostrar menos",
-				"pt": "Mostrar menos",
-				"ru": "Показать меньше",
-			},
-			"session.runningTitle": {
-				"en": "This session is still running",
-				"zh-Hans": "该会话仍在运行",
-				"zh-Hant": "此會話仍在執行",
-				"ja": "このセッションはまだ実行中です",
-				"fr": "Cette session est toujours en cours",
-				"de": "Diese Sitzung läuft noch",
-				"es": "Esta sesión sigue en ejecución",
-				"pt": "Esta sessão ainda está em execução",
-				"ru": "Этот сеанс всё ещё выполняется",
-			},
-			"session.runningMessage": {
-				"en": "Stop it and archive?",
-				"zh-Hans": "停止它并归档？",
-				"zh-Hant": "停止並封存？",
-				"ja": "停止してアーカイブしますか？",
-				"fr": "L’arrêter et l’archiver ?",
-				"de": "Anhalten und archivieren?",
-				"es": "¿Detenerla y archivarla?",
-				"pt": "Parar e arquivar?",
-				"ru": "Остановить и архивировать?",
-			},
-			"session.stopArchive": {
-				"en": "Stop and archive",
-				"zh-Hans": "停止并归档",
-				"zh-Hant": "停止並封存",
-				"ja": "停止してアーカイブ",
-				"fr": "Arrêter et archiver",
-				"de": "Anhalten und archivieren",
-				"es": "Detener y archivar",
-				"pt": "Parar e arquivar",
-				"ru": "Остановить и архивировать",
-			},
-			"workspace.newSession": {
-				"en": "New session",
-				"zh-Hans": "新建会话",
-				"zh-Hant": "新增會話",
-				"ja": "新しいセッション",
-				"fr": "Nouvelle session",
-				"de": "Neue Sitzung",
-				"es": "Nueva sesión",
-				"pt": "Nova sessão",
-				"ru": "Новый сеанс",
-			},
-			"workspace.rename": {
-				"en": "Rename workspace",
-				"zh-Hans": "重命名工作区",
-				"zh-Hant": "重新命名工作區",
-				"ja": "ワークスペース名を変更",
-				"fr": "Renommer l’espace de travail",
-				"de": "Arbeitsbereich umbenennen",
-				"es": "Cambiar nombre del espacio de trabajo",
-				"pt": "Renomear espaço de trabalho",
-				"ru": "Переименовать рабочую область",
-			},
-			"workspace.copyPath": {
-				"en": "Copy path",
-				"zh-Hans": "复制路径",
-				"zh-Hant": "複製路徑",
-				"ja": "パスをコピー",
-				"fr": "Copier le chemin",
-				"de": "Pfad kopieren",
-				"es": "Copiar la ruta",
-				"pt": "Copiar caminho",
-				"ru": "Копировать путь",
-			},
-			"workspace.moveTo": {
-				"en": "Move to category",
-				"zh-Hans": "移入分类",
-				"zh-Hant": "移至分類",
-				"ja": "カテゴリへ移動",
-				"fr": "Déplacer vers une catégorie",
-				"de": "In Kategorie verschieben",
-				"es": "Mover a una categoría",
-				"pt": "Mover para uma categoria",
-				"ru": "Переместить в категорию",
-			},
-			"workspace.moveOut": {
-				"en": "Remove from category",
-				"zh-Hans": "移出分类",
-				"zh-Hant": "移出分類",
-				"ja": "カテゴリから外す",
-				"fr": "Retirer de la catégorie",
-				"de": "Aus Kategorie entfernen",
-				"es": "Quitar de la categoría",
-				"pt": "Remover da categoria",
-				"ru": "Убрать из категории",
-			},
-			"workspace.delete": {
-				"en": "Delete workspace",
-				"zh-Hans": "删除工作区",
-				"zh-Hant": "刪除工作區",
-				"ja": "ワークスペースを削除",
-				"fr": "Supprimer l’espace de travail",
-				"de": "Arbeitsbereich löschen",
-				"es": "Eliminar el espacio de trabajo",
-				"pt": "Excluir espaço de trabalho",
-				"ru": "Удалить рабочую область",
-			},
-			"workspace.deleteMessage": {
-				"en": "Removes it from this list only; the folder on disk is untouched.",
-				"zh-Hans": "仅从列表移除，不会删除磁盘上的目录。",
-				"zh-Hant": "僅從清單移除，不會刪除磁碟上的目錄。",
-				"ja": "一覧から外すだけで、ディスク上のフォルダーは削除されません。",
-				"fr": "Retiré de cette liste uniquement ; le dossier sur le disque n’est pas touché.",
-				"de": "Wird nur aus dieser Liste entfernt; der Ordner auf der Festplatte bleibt.",
-				"es": "Solo lo quita de esta lista; la carpeta del disco no se toca.",
-				"pt": "Remove apenas desta lista; a pasta no disco não é alterada.",
-				"ru": "Убирается только из списка; папка на диске остаётся.",
-			},
-			"workspace.more": {
-				"en": "Workspace actions",
-				"zh-Hans": "工作区操作",
-				"zh-Hant": "工作區操作",
-				"ja": "ワークスペースの操作",
-				"fr": "Actions de l’espace de travail",
-				"de": "Arbeitsbereich-Aktionen",
-				"es": "Acciones del espacio de trabajo",
-				"pt": "Ações do espaço de trabalho",
-				"ru": "Действия с рабочей областью",
-			},
-			"workspace.dropHint": {
-				"en": "Drop a workspace here, or click + to create one",
-				"zh-Hans": "把工作区拖到这里，或点 + 新建",
-				"zh-Hant": "將工作區拖曳到這裡，或按 + 新增",
-				"ja": "ここにワークスペースをドラッグするか、+ で新規作成します",
-				"fr": "Déposez un espace de travail ici, ou cliquez sur + pour en créer un",
-				"de": "Arbeitsbereich hierher ziehen oder + zum Anlegen nutzen",
-				"es": "Suelte un espacio de trabajo aquí o pulse + para crear uno",
-				"pt": "Solte um espaço de trabalho aqui ou clique em + para criar um",
-				"ru": "Перетащите рабочую область сюда или нажмите +, чтобы создать",
-			},
-			"workspace.empty": {
-				"en": "No workspaces yet — click + above to add a folder",
-				"zh-Hans": "还没有工作区，点上方 + 添加一个目录",
-				"zh-Hant": "尚無工作區，請按上方 + 新增目錄",
-				"ja": "ワークスペースがありません。上の + からフォルダーを追加してください",
-				"fr": "Aucun espace de travail — cliquez sur + ci-dessus pour ajouter un dossier",
-				"de": "Noch keine Arbeitsbereiche — über + oben einen Ordner hinzufügen",
-				"es": "Aún no hay espacios de trabajo: pulse + arriba para añadir una carpeta",
-				"pt": "Ainda não há espaços de trabalho — clique em + acima para adicionar uma pasta",
-				"ru": "Рабочих областей пока нет — нажмите + выше, чтобы добавить папку",
-			},
-			"options.title": {
-				"en": "View options",
-				"zh-Hans": "视图选项",
-				"zh-Hant": "檢視選項",
-				"ja": "表示オプション",
-				"fr": "Options d’affichage",
-				"de": "Ansichtsoptionen",
-				"es": "Opciones de vista",
-				"pt": "Opções de exibição",
-				"ru": "Параметры вида",
-			},
-			"options.archivedHeader": {
-				"en": "Archived sessions",
-				"zh-Hans": "已归档会话",
-				"zh-Hant": "已封存會話",
-				"ja": "アーカイブ済みセッション",
-				"fr": "Sessions archivées",
-				"de": "Archivierte Sitzungen",
-				"es": "Sesiones archivadas",
-				"pt": "Sessões arquivadas",
-				"ru": "Архивные сеансы",
-			},
-			"options.archivedDefault": {
-				"en": "Hide archived",
-				"zh-Hans": "隐藏已归档",
-				"zh-Hant": "隱藏已封存",
-				"ja": "アーカイブを非表示",
-				"fr": "Masquer les archivées",
-				"de": "Archivierte ausblenden",
-				"es": "Ocultar archivadas",
-				"pt": "Ocultar arquivadas",
-				"ru": "Скрыть архивные",
-			},
-			"options.archivedShow": {
-				"en": "All conversations (show archived)",
-				"zh-Hans": "全部对话（显示已归档）",
-				"zh-Hant": "全部對話（顯示已封存）",
-				"ja": "すべての会話（アーカイブを含む）",
-				"fr": "Toutes les conversations (archives incluses)",
-				"de": "Alle Unterhaltungen (archivierte anzeigen)",
-				"es": "Todas las conversaciones (mostrar archivadas)",
-				"pt": "Todas as conversas (mostrar arquivadas)",
-				"ru": "Все беседы (показывать архивные)",
-			},
-			"options.archivedOnly": {
-				"en": "Archived only",
-				"zh-Hans": "仅显示已归档",
-				"zh-Hant": "僅顯示已封存",
-				"ja": "アーカイブのみ",
-				"fr": "Archivées uniquement",
-				"de": "Nur archivierte",
-				"es": "Solo archivadas",
-				"pt": "Somente arquivadas",
-				"ru": "Только архивные",
-			},
-			"options.sortHeader": {
-				"en": "Workspace order",
-				"zh-Hans": "工作区排序",
-				"zh-Hant": "工作區排序",
-				"ja": "ワークスペースの並び順",
-				"fr": "Ordre des espaces de travail",
-				"de": "Reihenfolge der Arbeitsbereiche",
-				"es": "Orden de los espacios de trabajo",
-				"pt": "Ordem dos espaços de trabalho",
-				"ru": "Порядок рабочих областей",
-			},
-			"options.sortManual": {
-				"en": "Manual order",
-				"zh-Hans": "不自动排序",
-				"zh-Hant": "不自動排序",
-				"ja": "手動",
-				"fr": "Ordre manuel",
-				"de": "Manuelle Reihenfolge",
-				"es": "Orden manual",
-				"pt": "Ordem manual",
-				"ru": "Вручную",
-			},
-			"options.sortName": {
-				"en": "By name",
-				"zh-Hans": "按名称排序",
-				"zh-Hant": "依名稱排序",
-				"ja": "名前順",
-				"fr": "Par nom",
-				"de": "Nach Name",
-				"es": "Por nombre",
-				"pt": "Por nome",
-				"ru": "По имени",
-			},
-			"options.sortTime": {
-				"en": "By latest session",
-				"zh-Hans": "按最近会话排序",
-				"zh-Hant": "依最近會話排序",
-				"ja": "最新セッション順",
-				"fr": "Par session la plus récente",
-				"de": "Nach letzter Sitzung",
-				"es": "Por sesión más reciente",
-				"pt": "Por sessão mais recente",
-				"ru": "По последнему сеансу",
-			},
-			"options.newHeader": {
-				"en": "New group or workspace",
-				"zh-Hans": "新建分组或工作区",
-				"zh-Hant": "新增群組或工作區",
-				"ja": "新規カテゴリ / ワークスペース",
-				"fr": "Nouveau groupe ou espace de travail",
-				"de": "Neue Gruppe oder neuer Arbeitsbereich",
-				"es": "Nuevo grupo o espacio de trabajo",
-				"pt": "Novo grupo ou espaço de trabalho",
-				"ru": "Новая группа или рабочая область",
-			},
-			"options.newGroup": {
-				"en": "New category",
-				"zh-Hans": "新建分组",
-				"zh-Hant": "新增分類",
-				"ja": "新しいカテゴリ",
-				"fr": "Nouvelle catégorie",
-				"de": "Neue Kategorie",
-				"es": "Nueva categoría",
-				"pt": "Nova categoria",
-				"ru": "Новая категория",
-			},
-			"options.newWorkspace": {
-				"en": "New workspace",
-				"zh-Hans": "新建工作区",
-				"zh-Hant": "新增工作區",
-				"ja": "新しいワークスペース",
-				"fr": "Nouvel espace de travail",
-				"de": "Neuer Arbeitsbereich",
-				"es": "Nuevo espacio de trabajo",
-				"pt": "Novo espaço de trabalho",
-				"ru": "Новая рабочая область",
-			},
-			"options.language": {
-				"en": "Language",
-				"zh-Hans": "界面语言",
-				"zh-Hant": "介面語言",
-				"ja": "言語",
-				"fr": "Langue",
-				"de": "Sprache",
-				"es": "Idioma",
-				"pt": "Idioma",
-				"ru": "Язык",
-			},
-			"options.langAuto": {
-				"en": "Follow browser",
-				"zh-Hans": "跟随浏览器",
-				"zh-Hant": "跟隨瀏覽器",
-				"ja": "ブラウザに合わせる",
-				"fr": "Suivre le navigateur",
-				"de": "Browser folgen",
-				"es": "Seguir el navegador",
-				"pt": "Seguir o navegador",
-				"ru": "Как в браузере",
-			},
-			"search.placeholder": {
-				"en": "Filter workspaces and sessions…",
-				"zh-Hans": "筛选工作区与会话…",
-				"zh-Hant": "篩選工作區與會話…",
-				"ja": "ワークスペースとセッションを絞り込む…",
-				"fr": "Filtrer les espaces de travail et les sessions…",
-				"de": "Arbeitsbereiche und Sitzungen filtern…",
-				"es": "Filtrar espacios de trabajo y sesiones…",
-				"pt": "Filtrar espaços de trabalho e sessões…",
-				"ru": "Фильтр рабочих областей и сеансов…",
-			},
-			"search.expandHits": {
-				"en": "Expand all hits",
-				"zh-Hans": "展开全部命中",
-				"zh-Hant": "展開全部符合項目",
-				"ja": "一致する項目をすべて展開",
-				"fr": "Déplier tous les résultats",
-				"de": "Alle Treffer ausklappen",
-				"es": "Expandir todos los resultados",
-				"pt": "Expandir todos os resultados",
-				"ru": "Развернуть все совпадения",
-			},
-			"search.collapseHits": {
-				"en": "Collapse hits",
-				"zh-Hans": "收起命中",
-				"zh-Hant": "收合符合項目",
-				"ja": "一致する項目を折りたたむ",
-				"fr": "Replier les résultats",
-				"de": "Treffer einklappen",
-				"es": "Contraer los resultados",
-				"pt": "Recolher os resultados",
-				"ru": "Свернуть совпадения",
-			},
-			"mode.title": {
-				"en": "View",
-				"zh-Hans": "视图切换",
-				"zh-Hant": "檢視切換",
-				"ja": "表示",
-				"fr": "Affichage",
-				"de": "Ansicht",
-				"es": "Vista",
-				"pt": "Visualização",
-				"ru": "Вид",
-			},
-			"mode.native": {
-				"en": "Native list",
-				"zh-Hans": "原生列表",
-				"zh-Hant": "原生清單",
-				"ja": "標準リスト",
-				"fr": "Liste native",
-				"de": "Native Liste",
-				"es": "Lista nativa",
-				"pt": "Lista nativa",
-				"ru": "Встроенный список",
-			},
-			"mode.cards": {
-				"en": "Card sidebar",
-				"zh-Hans": "卡片侧栏",
-				"zh-Hant": "卡片側欄",
-				"ja": "カード表示",
-				"fr": "Barre latérale en cartes",
-				"de": "Karten-Seitenleiste",
-				"es": "Barra lateral de tarjetas",
-				"pt": "Barra lateral de cartões",
-				"ru": "Боковая панель с карточками",
-			},
-			"mode.toNative": {
-				"en": "Switch to the native workspace list",
-				"zh-Hans": "切换为原生工作区列表",
-				"zh-Hant": "切換為原生工作區清單",
-				"ja": "標準のワークスペース一覧に切り替える",
-				"fr": "Passer à la liste native des espaces de travail",
-				"de": "Zur nativen Arbeitsbereichsliste wechseln",
-				"es": "Cambiar a la lista nativa de espacios de trabajo",
-				"pt": "Mudar para a lista nativa de espaços de trabalho",
-				"ru": "Переключиться на встроенный список рабочих областей",
-			},
-			"mode.toCards": {
-				"en": "Switch to the card sidebar",
-				"zh-Hans": "切换为卡片侧栏",
-				"zh-Hant": "切換為卡片側欄",
-				"ja": "カード表示に切り替える",
-				"fr": "Passer à la barre latérale en cartes",
-				"de": "Zur Karten-Seitenleiste wechseln",
-				"es": "Cambiar a la barra lateral de tarjetas",
-				"pt": "Mudar para a barra lateral de cartões",
-				"ru": "Переключиться на боковую панель с карточками",
-			},
-			"error.noDirectoryPicker": {
-				"en": "No directory picker is available",
-				"zh-Hans": "没有可用的目录选择器",
-				"zh-Hant": "沒有可用的目錄選擇器",
-				"ja": "ディレクトリ選択を利用できません",
-				"fr": "Aucun sélecteur de dossier disponible",
-				"de": "Keine Ordnerauswahl verfügbar",
-				"es": "No hay selector de carpetas disponible",
-				"pt": "Nenhum seletor de pasta disponível",
-				"ru": "Нет средства выбора папки",
-			},
-			"error.workspacesUnavailable": {
-				"en": "The workspaces service is unavailable",
-				"zh-Hans": "workspaces 服务不可用",
-				"zh-Hant": "workspaces 服務無法使用",
-				"ja": "workspaces サービスを利用できません",
-				"fr": "Le service workspaces est indisponible",
-				"de": "Der Dienst workspaces ist nicht verfügbar",
-				"es": "El servicio workspaces no está disponible",
-				"pt": "O serviço workspaces não está disponível",
-				"ru": "Служба workspaces недоступна",
-			},
-			"error.sessionsUnavailable": {
-				"en": "The sessions service is unavailable",
-				"zh-Hans": "sessions 服务不可用",
-				"zh-Hant": "sessions 服務無法使用",
-				"ja": "sessions サービスを利用できません",
-				"fr": "Le service sessions est indisponible",
-				"de": "Der Dienst sessions ist nicht verfügbar",
-				"es": "El servicio sessions no está disponible",
-				"pt": "O serviço sessions não está disponível",
-				"ru": "Служба sessions недоступна",
-			},
-			"error.pinUnavailable": {
-				"en": "Pin is unavailable",
-				"zh-Hans": "置顶不可用",
-				"zh-Hant": "釘選無法使用",
-				"ja": "ピン留めを利用できません",
-				"fr": "L’épinglage est indisponible",
-				"de": "Anheften ist nicht verfügbar",
-				"es": "Fijar no está disponible",
-				"pt": "Fixar não está disponível",
-				"ru": "Закрепление недоступно",
-			},
-			"error.unpinUnavailable": {
-				"en": "Unpin is unavailable",
-				"zh-Hans": "取消置顶不可用",
-				"zh-Hant": "取消釘選無法使用",
-				"ja": "ピン留めの解除を利用できません",
-				"fr": "Le retrait de l’épingle est indisponible",
-				"de": "Anheftung aufheben ist nicht verfügbar",
-				"es": "Dejar de fijar no está disponible",
-				"pt": "Desafixar não está disponível",
-				"ru": "Открепление недоступно",
-			},
-			"error.forkUnavailable": {
-				"en": "Fork is unavailable",
-				"zh-Hans": "分叉不可用",
-				"zh-Hant": "分支無法使用",
-				"ja": "セッション分岐を利用できません",
-				"fr": "La création de branche est indisponible",
-				"de": "Verzweigen ist nicht verfügbar",
-				"es": "Bifurcar no está disponible",
-				"pt": "Criar ramificação não está disponível",
-				"ru": "Создание ответвления недоступно",
-			},
-			"error.renameFailed": {
-				"en": "Rename failed",
-				"zh-Hans": "重命名失败",
-				"zh-Hant": "重新命名失敗",
-				"ja": "名前の変更に失敗しました",
-				"fr": "Le renommage a échoué",
-				"de": "Umbenennen fehlgeschlagen",
-				"es": "Error al cambiar el nombre",
-				"pt": "Falha ao renomear",
-				"ru": "Не удалось переименовать",
-			},
+		/**
+ * English fallback copy: what the cards render before the Host answers, and
+ * the last resort for a message a translation omits. Every other language
+ * lives in `locale/ui/<language>.json` and is fetched once per page.
+ */
+		const EN_STRINGS = {
+			"card.workspaces": "Workspaces",
+			"card.plugins": "Plugins",
+			"card.unassigned": "Uncategorized",
+			"card.ungrouped": "Ungrouped",
+			"action.cancel": "Cancel",
+			"action.confirm": "OK",
+			"action.delete": "Delete",
+			"action.close": "Close",
+			"action.expandAll": "Expand all",
+			"action.collapseAll": "Collapse all",
+			"category.new": "New category",
+			"category.newWorkspace": "New workspace in this category",
+			"category.rename": "Rename category",
+			"category.delete": "Delete category",
+			"category.deleteMessage": "Workspaces in this category move to Uncategorized; no workspace is deleted.",
+			"category.namePlaceholder": "Category name, for example Org management / Projects",
+			"category.untitled": "Untitled category",
+			"plugins.newGroup": "New plugin group",
+			"plugins.renameGroup": "Rename group",
+			"plugins.deleteGroup": "Delete group",
+			"plugins.groupNamePlaceholder": "Group name, for example Tools / Data / Connectors",
+			"plugins.dragHint": "Drag into a group",
+			"plugins.restore": "Show again",
+			"plugins.hide": "Hide entry",
+			"plugins.empty": "No plugin entries to manage",
+			"plugins.showHidden": "Show hidden entries",
+			"plugins.showHiddenCount": "Show hidden entries ({n})",
+			"card.files": "Files",
+			"files.noSession": "Open a session to browse its files",
+			"files.loading": "Reading…",
+			"files.empty": "Empty folder",
+			"files.error": "Could not read this folder",
+			"files.truncated": "List shortened",
+			"files.copyFiles": "Copy file paths",
+			"files.copyNames": "Copy file names",
+			"files.clearSelection": "Clear selection",
+			"files.namesCopied": "File names copied",
+			"files.copyFile": "Copy file path",
+			"files.openWith": "Open folder with…",
+			"files.options": "Folder options",
+			"files.noSelection": "Select a file first",
+			"files.collapseAll": "Collapse all folders",
+			"files.copyPath": "Copy project path",
+			"files.revealFinder": "Reveal in Finder",
+			"files.revealExplorer": "Reveal in File Explorer",
+			"files.revealGeneric": "Reveal in the file manager",
+			"files.openDefault": "Open with the system default",
+			"files.openWithApp": "Open with {app}",
+			"files.fileManager": "File manager",
+			"files.reveal": "Show in {app}",
+			"files.expandLimited": "Expanded the first folders only",
+			"files.directoryActions": "Folder actions…",
+			"files.noPath": "No project folder",
+			"files.copyDone": "Path copied",
+			"files.reload": "Reload",
+			"plugins.browsePlugins": "Browse other plugins",
+			"plugins.createPlugin": "Create your plugin",
+			"plugins.createPrompt": "Create a DSH plugin with a left sidebar entry.",
+			"plugins.untitledGroup": "Untitled group",
+			"session.rename": "Rename session",
+			"session.pin": "Pin",
+			"session.unpin": "Unpin",
+			"session.fork": "Fork session",
+			"session.copyId": "Copy session ID",
+			"session.archive": "Archive",
+			"session.unarchive": "Unarchive",
+			"session.more": "More actions",
+			"session.untitled": "Untitled",
+			"session.empty": "No sessions yet",
+			"session.noMatch": "No matching sessions",
+			"session.showMore": "Show more",
+			"session.showLess": "Show less",
+			"session.runningTitle": "This session is still running",
+			"session.runningMessage": "Stop it and archive?",
+			"session.stopArchive": "Stop and archive",
+			"workspace.newSession": "New session",
+			"workspace.rename": "Rename workspace",
+			"workspace.copyPath": "Copy path",
+			"workspace.moveTo": "Move to category",
+			"workspace.moveOut": "Remove from category",
+			"workspace.delete": "Delete workspace",
+			"workspace.deleteMessage": "Removes it from this list only; the folder on disk is untouched.",
+			"workspace.more": "Workspace actions",
+			"workspace.dropHint": "Drop a workspace here, or click + to create one",
+			"workspace.empty": "No workspaces yet — click + above to add a folder",
+			"options.title": "View options",
+			"options.archivedHeader": "Archived sessions",
+			"options.archivedDefault": "Hide archived",
+			"options.archivedShow": "All conversations (show archived)",
+			"options.archivedOnly": "Archived only",
+			"options.sortHeader": "Workspace order",
+			"options.sortManual": "Manual order",
+			"options.sortName": "By name",
+			"options.sortTime": "By latest session",
+			"options.newHeader": "New group or workspace",
+			"options.newGroup": "New category",
+			"options.newWorkspace": "New workspace",
+			"options.language": "Language",
+			"options.langAuto": "Follow browser",
+			"search.placeholder": "Filter workspaces and sessions…",
+			"search.expandHits": "Expand all hits",
+			"search.collapseHits": "Collapse hits",
+			"mode.title": "View",
+			"mode.native": "Native list",
+			"mode.cards": "Card sidebar",
+			"mode.toNative": "Switch to the native workspace list",
+			"mode.toCards": "Switch to the card sidebar",
+			"error.noDirectoryPicker": "No directory picker is available",
+			"error.workspacesUnavailable": "The workspaces service is unavailable",
+			"error.sessionsUnavailable": "The sessions service is unavailable",
+			"error.pinUnavailable": "Pin is unavailable",
+			"error.unpinUnavailable": "Unpin is unavailable",
+			"error.forkUnavailable": "Fork is unavailable",
+			"error.renameFailed": "Rename failed",
 		}
+
+		/** `key -> { language: text }`, filled by `loadStrings()` from the Host. */
+		let STRINGS = null
 
 		/** The languages this build carries, in menu order. */
 		const LANGS = [
@@ -1147,14 +322,42 @@ function build(require) {
 		}
 
 		function t(key) {
-			const row = STRINGS[key]
-			if (row === undefined) return key
 			const chain = LANG_FALLBACK[currentLang()] || LANG_FALLBACK.en
-			for (const code of chain) {
-				const text = row[code]
-				if (typeof text === 'string') return text
+			const row = STRINGS === null ? undefined : STRINGS[key]
+			if (row !== undefined) {
+				for (const code of chain) {
+					const text = row[code]
+					if (typeof text === 'string') return text
+				}
 			}
-			return key
+			const fallback = EN_STRINGS[key]
+			return typeof fallback === 'string' ? fallback : key
+		}
+
+		/**
+		 * Pull every language the package ships from the Host half (one call, one
+		 * JSON body) and reshape it into `key -> { language: text }`. English stays
+		 * embedded, so the cards stay readable whatever happens to this call.
+		 */
+		async function loadStrings() {
+			const result = await hostCall('strings', {})
+			const languages = result && result.languages
+			if (languages === null || typeof languages !== 'object') return false
+			const merged = {}
+			for (const language of Object.keys(languages)) {
+				const dictionary = languages[language]
+				if (dictionary === null || typeof dictionary !== 'object') continue
+				for (const key of Object.keys(dictionary)) {
+					const text = dictionary[key]
+					if (typeof text !== 'string') continue
+					if (merged[key] === undefined) merged[key] = {}
+					merged[key][language] = text
+				}
+			}
+			if (Object.keys(merged).length === 0) return false
+			STRINGS = merged
+			notify()
+			return true
 		}
 
 		/** `t()` with its `{name}` placeholders filled in. */
@@ -1205,6 +408,7 @@ function build(require) {
 			visible: {},
 			archived: 'default',
 			workspaceCollapsed: false,
+			panelPins: { workspaces: null, plugins: null, files: null },
 			workspaceSort: 'manual',
 			workspaceSortDir: 'asc',
 			lang: 'auto',
@@ -1212,7 +416,8 @@ function build(require) {
 			pluginGroups: [],
 			pluginAssign: {},
 			pluginHidden: [],
-			pluginShowHidden: false
+			pluginShowHidden: false,
+			filesCollapsed: false
 		}
 
 		function sanitize(raw) {
@@ -1244,6 +449,11 @@ function build(require) {
 				visible: asRecord(merged.visible),
 				archived: ARCHIVED_MODES.indexOf(merged.archived) === -1 ? 'default' : merged.archived,
 				workspaceCollapsed: merged.workspaceCollapsed === true,
+				panelPins: (() => {
+					const raw = merged.panelPins && typeof merged.panelPins === 'object' ? merged.panelPins : {}
+					const pick = (key) => (typeof raw[key] === 'number' && raw[key] > 0 ? Math.round(raw[key]) : null)
+					return { workspaces: pick('workspaces'), plugins: pick('plugins'), files: pick('files') }
+				})(),
 				workspaceSort: ['manual', 'name', 'time'].indexOf(merged.workspaceSort) === -1 ? 'manual' : merged.workspaceSort,
 				workspaceSortDir: merged.workspaceSortDir === 'desc' ? 'desc' : 'asc',
 				lang: sanitizeLang(merged.lang),
@@ -1251,7 +461,8 @@ function build(require) {
 				pluginGroups,
 				pluginAssign: asRecord(merged.pluginAssign),
 				pluginHidden: Array.isArray(merged.pluginHidden) ? merged.pluginHidden.filter((v) => typeof v === 'string') : [],
-				pluginShowHidden: merged.pluginShowHidden === true
+				pluginShowHidden: merged.pluginShowHidden === true,
+				filesCollapsed: merged.filesCollapsed === true
 			}
 		}
 
@@ -1408,6 +619,9 @@ function build(require) {
 			layers: 'M8 2.2 14 5.5 8 8.8 2 5.5zM2 9l6 3.3L14 9M2 12.2 8 15.5l6-3.3',
 			plug: 'M6 2.6v3M10 2.6v3M4.4 5.6h7.2v2.3a3.6 3.6 0 0 1-3.6 3.6A3.6 3.6 0 0 1 4.4 7.9zM8 11.5v2.4',
 			pinwheel: 'M8 2.5c2 0 3.5 1.6 3.5 3.5S10 9.5 8 9.5 4.5 7.9 4.5 6 6 2.5 8 2.5zM8 13.5c-2 0-3.5-1.6-3.5-3.5S6 6.5 8 6.5s3.5 1.6 3.5 3.5-1.5 3.5-3.5 3.5z',
+			file: 'M4.4 2.4h4.2l3 3v8.2H4.4zM8.4 2.6v3.2h3',
+			copy: 'M5.2 5.2h7.4v7.4H5.2zM3.4 10.8V3.4h7.4',
+			openIn: 'M6.4 9.6 12 4M12 4H8.2M12 4v3.8M11.2 10.4v2.4H3.2V4.8h2.4',
 			arrowLeft: 'M12.5 8H3.5M6.8 4.7 3.5 8l3.3 3.3',
 			expand: 'M4.5 6 8 9.5 11.5 6M4.5 10.5 8 14l3.5-3.5',
 			chevronDown: 'M4 6l4 4 4-4',
@@ -1436,6 +650,10 @@ function build(require) {
 			layers: shipped('IconWorkspaceTreeOutlineRegular'),
 			plug: shipped('IconCordisPluginOutlineRegular'),
 			pinwheel: shipped('IconPluginPinwheelOutlineRegular'),
+			file: shipped('IconDeliverDocRegular'),
+			reload: shipped('IconRefreshOutlineRegular'),
+			copy: shipped('IconCopyOutlineRegular'),
+			openIn: shipped('IconRightUpOutlineRegular'),
 			expand: shipped('IconChevronsUpDownOutlineRegular'),
 			chevronDown: shipped('IconChevronDownOutlineRegular'),
 			chevronUp: shipped('IconChevronUpOutlineRegular')
@@ -1561,7 +779,11 @@ function build(require) {
 										if (item.onSelect) item.onSelect()
 									}
 								},
-								item.icon ? h(Icon, { name: item.icon, size: 13 }) : null,
+								item.iconSrc
+									? h('img', { className: 'dsc-menu-appicon', src: item.iconSrc, width: 13, height: 13, alt: '' })
+									: item.icon
+										? h(Icon, { name: item.icon, size: 13 })
+										: null,
 								h('span', { className: 'dsc-menu-label' }, item.label),
 								item.trailing ? h('span', { className: 'dsc-menu-trailing' }, item.trailing) : null,
 								Array.isArray(item.submenu) ? h('span', { className: 'dsc-menu-caret' }, h(Icon, { name: 'chevron', size: 12 })) : null
@@ -1848,6 +1070,44 @@ function build(require) {
 			return h('span', { className: 'dsc-countcell' }, String(props.count))
 		}
 
+		/**
+		 * The resize handle between two stacked cards. It reports the pointer
+		 * movement since the gesture began; the layout decides what that movement
+		 * means, so a handle never has to know how tall anything is.
+		 */
+		function Splitter(props) {
+			const onPointerDown = (event) => {
+				if (event.button !== 0) return
+				event.preventDefault()
+				const startY = event.clientY
+				if (props.onStart) props.onStart()
+				const move = (moveEvent) => {
+					props.onDrag(moveEvent.clientY - startY)
+				}
+				const stop = () => {
+					window.removeEventListener('pointermove', move)
+					window.removeEventListener('pointerup', stop)
+					window.removeEventListener('pointercancel', stop)
+					document.body.style.cursor = ''
+					document.body.style.userSelect = ''
+					if (props.onEnd) props.onEnd()
+				}
+				window.addEventListener('pointermove', move)
+				window.addEventListener('pointerup', stop)
+				window.addEventListener('pointercancel', stop)
+				document.body.style.cursor = 'row-resize'
+				document.body.style.userSelect = 'none'
+			}
+			return h('div', {
+				className: 'dsc-splitter' + (props.hidden === true ? ' dsc-splitter-hidden' : ''),
+				role: 'separator',
+				'aria-orientation': 'horizontal',
+				tabIndex: -1,
+				onPointerDown: props.hidden === true ? undefined : onPointerDown,
+				onDoubleClick: props.hidden === true ? undefined : () => props.onReset()
+			})
+		}
+
 		/* -------------------------------------------------------- plugin card */
 
 		function PluginCard(props) {
@@ -2075,7 +1335,11 @@ function build(require) {
 
 			return h(
 				'div',
-				{ className: 'dsc-card dsc-plugincard' },
+				{
+					'data-card': 'plugins',
+					className: 'dsc-card dsc-plugincard',
+					style: open && typeof props.size === 'number' ? { height: String(props.size) + 'px' } : undefined
+				},
 				h(
 					CardHeader,
 					{
@@ -2124,7 +1388,7 @@ function build(require) {
 				open
 					? h(
 							'div',
-							{ className: 'dsc-cardbody dsc-pluginbody' },
+							{ className: 'dsc-cardbody dsc-pluginbody', 'data-card-body': true },
 							groups.map(renderGroup),
 							ungrouped.length > 0
 								? h(
@@ -2245,6 +1509,600 @@ function build(require) {
 						)
 					)
 				)
+			)
+		}
+
+		/* ------------------------------------------------------ file glyphs */
+
+		/**
+		 * A small file-icon set: one soft colour per family and a shape that says
+		 * what the family is (code, data, image, text, document). Drawn here so the
+		 * plugin carries no third-party icon artwork.
+		 */
+		const FILE_FAMILIES = [
+			{ kind: 'code', tone: '#e0b341', exts: ['js', 'mjs', 'cjs', 'ts', 'tsx', 'jsx', 'py', 'go', 'rs', 'java', 'rb', 'php', 'c', 'h', 'cpp', 'cs', 'swift', 'kt', 'sh', 'bash', 'zsh', 'lua', 'sql'] },
+			{ kind: 'data', tone: '#7f8cf0', exts: ['json', 'jsonc', 'yaml', 'yml', 'toml', 'xml', 'ini', 'conf', 'env', 'lock', 'csv', 'tsv'] },
+			{ kind: 'image', tone: '#b07fe0', exts: ['png', 'jpg', 'jpeg', 'gif', 'webp', 'svg', 'ico', 'bmp', 'avif'] },
+			{ kind: 'markup', tone: '#79a9f5', exts: ['md', 'mdx', 'markdown', 'rst', 'txt', 'log'] },
+			{ kind: 'web', tone: '#e08a5a', exts: ['html', 'htm', 'css', 'scss', 'sass', 'less', 'vue', 'svelte'] },
+			{ kind: 'doc', tone: '#c8b06a', exts: ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'license'] }
+		]
+
+		function fileFamily(name) {
+			const base = String(name || '').toLowerCase()
+			const dot = base.lastIndexOf('.')
+			const ext = dot === -1 ? base : base.slice(dot + 1)
+			if (base === 'license' || base === 'licence' || base.startsWith('license.')) {
+				return { kind: 'doc', tone: '#c8b06a' }
+			}
+			for (const family of FILE_FAMILIES) {
+				if (family.exts.indexOf(ext) !== -1) return family
+			}
+			return { kind: 'file', tone: 'var(--dsw-alias-label-tertiary)' }
+		}
+
+		/** One file row's glyph: the shape says the family, the colour tells families apart. */
+		function FileGlyph(props) {
+			const size = props.size === undefined ? 13 : props.size
+			const family = fileFamily(props.name)
+			const stroke = family.tone
+			const sheet = h('path', {
+				d: 'M4.2 2.2h4.6l2.9 2.9v8.7H4.2z M8.8 2.4v2.9h2.9',
+				fill: 'none',
+				stroke,
+				'stroke-width': 1.15,
+				'stroke-linejoin': 'round'
+			})
+			let mark = null
+			if (family.kind === 'code') {
+				mark = h('path', { d: 'M6.4 8.1l-1.3 1.4 1.3 1.4M9.6 8.1l1.3 1.4-1.3 1.4', fill: 'none', stroke, 'stroke-width': 1.1, 'stroke-linecap': 'round' })
+			} else if (family.kind === 'data') {
+				mark = h('path', { d: 'M6.2 8.6h3.6M6.2 10.4h3.6M6.2 12.2h2.2', fill: 'none', stroke, 'stroke-width': 1.05, 'stroke-linecap': 'round' })
+			} else if (family.kind === 'markup') {
+				mark = h('path', { d: 'M6.2 8.6h3.6M6.2 10.4h3.6M6.2 12.2h2.4', fill: 'none', stroke, 'stroke-width': 1.05, 'stroke-linecap': 'round' })
+			} else if (family.kind === 'image') {
+				mark = h('path', { d: 'M6.1 12.4l1.7-2 .9 1 .8-.9 1.4 1.9z', fill: 'none', stroke, 'stroke-width': 1.05 })
+			} else if (family.kind === 'web') {
+				mark = h('path', { d: 'M6.4 8.2l-1.4 1.5 1.4 1.5M9.6 8.2l1.4 1.5-1.4 1.5M8.6 7.9l-.9 4', fill: 'none', stroke, 'stroke-width': 1.05, 'stroke-linecap': 'round' })
+			} else if (family.kind === 'doc') {
+				mark = h('path', { d: 'M6.2 8.7h3.6M6.2 10.6h3.6', fill: 'none', stroke, 'stroke-width': 1.05, 'stroke-linecap': 'round' })
+			}
+			return h(
+				'svg',
+				{
+					className: 'dsc-svg',
+					width: size,
+					height: size,
+					viewBox: '0 0 16 16',
+					'aria-hidden': 'true',
+					focusable: 'false'
+				},
+				sheet,
+				mark
+			)
+		}
+
+		/* --------------------------------------------------------- files card */
+
+		/**
+		 * The current project's files, one directory at a time over the wire.
+		 *
+		 * The listing is the same Remote the shipped Files panel uses
+		 * (`remote.workspaceFiles.list(sessionId, path)`), scoped to the Session
+		 * the main view is showing, so the panel always means "the project I am
+		 * looking at". A file row opens through the resource registry, exactly like
+		 * a file link in the conversation does.
+		 */
+		function FilesCard(props) {
+			const stateNow = useStateTick()
+			const wsSnap = useStoreSnapshot(props.workspacesStore) || {}
+			const sSnap = useStoreSnapshot(props.sessionsStore) || {}
+			const [dirs, setDirs] = React.useState({})
+			const [expanded, setExpanded] = React.useState([])
+			const [tick, setTick] = React.useState(0)
+			const [failure, setFailure] = React.useState(null)
+			const [selection, setSelection] = React.useState([])
+			const [anchor, setAnchor] = React.useState(null)
+			const [menu, setMenu] = React.useState(null)
+			const [notice, setNotice] = React.useState(null)
+			const [defaultApp, setDefaultApp] = React.useState(null)
+			const [revealIcon, setRevealIcon] = React.useState(null)
+
+			const activeSessionId = React.useMemo(() => {
+				const byId = sSnap.byId || {}
+				for (const id of sSnap.ids || []) {
+					const summary = byId[id]
+					if (summary && summary.retainedBy && summary.retainedBy.mainView > 0) return id
+				}
+				return undefined
+			}, [sSnap])
+
+			/**
+			 * Which project the tree shows: the open Session's Workspace when there is
+			 * one, otherwise the most recently used Workspace — the same fallback the
+			 * shell uses for a blank New Session.
+			 */
+			const workspacePath = React.useMemo(() => {
+				const items = Array.isArray(wsSnap.items) ? wsSnap.items : []
+				const usable = (workspace) => {
+					const path = String(workspace.path || '').replace(/[\\/]+$/, '')
+					return path === '' ? undefined : path
+				}
+				if (activeSessionId !== undefined) {
+					for (const workspace of items) {
+						if ((workspace.sessionIds || []).indexOf(activeSessionId) !== -1) {
+							const path = usable(workspace)
+							if (path !== undefined) return path
+						}
+					}
+				}
+				const byId = sSnap.byId || {}
+				let best
+				let bestAt = -1
+				for (const workspace of items) {
+					const path = usable(workspace)
+					if (path === undefined) continue
+					let at = 0
+					for (const id of workspace.sessionIds || []) {
+						const summary = byId[id]
+						if (summary === undefined) continue
+						const stamp = timeOf(summary.updatedAt)
+						if (stamp > at) at = stamp
+					}
+					if (at > bestAt) {
+						bestAt = at
+						best = path
+					}
+				}
+				return best
+			}, [activeSessionId, wsSnap, sSnap])
+
+			const listDir = React.useCallback(
+				(path) => {
+					if (activeSessionId === undefined) return Promise.resolve()
+					setDirs((current) => Object.assign({}, current, { [path]: { status: 'loading', entries: [] } }))
+					let call
+					try {
+						const remote = safeService('remote') || (ctxRef && ctxRef.remote)
+						call = remote && remote.workspaceFiles && typeof remote.workspaceFiles.list === 'function'
+							? remote.workspaceFiles.list(activeSessionId, path, new AbortController().signal)
+							: Promise.resolve({ ok: false, error: { message: 'workspaceFiles is unavailable' } })
+					} catch (error) {
+						call = Promise.reject(error)
+					}
+					return Promise.resolve(call)
+						.then((result) => {
+							if (!result || result.ok !== true) {
+								const message = result && result.error && result.error.message ? result.error.message : 'read failed'
+								setDirs((current) => Object.assign({}, current, { [path]: { status: 'error', entries: [], message } }))
+								return []
+							}
+							const value = result.value || {}
+							setDirs((current) =>
+								Object.assign({}, current, {
+									[path]: { status: 'ready', entries: value.entries || [], truncated: value.truncated === true }
+								})
+							)
+							return value.entries || []
+						})
+						.catch((error) => {
+							setDirs((current) => Object.assign({}, current, { [path]: { status: 'error', entries: [], message: describe(error) } }))
+							return []
+						})
+				},
+				[activeSessionId]
+			)
+
+			React.useEffect(() => {
+				setDirs({})
+				setExpanded([])
+				setSelection([])
+				setAnchor(null)
+				setFailure(null)
+				if (activeSessionId !== undefined && workspacePath !== undefined) listDir(workspacePath)
+			}, [activeSessionId, workspacePath, tick, listDir])
+
+			const toggleDir = (path) => {
+				if (expanded.indexOf(path) !== -1) {
+					setExpanded(expanded.filter((entry) => entry !== path))
+					return
+				}
+				if (dirs[path] === undefined || dirs[path].status !== 'ready') listDir(path)
+				setExpanded(expanded.concat([path]))
+			}
+
+			/**
+			 * One click on a file selects it: plain replaces the selection,
+			 * Cmd/Ctrl toggles, Shift extends from the last anchor. Double-click
+			 * opens the preview through the resource registry.
+			 */
+			const selectFile = (event, relativePath, order) => {
+				if (event.shiftKey && anchor !== null) {
+					const from = order.indexOf(anchor)
+					const to = order.indexOf(relativePath)
+					if (from !== -1 && to !== -1) {
+						const [low, high] = from < to ? [from, to] : [to, from]
+						setSelection(order.slice(low, high + 1))
+						return
+					}
+				}
+				if (event.metaKey || event.ctrlKey) {
+					setSelection((current) =>
+						current.indexOf(relativePath) === -1 ? current.concat([relativePath]) : current.filter((entry) => entry !== relativePath)
+					)
+					setAnchor(relativePath)
+					return
+				}
+				setSelection([relativePath])
+				setAnchor(relativePath)
+			}
+
+			const openFile = (relativePath) => {
+				if (activeSessionId === undefined) return
+				const relative = relativePath
+					.split('/')
+					.map((segment) => encodeURIComponent(segment))
+					.join('/')
+				const address = `dsh-resource://file/session/${encodeURIComponent(activeSessionId)}/${relative}`
+				try {
+					const sidebarRight = safeService('sidebarRight')
+					if (sidebarRight && typeof sidebarRight.openResource === 'function') sidebarRight.openResource(address)
+				} catch (error) {
+					setFailure(describe(error))
+				}
+			}
+
+			const writeClipboard = (value) => {
+				try {
+					Promise.resolve(navigator.clipboard.writeText(value)).then(
+						() => setNotice(t('files.copyDone')),
+						(error) => setFailure(describe(error))
+					)
+				} catch (error) {
+					setFailure(describe(error))
+				}
+			}
+
+			/** Copy the selected files' paths (one per line), or say nothing was selected. */
+			const copySelection = () => {
+				if (workspacePath === undefined) return
+				if (selection.length === 0) {
+					setNotice(t('files.noSelection'))
+					return
+				}
+				writeClipboard(selection.map((relative) => workspacePath + '/' + relative).join('\n'))
+			}
+
+			/** Copy just the basenames of the selected files. */
+			const copyNames = () => {
+				if (selection.length === 0) {
+					setNotice(t('files.noSelection'))
+					return
+				}
+				const names = selection.map((relative) => relative.split('/').pop() || relative).join('\n')
+				writeClipboard(names)
+			}
+
+			const copyFolder = () => {
+				if (workspacePath === undefined) return
+				writeClipboard(workspacePath)
+			}
+
+			/**
+			 * The operating system's default application for what the menu acts on:
+			 * the selected file, or the project folder when nothing is selected. The
+			 * Host reports the display name and icon, so the row can wear them; a
+			 * failed read leaves just the generic label.
+			 */
+			const targetPath = () =>
+				workspacePath === undefined ? undefined : selection.length > 0 ? workspacePath + '/' + selection[0] : workspacePath
+
+			React.useEffect(() => {
+				const remote = safeService('remote')
+				const path = targetPath()
+				if (!remote || !remote.session || typeof remote.session.workspacePathApplications !== 'function' || path === undefined) {
+					setDefaultApp(null)
+					return undefined
+				}
+				let cancelled = false
+				Promise.resolve(remote.session.workspacePathApplications({ path }))
+					.then((result) => {
+						if (cancelled) return
+						const apps = result && result.ok === true && Array.isArray(result.value) ? result.value : []
+						const chosen = apps.find((entry) => entry && entry.default === true) || apps[0] || null
+						setDefaultApp(chosen === null ? null : { name: chosen.name, icon: typeof chosen.icon === 'string' ? chosen.icon : null })
+					})
+					.catch(() => {
+						if (!cancelled) setDefaultApp(null)
+					})
+				return () => {
+					cancelled = true
+				}
+			}, [selection, workspacePath])
+
+			/** Which file manager this platform ships, and how the platform names it. */
+			const platformKind = () => {
+				const ua = String((typeof navigator === 'object' && navigator && navigator.userAgent) || '')
+				if (/Mac|iPhone|iPad/.test(ua)) return 'finder'
+				if (/Win/.test(ua)) return 'explorer'
+				return 'generic'
+			}
+
+			// The file manager's own icon comes from the shipped application-icon
+			// route; a missing icon simply leaves the generic folder glyph.
+			React.useEffect(() => {
+				const kind = platformKind()
+				if (kind === 'generic' || typeof Image !== 'function') {
+					setRevealIcon(null)
+					return undefined
+				}
+				const url = 'open-in-app/icon/' + kind
+				let cancelled = false
+				const probe = new Image()
+				probe.onload = () => {
+					if (!cancelled) setRevealIcon(url)
+				}
+				probe.onerror = () => {
+					if (!cancelled) setRevealIcon(null)
+				}
+				probe.src = url
+				return () => {
+					cancelled = true
+					probe.onload = null
+					probe.onerror = null
+				}
+			}, [])
+
+			const revealLabel = () =>
+				platformKind() === 'finder' ? t('files.revealFinder') : platformKind() === 'explorer' ? t('files.revealExplorer') : t('files.revealGeneric')
+
+			/**
+			 * Hand the path to the platform's file manager so it shows the item in
+			 * place, through the same two Host routes the shipped "Open In…" controls
+			 * use (catalog read, then launch).
+			 */
+			const revealPath = () => {
+				const path = targetPath()
+				if (path === undefined) return
+				const preferred = platformKind() === 'finder' ? ['finder'] : platformKind() === 'explorer' ? ['explorer'] : ['filemanager', 'finder', 'explorer']
+				Promise.resolve()
+					.then(() => fetch('open-in-app/apps', { headers: { accept: 'application/json' } }))
+					.then((response) => (response.ok ? response.json() : null))
+					.then((payload) => {
+						const apps = payload && Array.isArray(payload.apps) ? payload.apps : []
+						const manager = preferred.find((id) => apps.indexOf(id) !== -1) || ['finder', 'explorer', 'filemanager'].find((id) => apps.indexOf(id) !== -1)
+						if (manager === undefined) throw new Error(t('files.revealGeneric'))
+						return fetch('open-in-app/open', {
+							method: 'POST',
+							headers: { 'content-type': 'application/json' },
+							body: JSON.stringify({ app: manager, path })
+						})
+					})
+					.then((response) => {
+						if (!response.ok) throw new Error('HTTP ' + String(response.status))
+					})
+					.catch((error) => setFailure(describe(error)))
+			}
+
+			const openDefaultApp = () => {
+				const remote = safeService('remote')
+				const path = targetPath()
+				if (!remote || !remote.session || typeof remote.session.openWorkspacePath !== 'function' || path === undefined) {
+					setFailure(t('files.noPath'))
+					return
+				}
+				Promise.resolve(remote.session.openWorkspacePath({ path }))
+					.then((result) => {
+						if (!result || result.ok !== true) {
+							throw new Error(result && result.error && result.error.message ? result.error.message : 'open failed')
+						}
+					})
+					.catch((error) => setFailure(describe(error)))
+			}
+
+			/**
+			 * Expand the tree breadth-first: every directory within a bounded depth
+			 * and count, so a huge project cannot open thousands of folders at once.
+			 */
+			const expandAll = () => {
+				if (workspacePath === undefined) return Promise.resolve()
+				const MAX_DIRS = 80
+				const MAX_DEPTH = 4
+				const found = []
+				const queue = [{ path: workspacePath, depth: 0 }]
+				let limited = false
+				const step = () => {
+					if (queue.length === 0) return Promise.resolve()
+					if (found.length >= MAX_DIRS) {
+						limited = true
+						queue.length = 0
+						return Promise.resolve()
+					}
+					const item = queue.shift()
+					const known = dirs[item.path]
+					const loading = known !== undefined && known.status === 'ready' ? Promise.resolve(known.entries) : listDir(item.path)
+					return loading.then((entries) => {
+						for (const entry of entries) {
+							if (entry.type !== 'directory') continue
+							const childPath = item.path + '/' + entry.name
+							found.push(childPath)
+							if (item.depth + 1 < MAX_DEPTH) queue.push({ path: childPath, depth: item.depth + 1 })
+							if (found.length >= MAX_DIRS) {
+								limited = true
+								break
+							}
+						}
+						return step()
+					})
+				}
+				return step().then(() => {
+					setExpanded(found)
+					setNotice(limited ? t('files.expandLimited') : null)
+				})
+			}
+
+			const rows = []
+			// Visible files in display order, so Shift can select a range.
+			const visibleOrder = []
+			const walk = (path, depth, relative) => {
+				const node = dirs[path]
+				if (node === undefined) {
+					rows.push(h('div', { className: 'dsc-empty', key: 'pending:' + path }, t('files.loading')))
+					return
+				}
+				if (node.status === 'loading') {
+					rows.push(h('div', { className: 'dsc-empty', key: 'loading:' + path }, t('files.loading')))
+					return
+				}
+				if (node.status === 'error') {
+					rows.push(
+						h(
+							'div',
+							{ className: 'dsc-empty', key: 'error:' + path },
+							node.message ? t('files.error') + ' — ' + node.message : t('files.error')
+						)
+					)
+					return
+				}
+				if (node.entries.length === 0) {
+					rows.push(h('div', { className: 'dsc-empty', key: 'empty:' + path }, t('files.empty')))
+					return
+				}
+				// Directories first, then files, each in natural name order — the
+				// ordering every file tree uses, regardless of the backend's order.
+				const ordered = node.entries.slice().sort((left, right) => {
+					const leftDir = left.type === 'directory' ? 0 : 1
+					const rightDir = right.type === 'directory' ? 0 : 1
+					if (leftDir !== rightDir) return leftDir - rightDir
+					return String(left.name).localeCompare(String(right.name), undefined, { numeric: true, sensitivity: 'base' })
+				})
+				for (const entry of ordered) {
+					const childPath = path + '/' + entry.name
+					const childRelative = relative === '' ? entry.name : relative + '/' + entry.name
+					const isDir = entry.type === 'directory'
+					const open = isDir && expanded.indexOf(childPath) !== -1
+					const picked = isDir ? false : selection.indexOf(childRelative) !== -1
+					if (!isDir) visibleOrder.push(childRelative)
+					rows.push(
+						h(
+							'div',
+							{
+								key: childPath,
+								className: 'dsc-row dsc-file-row' + (picked ? ' dsc-selected' : ''),
+								style: { '--dsc-depth': String(depth * 10) + 'px' }
+							},
+							h(
+								'button',
+								{
+									type: 'button',
+									className: 'dsc-rowmain',
+									onClick: (event) => {
+										if (isDir) {
+											toggleDir(childPath)
+											return
+										}
+										selectFile(event, childRelative, visibleOrder)
+										// A plain click selects and opens; a modifier click only
+										// adjusts the selection.
+										if (!event.metaKey && !event.ctrlKey && !event.shiftKey) openFile(childRelative)
+									}
+								},
+								isDir
+									? h('span', { className: 'dsc-caret' + (open ? ' dsc-caret-open' : '') }, h(Icon, { name: 'chevron', size: 11 }))
+									: h('span', { className: 'dsc-filepad' }),
+								h(
+									'span',
+									{ className: 'dsc-folder' + (isDir ? ' dsc-dir' : '') },
+									isDir
+										? h(Icon, { name: open ? 'folderOpen' : 'folder', size: 13 })
+										: h(FileGlyph, { name: entry.name, size: 13 })
+								),
+								h('span', { className: 'dsc-rowlabel' }, entry.name)
+							)
+						)
+					)
+					if (isDir && open) walk(childPath, depth + 1, childRelative)
+				}
+				if (node.truncated === true) {
+					rows.push(h('div', { className: 'dsc-empty', key: 'trunc:' + path }, t('files.truncated')))
+				}
+			}
+
+			const rootReady = workspacePath !== undefined && dirs[workspacePath] !== undefined && dirs[workspacePath].status === 'ready'
+			if (activeSessionId !== undefined && workspacePath !== undefined) walk(workspacePath, 0, '')
+
+			const open = stateNow.filesCollapsed !== true
+			return h(
+				'div',
+				{
+					'data-card': 'files',
+					className: 'dsc-card dsc-filescard',
+					style: open && typeof props.size === 'number' ? { height: String(props.size) + 'px' } : undefined
+				},
+				h(
+					CardHeader,
+					{
+						title: t('card.files'),
+						open,
+						count: rootReady ? dirs[workspacePath].entries.length : undefined,
+						onToggle: () => setState({ filesCollapsed: open })
+					},
+					h(IconButton, { name: 'copy', label: t('files.copyFile'), onClick: () => copySelection() }),
+					h(IconButton, {
+						name: 'more',
+						label: t('files.options'),
+						onClick: (event) => {
+							const rect = event.currentTarget.getBoundingClientRect()
+							setNotice(null)
+							setMenu({
+								x: rect.right - 220,
+								y: rect.bottom + 4,
+								items: [
+									{ label: revealLabel(), iconSrc: revealIcon || undefined, icon: 'folder', onSelect: () => revealPath() },
+									// A folder's default application IS this platform's file
+									// manager, which the row above already does for that path.
+									...(selection.length === 0 && platformKind() !== 'generic'
+										? []
+										: [
+												{
+													label: defaultApp ? tf('files.openWithApp', { app: defaultApp.name }) : t('files.openDefault'),
+													iconSrc: defaultApp ? defaultApp.icon || undefined : undefined,
+													icon: 'openIn',
+													onSelect: () => openDefaultApp()
+												}
+											]),
+									{ separator: true },
+									{
+										label: t('files.copyFiles'),
+										icon: 'copy',
+										trailing: selection.length > 0 ? String(selection.length) : '',
+										onSelect: () => copySelection()
+									},
+									{ label: t('files.copyPath'), icon: 'folder', onSelect: () => copyFolder() },
+									{ separator: true },
+									{ label: t('action.expandAll'), icon: 'chevronDown', onSelect: () => expandAll() },
+									{ label: t('action.collapseAll'), icon: 'chevronUp', onSelect: () => setExpanded([]) }
+								]
+							})
+						}
+					}),
+					h(IconButton, { name: 'reload', label: t('files.reload'), onClick: () => setTick((value) => value + 1) })
+				),
+				open
+					? h(
+							'div',
+							{ className: 'dsc-cardbody dsc-filesbody', 'data-card-body': true },
+							activeSessionId === undefined || workspacePath === undefined
+								? h('div', { className: 'dsc-empty dsc-empty-block' }, t('files.noSession'))
+								: failure !== null
+									? h('div', { className: 'dsc-empty dsc-empty-block' }, failure)
+									: rows.length > 0
+										? rows
+										: h('div', { className: 'dsc-empty dsc-empty-block' }, t('files.empty')),
+							notice !== null ? h('div', { className: 'dsc-hintline' }, notice) : null
+						)
+					: null,
+				menu ? h(Popover, { x: menu.x, y: menu.y, items: menu.items, onClose: () => setMenu(null) }) : null
 			)
 		}
 
@@ -2813,7 +2671,11 @@ function build(require) {
 
 			return h(
 				'div',
-				{ className: 'dsc-card dsc-wscard' },
+				{
+					'data-card': 'workspace',
+					className: 'dsc-card dsc-wscard' + (open ? '' : ' dsc-wscard-collapsed'),
+					style: open && typeof props.size === 'number' ? { height: String(props.size) + 'px' } : undefined
+				},
 				h(
 					CardHeader,
 					{
@@ -3054,19 +2916,22 @@ function build(require) {
 			}
 		}
 
+		/* ---------------------------------------------------------- layout */
+
+		const CARD_ORDER = ['workspaces', 'plugins', 'files']
+		const CARD_MIN = { workspaces: 120, plugins: 72, files: 96 }
+		const CARD_HEADER_PX = 28
+		const SPLITTER_PX = 8
+		const MAX_EXPAND_PX = 200
+
 		function Root(props) {
 			const stateNow = useStateTick()
 			const wide = props.wide !== false
-			// The slot hands every region the shipped panel selector; without it
-			// (older host) no panel row is marked as open.
 			const activePanelId =
 				typeof props.usePanelInfo === 'function'
 					? props.usePanelInfo((info) => (info ? info.activePanelId : undefined))
 					: undefined
-			// running / awaiting-interaction / unread-completion, the same facts the
-			// shipped browser reads for its row dots.
-			const statuses =
-				typeof props.useSessionStatus === 'function' ? props.useSessionStatus((map) => map) : undefined
+			const statuses = typeof props.useSessionStatus === 'function' ? props.useSessionStatus((map) => map) : undefined
 
 			React.useEffect(() => {
 				const root = document.documentElement
@@ -3075,18 +2940,228 @@ function build(require) {
 				return () => root.classList.remove(HTML_CLASS)
 			}, [stateNow.mode, wide])
 
+			const rootRef = React.useRef(null)
+			const [columnHeight, setColumnHeight] = React.useState(0)
+			React.useEffect(() => {
+				const element = rootRef.current
+				if (element === null) return undefined
+				const measure = () => setColumnHeight(element.clientHeight)
+				measure()
+				const observer = typeof ResizeObserver === 'function' ? new ResizeObserver(measure) : null
+				if (observer !== null) observer.observe(element)
+				window.addEventListener('resize', measure)
+				return () => {
+					if (observer !== null) observer.disconnect()
+					window.removeEventListener('resize', measure)
+				}
+			}, [])
+
+			// What each expanded card needs to show its rows: measured after every
+			// render, capped at 200px. This is a FLOOR, never a target.
+			const [contentMins, setContentMins] = React.useState({
+				workspaces: CARD_MIN.workspaces,
+				plugins: CARD_MIN.plugins,
+				files: CARD_MIN.files
+			})
+			React.useEffect(() => {
+				const root = rootRef.current
+				if (root === null) return
+				const next = Object.assign({}, contentMins)
+				let changed = false
+				for (const key of CARD_ORDER) {
+					const body = root.querySelector('[data-card="' + key + '"] [data-card-body]')
+					// Sum the children instead of reading scrollHeight: a card dragged
+					// taller than its content reports scrollHeight = clientHeight, which
+					// would ratchet the floor up to the cap and stop the card shrinking.
+					let content = 0
+					if (body !== null) {
+						for (const child of Array.from(body.children)) content += child.getBoundingClientRect().height
+						content += 4
+					}
+					const wanted =
+						body === null ? CARD_MIN[key] : Math.max(CARD_MIN[key], Math.min(MAX_EXPAND_PX, CARD_HEADER_PX + content))
+					if (Math.abs(wanted - (contentMins[key] || 0)) > 1) {
+						next[key] = wanted
+						changed = true
+					}
+				}
+				if (changed) setContentMins(next)
+			})
+
+			const floorOf = (key) => Math.max(CARD_MIN[key], contentMins[key] === undefined ? CARD_MIN[key] : contentMins[key])
+
+			const collapsed = {
+				workspaces: stateNow.workspaceCollapsed === true,
+				plugins: stateNow.pluginCollapsed === true,
+				files: stateNow.filesCollapsed === true
+			}
+			const expanded = CARD_ORDER.filter((key) => !collapsed[key])
+			const splitterShown = (index) => !(collapsed[CARD_ORDER[index]] && collapsed[CARD_ORDER[index + 1]])
+			const splitters = CARD_ORDER.slice(0, 2).filter((_key, index) => splitterShown(index)).length
+			const collapsedCount = CARD_ORDER.length - expanded.length
+			const measured = columnHeight > 0
+			const available = Math.max(0, columnHeight - 4 - collapsedCount * CARD_HEADER_PX - splitters * SPLITTER_PX)
+
+			/**
+			 * Heights come from the user's own numbers (`panelPins`) over the measured
+			 * floors. A card with no number is "automatic": the Workspaces card takes
+			 * the rest of the column, the others take exactly their floor. Nothing is
+			 * normalized, so a panel the user sized stays that size.
+			 */
+			const sizes = {}
+			if (measured) {
+				let used = 0
+				for (const key of expanded) {
+					const stored = stateNow.panelPins[key]
+					if (typeof stored === 'number' && stored > 0) {
+						sizes[key] = Math.max(floorOf(key), Math.round(stored))
+						used += sizes[key]
+					}
+				}
+				for (const key of expanded) {
+					if (sizes[key] !== undefined) continue
+					if (key === 'workspaces') continue
+					sizes[key] = floorOf(key)
+					used += sizes[key]
+				}
+				if (expanded.indexOf('workspaces') !== -1 && sizes.workspaces === undefined) {
+					sizes.workspaces = Math.max(floorOf('workspaces'), available - used)
+					used += sizes.workspaces
+				}
+				// Spare height goes to the LAST expanded card that the user has not
+				// pinned, so the column never ends in dead space and that card can grow
+				// all the way down. A pinned layout keeps the user's numbers as-is.
+				let spare = available - used
+				if (spare > 0.5) {
+					// Prefer the last card the user has not pinned; if every card is
+					// pinned, the last one still takes the remainder, so the column can
+					// never end in locked empty space.
+					let target
+					for (let index = expanded.length - 1; index >= 0; index -= 1) {
+						const key = expanded[index]
+						const pinned = typeof stateNow.panelPins[key] === 'number' && stateNow.panelPins[key] > 0
+						if (!pinned) {
+							target = key
+							break
+						}
+					}
+					if (target === undefined && expanded.length > 0) target = expanded[expanded.length - 1]
+					if (target !== undefined) {
+						sizes[target] = (sizes[target] === undefined ? floorOf(target) : sizes[target]) + spare
+						spare = 0
+					}
+				}
+				// Too much demanded for this column: trim the largest first.
+				let excess = used - available
+				if (excess > 0.5) {
+					for (let pass = 0; pass < 6 && excess > 0.5; pass += 1) {
+						const order = CARD_ORDER.filter((key) => sizes[key] !== undefined).sort((left, right) => sizes[right] - sizes[left])
+						let progressed = false
+						for (const key of order) {
+							const room = sizes[key] - CARD_MIN[key]
+							if (room <= 0.5) continue
+							const cut = Math.min(room, excess)
+							sizes[key] -= cut
+							excess -= cut
+							progressed = true
+							if (excess <= 0.5) break
+						}
+						if (!progressed) break
+					}
+				}
+			}
+			const sizesRef = React.useRef(sizes)
+			sizesRef.current = sizes
+
+			const cardHeight = (key) => (collapsed[key] || !measured || sizes[key] === undefined ? undefined : sizes[key])
+
+			const setOne = (key, value) => {
+				const next = Object.assign({}, getState().panelPins)
+				next[key] = value
+				setState({ panelPins: next })
+			}
+
+			const dragStartRef = React.useRef(null)
+
+			/** Move the divider at `index` by `delta`: the two cards share the change. */
+			const dragSplitter = (index, delta) => {
+				const above = CARD_ORDER[index]
+				const below = CARD_ORDER[index + 1]
+				const aboveOpen = !collapsed[above]
+				const belowOpen = !collapsed[below]
+				if (!aboveOpen && !belowOpen) return
+				// Drag from the sizes captured when the gesture started: pointer moves
+				// arrive faster than React re-renders, and a per-move delta would be
+				// measured against a stale height.
+				if (dragStartRef.current === null || dragStartRef.current.index !== index) {
+					dragStartRef.current = { index, sizes: Object.assign({}, sizesRef.current) }
+				}
+				const current = dragStartRef.current.sizes
+				const aboveNow = current[above] || 0
+				const belowNow = current[below] || 0
+				const next = Object.assign({}, getState().panelPins)
+				if (aboveOpen && belowOpen) {
+					const total = aboveNow + belowNow
+					const top = Math.min(total - floorOf(below), Math.max(floorOf(above), aboveNow + delta))
+					if (Math.abs(top - aboveNow) < 0.5) return
+					next[above] = Math.round(top)
+					next[below] = Math.round(total - top)
+				} else if (aboveOpen) {
+					const top = Math.max(floorOf(above), aboveNow + delta)
+					if (Math.abs(top - aboveNow) < 0.5) return
+					next[above] = Math.round(top)
+				} else {
+					const bottom = Math.max(floorOf(below), belowNow - delta)
+					if (Math.abs(bottom - belowNow) < 0.5) return
+					next[below] = Math.round(bottom)
+				}
+				setState({ panelPins: next })
+			}
+
+			/** Double click on a divider: every card goes back to automatic. */
+			const resetSizes = () => setState({ panelPins: { workspaces: null, plugins: null, files: null } })
+
 			const cards = h(
 				'div',
-				{ className: 'dsc-root', 'data-sidebar-cards': 'cards' },
+				{ className: 'dsc-root', 'data-sidebar-cards': 'cards', ref: rootRef },
 				h(WorkspaceCard, {
 					workspacesStore: props.workspacesStore,
 					sessionsStore: props.sessionsStore,
 					statuses,
-					actions: props.actions
+					actions: props.actions,
+					size: cardHeight('workspaces')
+				}),
+				h(Splitter, {
+					hidden: !splitterShown(0),
+					onStart: () => {
+						dragStartRef.current = null
+					},
+					onDrag: (delta) => dragSplitter(0, delta),
+					onEnd: () => {
+						dragStartRef.current = null
+					},
+					onReset: resetSizes
 				}),
 				h(PluginCard, {
 					pluginEntriesStore: props.pluginEntriesStore,
-					activePanelId
+					activePanelId,
+					size: cardHeight('plugins')
+				}),
+				h(Splitter, {
+					hidden: !splitterShown(1),
+					onStart: () => {
+						dragStartRef.current = null
+					},
+					onDrag: (delta) => dragSplitter(1, delta),
+					onEnd: () => {
+						dragStartRef.current = null
+					},
+					onReset: resetSizes
+				}),
+				h(FilesCard, {
+					workspacesStore: props.workspacesStore,
+					sessionsStore: props.sessionsStore,
+					size: cardHeight('files')
 				})
 			)
 			return cards
@@ -3153,20 +3228,44 @@ function build(require) {
    chrome is a hairline between the two sections. */
 .dsc-root{display:flex;flex-direction:column;flex:1 1 auto;min-height:0;height:100%;overflow:hidden;padding:0 0 4px;color:var(--dsw-alias-label-primary)}
 .dsc-root *{box-sizing:border-box}
-.dsc-card{display:flex;flex-direction:column;min-height:0;flex:0 1 auto}
-.dsc-wscard{flex:1 1 auto}
-.dsc-plugincard{flex:none;margin-top:2px;padding-top:2px;border-top:1px solid color-mix(in srgb,var(--dsw-alias-label-primary) 7%,transparent)}
-.dsc-cardhead{display:flex;align-items:center;gap:2px;height:28px;padding:0 6px;flex:none;position:relative;background:color-mix(in srgb,var(--dsw-alias-label-primary) 1.5%,var(--dsw-specific-sidebar-fill,var(--dsw-alias-bg-base)))}
-.dsc-cardtoggle{display:flex;align-items:center;gap:5px;flex:1 1 auto;min-width:0;height:26px;padding:0 4px;border:0;background:transparent;color:var(--dsw-alias-label-tertiary);font-size:11.5px;font-weight:600;border-radius:5px;cursor:pointer}
-.dsc-cardtoggle:hover{background:color-mix(in srgb,var(--dsw-alias-label-primary) 6%,transparent);color:var(--dsw-alias-label-secondary)}
+.dsc-card{display:grid;grid-template-rows:28px minmax(0,1fr);min-height:0;flex:none}
+.dsc-wscard{flex:0 0 auto;min-height:0;overflow:hidden}
+.dsc-plugincard{flex:0 0 auto;min-height:0;overflow:hidden}
+.dsc-filescard{flex:0 0 auto;min-height:0;overflow:hidden}
+.dsc-wscard.dsc-wscard-collapsed{flex:0 0 auto}
+.dsc-cardhead{display:flex;align-items:center;gap:2px;height:28px;padding:0 6px;flex:none;position:relative;background:color-mix(in srgb,var(--dsw-alias-label-primary) 3%,var(--dsw-specific-sidebar-fill,var(--dsw-alias-bg-base)))}
+.dsc-cardtoggle{display:flex;align-items:center;gap:5px;flex:1 1 auto;min-width:0;height:26px;padding:0 4px;border:0;background:transparent;color:var(--dsw-alias-label-tertiary);font-size:11.5px;font-weight:600;cursor:pointer}
+/* Hover brightens the label and deepens the whole band. The toggle never
+   paints its own rounded fill — that made one header look like a different
+   component from the other two. */
+.dsc-cardtoggle:hover{color:var(--dsw-alias-label-secondary)}
+.dsc-cardhead:hover{background:color-mix(in srgb,var(--dsw-alias-label-primary) 5%,var(--dsw-specific-sidebar-fill,var(--dsw-alias-bg-base)))}
 .dsc-cardtitle{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:left}
 .dsc-headcount{flex:none;min-width:16px;text-align:right;font-size:11px;color:var(--dsw-alias-label-tertiary);font-variant-numeric:tabular-nums;padding-right:2px;transition:opacity .1s ease}
 /* Same grammar as a content row: the count while idle, the actions on hover. */
-.dsc-cardacts{position:absolute;right:6px;top:50%;transform:translateY(-50%);display:flex;align-items:center;gap:1px;opacity:0;pointer-events:none;transition:opacity .12s ease;border-radius:5px;padding-left:4px;background:color-mix(in srgb,var(--dsw-alias-label-primary) 1.5%,var(--dsw-specific-sidebar-fill,var(--dsw-alias-bg-base)))}
+.dsc-cardacts{position:absolute;right:6px;top:50%;transform:translateY(-50%);display:flex;align-items:center;gap:1px;opacity:0;pointer-events:none;transition:opacity .12s ease;border-radius:5px;padding-left:4px;background:color-mix(in srgb,var(--dsw-alias-label-primary) 5%,var(--dsw-specific-sidebar-fill,var(--dsw-alias-bg-base)))}
 .dsc-cardhead:hover .dsc-cardacts,.dsc-cardhead:focus-within .dsc-cardacts{opacity:1;pointer-events:auto}
 .dsc-cardhead:hover .dsc-headcount,.dsc-cardhead:focus-within .dsc-headcount{opacity:0}
-.dsc-cardbody{display:flex;flex-direction:column;min-height:0;flex:1 1 auto;overflow:auto;padding:0 4px 4px}
-.dsc-pluginbody{flex:0 1 auto;max-height:42vh}
+.dsc-cardbody{display:flex;flex-direction:column;min-height:0;overflow:auto;padding:0 4px 4px}
+/* Row 1 is the header, row 2 the body: the body always fills exactly what the
+   card's height leaves, pinned or automatic. */
+/* Row-resize handle between cards: invisible until pointed at. */
+.dsc-splitter{flex:none;height:8px;margin:0;position:relative;z-index:3;cursor:row-resize;touch-action:none}
+.dsc-splitter::after{content:'';position:absolute;left:10px;right:10px;top:3px;height:1px;background:color-mix(in srgb,var(--dsw-alias-label-primary) 8%,transparent);transition:background .12s ease}
+.dsc-splitter:hover::after,.dsc-splitter:focus-visible::after{background:color-mix(in srgb,var(--dsw-alias-label-primary) 26%,transparent)}
+.dsc-splitter-hidden{display:none}
+.dsc-filesbody{flex:1 1 auto;min-height:0;overflow-x:hidden}
+/* With the Workspaces card folded, the empty column belongs to the file tree
+   rather than to a dead gap under the cards. */
+
+.dsc-hintline{padding:2px 10px 4px;font-size:11px;color:var(--dsw-alias-label-tertiary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:left;min-width:0}
+.dsc-file-row .dsc-rowmain{padding-left:var(--dsc-depth,0px)}
+.dsc-file-row .dsc-rowlabel{font-size:12.5px;color:var(--dsw-alias-label-secondary)}
+/* Folders carry a warm tone in both themes, so a tree reads as folders + files
+   instead of one grey column. */
+.dsc-file-row .dsc-folder.dsc-dir{color:color-mix(in srgb,var(--dsw-alias-state-warn-primary) 78%,var(--dsw-alias-label-tertiary))}
+.dsc-filepad{display:inline-block;width:14px;flex:none}
+.dsc-pluginbody{flex:1 1 auto;min-height:0}
 .dsc-row{display:flex;align-items:center;gap:2px;min-height:26px;border-radius:5px;padding:0 6px;position:relative}
 .dsc-row:hover{background:color-mix(in srgb,var(--dsw-alias-label-primary) 6%,transparent)}
 .dsc-rowmain{display:flex;align-items:center;gap:5px;flex:1 1 auto;min-width:0;height:26px;padding:0;border:0;background:transparent;color:inherit;font:inherit;font-size:13px;text-align:left;cursor:pointer}
@@ -3183,6 +3282,9 @@ function build(require) {
 .dsc-row:hover .dsc-rowacts,.dsc-row:focus-within .dsc-rowacts{opacity:1;pointer-events:auto}
 .dsc-iconbtn{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;padding:0;border:0;border-radius:5px;background:transparent;color:var(--dsw-alias-label-tertiary);cursor:pointer;flex:none}
 .dsc-iconbtn:hover{background:color-mix(in srgb,var(--dsw-alias-label-primary) 10%,transparent);color:var(--dsw-alias-label-primary)}
+/* Open-with reads as the shipped split button: the action plus its menu arrow. */
+.dsc-splitbtn{display:inline-flex;align-items:center;gap:0;height:22px;padding:0 3px;border:0;border-radius:5px;background:transparent;color:var(--dsw-alias-label-tertiary);cursor:pointer;flex:none}
+.dsc-splitbtn:hover{background:color-mix(in srgb,var(--dsw-alias-label-primary) 10%,transparent);color:var(--dsw-alias-label-primary)}
 .dsc-iconbtn-active{color:var(--dsw-alias-brand-primary)}
 .dsc-svg{display:block}
 .dsc-group{display:flex;flex-direction:column}
@@ -3216,10 +3318,10 @@ function build(require) {
 .dsc-error{display:flex;align-items:center;gap:6px;margin:2px 4px 4px;padding:5px 7px;border-radius:5px;background:color-mix(in srgb,var(--dsw-alias-state-error-primary) 12%,transparent);color:var(--dsw-alias-state-error-primary);font-size:12px}
 .dsc-error span{flex:1 1 auto;min-width:0}
 .dsc-hidden-row .dsc-rowlabel{opacity:.55;font-style:italic}
-/* The open Session, the Workspace that holds it, and the open panel keep the
-   shipped "selected" fill so the left column always says where you are. */
-.dsc-selected{background:var(--dsw-alias-interactive-bg-hover)}
-.dsc-selected:hover{background:var(--dsw-alias-interactive-bg-hover)}
+/* Selection is a ring, not a fill, so the hover tint keeps exactly one meaning
+   (the pointer is here). The open Session, the Workspace that holds it and the
+   open panel all use it. */
+.dsc-selected{box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--dsw-alias-brand-primary) 10%,transparent);background:color-mix(in srgb,var(--dsw-alias-label-primary) 1%,transparent)}
 .dsc-selected .dsc-rowlabel{color:var(--dsw-alias-label-primary)}
 .dsc-ws-active .dsc-rowlabel{color:var(--dsw-alias-label-primary)}
 .dsc-ws-active .dsc-folder{color:var(--dsw-alias-brand-primary)}
@@ -3232,13 +3334,14 @@ function build(require) {
 .dsc-glyph-clone svg{display:block}
 .dsc-menu{min-width:180px;max-width:260px;max-height:calc(100vh - 16px);overflow-y:auto;padding:4px;border-radius:8px;border:1px solid var(--dsw-alias-border-l1);background:var(--dsw-alias-bg-overlay);box-shadow:0 8px 24px rgba(0,0,0,.18);display:flex;flex-direction:column;gap:1px}
 .dsc-menu-item{display:flex;align-items:center;gap:6px;height:26px;padding:0 8px;border:0;border-radius:5px;background:transparent;color:var(--dsw-alias-label-primary);font-size:12px;cursor:pointer;text-align:left}
-.dsc-menu-item:hover{background:color-mix(in srgb,var(--dsw-alias-label-primary) 10%,transparent)}
+.dsc-menu-item:hover{background:color-mix(in srgb,var(--dsw-alias-label-primary) 5%,transparent)}
 .dsc-menu-danger{color:var(--dsw-alias-state-error-primary)}
-.dsc-menu-sep{height:1px;margin:3px 4px;background:color-mix(in srgb,var(--dsw-alias-label-primary) 10%,transparent)}
-.dsc-menu-head{padding:4px 8px 2px;font-size:11px;color:var(--dsw-alias-label-tertiary)}
+.dsc-menu-sep{height:1px;margin:3px 4px;background:color-mix(in srgb,var(--dsw-alias-label-primary) 5%,transparent)}
+.dsc-menu-head{padding:4px 8px 2px;font-size:11px;color:var(--dsw-alias-label-tertiary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
 .dsc-menu-label{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .dsc-menu-caret{margin-left:auto;flex:none;display:inline-flex;align-items:center;color:var(--dsw-alias-label-tertiary)}
 .dsc-menu-item-open{background:color-mix(in srgb,var(--dsw-alias-label-primary) 8%,transparent)}
+.dsc-menu-appicon{flex:none;border-radius:3px;object-fit:contain}
 .dsc-menu-trailing{margin-left:auto;flex:none;display:inline-flex;align-items:center;gap:4px;color:var(--dsw-alias-label-tertiary);font-size:11px}
 .dsc-scrim{position:fixed;inset:0;z-index:4100;background:rgba(0,0,0,.28);display:flex;align-items:center;justify-content:center;padding:24px}
 .dsc-dialog{width:min(360px,100%);border-radius:12px;border:1px solid var(--dsw-alias-border-l1);background:var(--dsw-alias-bg-overlay);padding:14px;display:flex;flex-direction:column;gap:10px;box-shadow:0 16px 40px rgba(0,0,0,.24)}
@@ -3282,11 +3385,19 @@ html.dsc-on [class*="panelList"]{display:none!important}
 
 		/* --------------------------------------------------------------- apply */
 
-		const inject = ['slots']
+		const inject = ['slots', 'remote', 'remote.workspaceFiles', 'remote.session']
 
 		function apply(ctx) {
 			ctxRef = ctx
 			ensureStyles()
+			// The state route may not be reachable in the first frames; retry a few
+			// times while the English fallback keeps the cards readable.
+			const tryStrings = (attempt) => {
+				loadStrings().then((loaded) => {
+					if (!loaded && attempt < 6) setTimeout(() => tryStrings(attempt + 1), 300 + attempt * 400)
+				})
+			}
+			tryStrings(0)
 
 			const pluginEntriesStore = createPluginEntriesStore()
 

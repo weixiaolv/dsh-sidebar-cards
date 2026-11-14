@@ -1,6 +1,6 @@
 {
   "meta": {
     "title": "Sidebar Cards",
-    "description": "Card-style left sidebar: a draggable category tree over workspaces and sessions, sortable by name or latest session, plus one grouped list holding every panel and shortcut entry."
+    "description": "Card-style left sidebar: workspace and session management, plugin management, and project file management."
   }
 }

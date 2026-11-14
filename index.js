@@ -18,6 +18,7 @@
 import { promises as fs } from 'node:fs'
 import os from 'node:os'
 import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 
 const PACKAGE = 'dsh-sidebar-cards'
 const ENDPOINT = 'dsh-sidebar-cards/state'
@@ -29,6 +30,10 @@ const STATE_DIR = process.env.DSC_STATE_DIR
   ? path.resolve(process.env.DSC_STATE_DIR)
   : path.join(os.homedir(), '.dsh', 'sidebar-cards')
 const STATE_FILE = path.join(STATE_DIR, 'state.json')
+// UI copy ships as plain JSON beside the package, one file per language.
+const PACKAGE_DIR = path.dirname(fileURLToPath(import.meta.url))
+const UI_LOCALE_DIR = path.join(PACKAGE_DIR, 'locale', 'ui')
+const UI_LANGUAGES = new Set(['en', 'zh-Hans', 'zh-Hant', 'ja', 'fr', 'de', 'es', 'pt', 'ru'])
 const HOST_LOG = path.join(STATE_DIR, 'host.log')
 
 const MAX_BODY_BYTES = 512 * 1024
@@ -134,6 +139,7 @@ function normalizeState(raw) {
     'visible',
     'archived',
     'workspaceCollapsed',
+    'panelPins',
     'workspaceSort',
     'workspaceSortDir',
     'lang',
@@ -142,6 +148,7 @@ function normalizeState(raw) {
     'pluginAssign',
     'pluginHidden',
     'pluginShowHidden',
+    'filesCollapsed',
     'updatedAt'
   ]
   for (const key of allowed) {
@@ -217,6 +224,30 @@ async function handleState(scope, request) {
     if (method === 'get') {
       const result = await readState()
       return reply(rpcId, { ok: true, value: result })
+    }
+    if (method === 'strings') {
+      // One body with every language: the Client asks once per page.
+      const languages = {}
+      let names = []
+      try {
+        names = await fs.readdir(UI_LOCALE_DIR)
+      } catch {
+        names = []
+      }
+      for (const name of names) {
+        if (!name.endsWith('.json')) continue
+        const language = name.slice(0, -'.json'.length)
+        if (!UI_LANGUAGES.has(language)) continue
+        try {
+          languages[language] = JSON.parse(await fs.readFile(path.join(UI_LOCALE_DIR, name), 'utf8'))
+        } catch (error) {
+          await logHost(`strings: ${name} unreadable (${describeError(error)})`)
+        }
+      }
+      const count = Object.keys(languages).length
+      if (count === 0) await logHost('strings: no locale/ui/*.json under ' + UI_LOCALE_DIR)
+      else await logHost('strings: served ' + String(count) + ' languages (' + String(Object.keys(languages).length) + ')')
+      return reply(rpcId, { ok: true, value: { languages } })
     }
     if (method === 'save') {
       const incoming = isRecord(call.payload) && Object.prototype.hasOwnProperty.call(call.payload, 'state') ? call.payload.state : call.state

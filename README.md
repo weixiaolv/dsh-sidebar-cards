@@ -1,26 +1,11 @@
 # dsh-sidebar-cards
 
-Turns the DeepSeek Harness left sidebar into VS Code–style cards: one card holds the
-workspace/session tree, sorted by user-made categories; the other collects every panel
-and shortcut entry that the shell used to scatter along the top and bottom of the sidebar.
+Turns the DeepSeek Harness left sidebar into cards: workspace and session management,
+plugin management, and project file management — all in one column.
 
-```
-▾ Workspaces                 [search] [+ category] [+]
-    ▾ Management (5)
-        ▾ ai_pm (1)
-            Can you read the project records in Feishu?
-        ▸ ai_org (4)
-    ▸ Product (2)
-    Uncategorized (3)
-▾ Plugins                    [+]
-    ▾ Tools (3)
-        Plugin Market
-        Scheduler
-        Task Board
-    Ungrouped (2)
-        Lark
-        …
-```
+![The left sidebar in card view: a Workspaces card with categories, workspaces, sessions and status dots, a Plugins card grouped into Tools, Connectors and Insights, and a Files card listing the project tree](assets/sidebar-cards.png)
+
+*Card view — an illustration with invented workspaces and plugins.*
 
 ## Install
 
@@ -36,43 +21,39 @@ Then add the bundle to the profile's `dsh.profile.bundles` list (or enable it on
 Plugins page) and restart `dsh web`. Requires DSH `0.2.1-rc.3` or newer; checked on
 `0.2.2-rc.1`.
 
-## What it takes over
+## What you get
 
-- The `sidebar.workspaces` slot (`priority: -200`), where it renders the two collapsible
-  cards.
-- The card style layer hides the shell's own top panel strip (`panelList`) and bottom
-  shortcut row (`footerActions`) and re-renders their entries inside the Plugins card.
-- The brand row, the new-session button and the settings entry stay native. The
-  "native workspace list" entry at the bottom of the card and the "card sidebar" entry in
-  the shell footer are both ways back to the shipped browser at any time.
+- **Workspaces** — your projects in categories you create, with the session actions you
+  expect: rename, pin, fork, archive, and a native context menu on every row.
+- **Plugins** — every panel and shortcut entry in one place, grouped however you like,
+  hidden when you do not need them.
+- **Files** — the current project's tree, one level at a time, with copy and open actions.
+- **One switch** at the bottom right flips between these cards and the shipped sidebar at
+  any time. Everything is reversible: the brand row, the new-session button and the settings
+  entry stay native, and switching back leaves no trace.
+- **Resizable cards** — drag the divider between two cards to give one more room; a
+  double click hands the height back to the layout. Sizes are remembered.
+- Follows your DSH theme — light and dark need no separate configuration.
 
 ## Capabilities
 
 | Card | What it does |
 | --- | --- |
-| Workspaces | Create / rename / delete / collapse categories; drag workspaces between them, rename, delete, start a session in one; open, rename, pin, archive or unarchive sessions (archiving a running session asks first), copy the session id; five sessions per workspace by default, with "show more" adding ten at a time |
+| Workspaces | Create / rename / delete / collapse categories; drag workspaces between them, rename, delete, start a session in one; open, rename, pin, fork or archive sessions (archiving a running session asks first), copy the session id; five sessions per workspace by default, with "show more" adding ten at a time; the open session and the workspace that holds it are marked |
 | Workspaces, view options | Three-way archived filter; sort workspaces by name or by their latest session, each in either direction (re-picking the active mode flips it); expand or collapse everything |
-| Search | Matches a workspace's own title and path, and also keeps a workspace whose sessions match; while a query is active no session list is truncated and the "expand all hits" switch unfolds every hit without changing your saved fold state |
-| Language | Every label ships in nine languages: English, Simplified and Traditional Chinese, Japanese, French, German, Spanish, Portuguese and Russian. The default follows the browser — zh-CN/SG to Simplified, zh-TW/HK/MO to Traditional, ja/fr/de/es/pt/ru to their own, anything else to English. The choice lives one level down in the Workspaces card's view options: a Language row shows the current language and opens a menu beside it — both lists stay on screen — that also pins “follow browser”, so the options menu itself stays short |
-| Plugins | Collects every entry registered in `sidebar.panellist` and `sidebar.footer.action`; user-made groups, drag to regroup, hide / restore, click to open; its menu also opens the plugin list and starts a Creator session with a sidebar-plugin draft; collapsed by default |
+| Search | Matches a workspace's own title and path, and also keeps a workspace whose sessions match; matched counts show on each row, and an "expand all hits" switch unfolds the results without changing your saved fold state |
+| Language | Every label ships in nine languages: English, Simplified and Traditional Chinese, Japanese, French, German, Spanish, Portuguese and Russian. The default follows the browser — zh-CN/SG to Simplified, zh-TW/HK/MO to Traditional, ja/fr/de/es/pt/ru to their own, anything else to English. The choice lives in the Workspaces card's view options, next to “follow browser” |
+| Plugins | Collects every panel and shortcut entry; your own groups, drag to regroup, hide / restore, click to open; its menu also opens the plugin list and starts a Creator session with a sidebar-plugin draft; collapsed by default |
+| Files | The current project's tree, root taken from the session you are looking at. Folders load on demand and sort before files, each file with a type-coloured icon. A click selects a file and opens its preview; ⌘/Ctrl-click toggles and Shift-click extends the selection. The header copies the selected paths; the options menu offers reveal in Finder / File Explorer, open with the system default (labelled with the application's own name and icon when the system reports them), copy file paths or the project path, and expand / collapse all |
 
-## State
+## Settings
 
-`~/.dsh/sidebar-cards/state.json`, read and written by the Host half through the
-`/api/dsh-sidebar-cards/state` route. The browser's `localStorage` only mirrors it — the
-Host copy wins. The same file keeps the language choice (`lang`: `auto`, `en`, `zh-Hans`,
-`zh-Hant`, `ja`, `fr`, `de`, `es`, `pt` or `ru`), so the UI comes back in the language you
-left it in.
+Everything you change — categories, groups, fold state, sorting, language — is saved in
+`~/.dsh/sidebar-cards/state.json` and comes back on every start, in any browser. Deleting
+that file restores the defaults.
 
 ## Known limitations
 
-- Hiding the native rows depends on the shell's CSS module class names (`panelList` /
-  `footerActions`). If a DSH upgrade renames them, the native rows simply reappear; nothing
-  crashes.
+- Collapsing the native rows relies on the shell's own style hooks. If a DSH upgrade
+  renames them, those native rows simply reappear; nothing breaks.
 - Overlaps `dsh-workspace-categories` and `dsh-panel-control`; keep only one of them.
-
-## Development
-
-Plain ESM, no build step: `index.js` is the Host half (the state route), `client.js` is the
-browser half, `cordis.patch.yml` mounts the loader row. `assets/icon-512.png` is the
-storefront icon; `locale/*.json` carries the display title and description.
